@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#include "DEMOS/demo_strings.h"
+
 int main(int argc, char** argv) {
 
 #ifndef __LARGE__
@@ -8,6 +10,6 @@ int main(int argc, char** argv) {
     return 0;
 #endif
 
-    printf("QUESTLIB");
+    return demo_strings(argc, argv);
 
 }
