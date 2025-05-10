@@ -7,8 +7,8 @@
 uint16_t str_trim_character(char* zsource, char target) {
     uint16_t i = 0; // search index;
     uint16_t j = 0; // copy index;
-    bool leading = (zsource[i++] == target) ? true : false;
-    while(leading && zsource[i] == target && zsource[i++]) {}
+    bool leading = (zsource[i++] == target) ? true : false; // leading target?
+    while(leading && zsource[i] == target && zsource[i++]) {} // skip them
     while (zsource[i]) {
         if(zsource[i] == target) {
             zsource[j++] = zsource[i++]; // allow 1 copy
@@ -38,10 +38,4 @@ uint16_t str_trim_characters(char* zsource, char* ztargets) {
        i++;
     };
     return str_trim_character(zsource, ztargets[0]);
-}
-
-uint16_t str_remove_characters(char* zsource, char* const zcharacters) {
-    uint16_t trimmed = 0;
-
-    return trimmed;
 }
