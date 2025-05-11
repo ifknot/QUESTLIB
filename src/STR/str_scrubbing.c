@@ -9,7 +9,7 @@ uint16_t str_trim_character(char* zsource, char target) {
     uint16_t i = 0; // search index;
     uint16_t j = 0; // copy index;
     bool islead = (zsource[i++] == target) ? true : false; // leading target?
-    while(islead && zsource[i] == target && zsource[i++]) {} // skip them
+    while(islead && zsource[i] == target && zsource[i++]); // skip them
     while (zsource[i]) {
         if(zsource[i] == target) {
             zsource[j++] = zsource[i++]; // allow 1 copy

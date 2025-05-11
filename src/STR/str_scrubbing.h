@@ -5,6 +5,7 @@
 
 #include "str_constants.h"
 
+
 uint16_t str_trim_character(char* zsource, char target);
 
 uint16_t str_trim_characters(char* zsource, char* zcharacters);
