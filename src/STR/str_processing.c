@@ -1,19 +1,17 @@
 #include "str_processing.h"
 
 #include <stdint.h>
-#include <stdio.h>
+//#include <stdio.h>
 #include <stdbool.h>
 #include <ctype.h>
 
-#include "str_constants.h"
-
-uint16_t str_count_words(const char* zsource) {
+uint16_t str_count_words(const char* string) {
     uint16_t i = 0; // char index
     uint16_t n = 0; // word count
-    while(zsource[i]) {
-        if(isalnum(zsource[i])) {
+    while(string[i]) {
+        if(isalnum(string[i])) {
             n++;    // found a word
-            while(isalnum(zsource[i])) { // skip rest of word
+            while(isalnum(string[i])) { // skip rest of word
                 i++;
             };
         } else {
@@ -23,20 +21,17 @@ uint16_t str_count_words(const char* zsource) {
     return n;
 }
 
-uint16_t str_enumarate_words(const char* zsource, char** zenumerated) {
+uint16_t str_enumarate_words(const char* string, char** string_list) {
     uint16_t i = 0; // source index
     uint16_t n = 0; // word count
-    char word[STR_MAX_WORD_LENGTH];
-    while(zsource[i]) {
-        if(isalnum(zsource[i])) {
-            n++;    // found a word
+    while(string[i]) {
+        if(isalnum(string[i])) { // found a word
             uint16_t j = 0;
-            word[j++] = zsource[i++];
-            while(isalnum(zsource[i])) {
-                word[j++] = zsource[i++];
+            string_list[n][j++] = string[i++]; // copy first letter into list slot
+            while(isalnum(string[i])) {
+                string_list[n][j++] = string[i++]; // copy any other letters
             }
-            word[j] = 0;
-            printf("%s\n", word);
+            string_list[n++][j] = 0; // terminate the copied string and count the word
         } else {
             i++;
         }

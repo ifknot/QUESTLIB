@@ -10,12 +10,17 @@
 
 int demo_strings(int argc, char** argv) {
     char s[] = "  \n\tKill,  the\n   C3PO!     with   \ta    axe ! ?       ";
+    char* list[] = {"1apple","2apple","3apple","4apple","5apple","6apple", 0};
+    str_token_t tokens[6];
+    int i = 0; while(list[i]) printf("%s\n", list[i++]);
+
     printf("DEMO STRINGS...\n");
     printf("%s=%i\n", s, strlen(s));
     printf("%s=%i\n", s, str_remove_punctuation(s));
     printf("%s=%i\n", s, str_trim_whitespace(s));
     printf("%s=%i\n", s, str_count_words(s));
-    printf("%s=%i\n", s, str_enumarate_words(s, 0));
+    printf("%s=%i\n", s, str_enumarate_words(s, list));
+    i = 0; while(list[i]) printf("%s\n", list[i++]);
 
     return EXIT_SUCCESS;
 }

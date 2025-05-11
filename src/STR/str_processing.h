@@ -5,10 +5,12 @@
 
 #include "str_types.h"
 
-uint16_t str_count_words(const char* zsource);
+uint16_t str_count_words(const char* string);
 
-uint16_t str_enumarate_words(const char* zsource, char** zenumerated);
+uint16_t str_enumarate_words(const char* string, char** string_array);
 
-//uint16_t str_tokenize(char* zsource, char** zdictionary, str_token_t* tokens);
+//uint16_t str_tokenize(char* string, char** dictionary, str_token_t* tokens);
+
+//uint16_t str_binary_search_dictionary(char* word, char** dictionary)
 
 #endif
