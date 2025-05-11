@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-typedef
+typedef uint16_t str_token_t;
 
 #endif

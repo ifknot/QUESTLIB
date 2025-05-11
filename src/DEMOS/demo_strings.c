@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "../STR/str_scrubbing.h"
+#include "../STR/str_processing.h"
 
 int demo_strings(int argc, char** argv) {
     char s[] = "  \n\tKill,  the\n   Troll!     with   \tthe    axe ! ?       ";
@@ -13,5 +14,6 @@ int demo_strings(int argc, char** argv) {
     printf("%s=%i\n", s, strlen(s));
     printf("%s=%i\n", s, str_remove_punctuation(s));
     printf("%s=%i\n", s, str_trim_whitespace(s));
+    printf("%s=%i\n", s, str_count_words(s));
     return EXIT_SUCCESS;
 }
