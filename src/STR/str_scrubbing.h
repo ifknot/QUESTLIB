@@ -19,6 +19,8 @@ inline uint16_t str_trim_whitespace(char* zsource) {
 
 //uint16_t str_remove_characters(char* zsource, char* const zcharacters);
 
+uint16_t str_remove_punctuation(char* zsource);
+
 //uint16_t str_copy_remove_characters(char* const zsource, char* zdestination, char* const zcharacters);
 
 #endif

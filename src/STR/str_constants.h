@@ -3,4 +3,6 @@
 
 static char STR_WHITESPACE[] = " \n\t\v\b\r\f\a";
 
+static char STR_PUNCTUATION[] = ",.;:?!";
+
 #endif

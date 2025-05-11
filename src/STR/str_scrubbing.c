@@ -1,8 +1,9 @@
 #include "str_scrubbing.h"
 
 #include <stdint.h>
-//#include <stdio.h>
+#include <stdio.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 uint16_t str_trim_character(char* zsource, char target) {
     uint16_t i = 0; // search index;
@@ -38,4 +39,17 @@ uint16_t str_trim_characters(char* zsource, char* ztargets) {
        i++;
     };
     return str_trim_character(zsource, ztargets[0]);
+}
+
+uint16_t str_remove_punctuation(char* zsource) {
+    uint16_t i = 0; // search index;
+    uint16_t j = 0; // copy index;
+    while(zsource[i]) {
+        if(ispunct(zsource[i])) {
+            //printf("%c", zsource[i]);
+            i++;
+        }
+        zsource[j++] = zsource[i++];
+    }
+    return i - j;
 }
