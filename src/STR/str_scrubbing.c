@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-uint16_t str_trim_character(char* zsource, char target) {
+uint16_t str_trim_character(char* zsource, const char target) {
     uint16_t i = 0; // search index;
     uint16_t j = 0; // copy index;
     bool islead = (zsource[i++] == target) ? true : false; // leading target?
@@ -26,7 +26,7 @@ uint16_t str_trim_character(char* zsource, char target) {
     return i - j;
 }
 
-uint16_t str_trim_characters(char* zsource, char* ztargets) {
+uint16_t str_trim_characters(char* zsource, const char* ztargets) {
     uint16_t i = 0; // source index
     while (ztargets[i]) { // convert all targets to target[0]
        uint16_t j = 0;
