@@ -20,17 +20,17 @@ uint16_t str_count_words(const char* string) {
     return n;
 }
 
-uint16_t str_enumarate_words(const char* string, char** string_list) {
+uint16_t str_enumarate_words(const char* string, char** string_array) {
     uint16_t i = 0; // source index
     uint16_t n = 0; // word count
     while(string[i]) {
         if(isalnum(string[i])) { // found a word
             uint16_t j = 0;
-            string_list[n][j++] = string[i++]; // copy first letter into list slot
+            string_array[n][j++] = string[i++]; // copy first letter into list slot
             while(isalnum(string[i])) {
-                string_list[n][j++] = string[i++]; // copy any other letters
+                string_array[n][j++] = string[i++]; // copy any other letters
             }
-            string_list[n++][j] = 0; // terminate the copied string and count the word
+            string_array[n++][j] = 0; // terminate the copied string and count the word
         } else {
             i++;
         }
