@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 //#include <stdio.h>
-#include <stdbool.h>
 #include <ctype.h>
 
 uint16_t str_count_words(const char* string) {
