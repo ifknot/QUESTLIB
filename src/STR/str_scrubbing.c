@@ -46,7 +46,6 @@ uint16_t str_remove_punctuation(char* zsource) {
     uint16_t j = 0; // copy index;
     while(zsource[i]) {
         if(ispunct(zsource[i])) {
-            //printf("%c", zsource[i]);
             i++;
         }
         zsource[j++] = zsource[i++];
