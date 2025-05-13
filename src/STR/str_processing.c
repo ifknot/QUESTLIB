@@ -4,6 +4,14 @@
 //#include <stdio.h>
 #include <ctype.h>
 
+uint16_t str_to_upper_case(char* string) {
+    
+}
+
+uint16_t str_to_lower_case(char* string) {
+
+}
+
 uint16_t str_count_words(const char* string) {
     uint16_t i = 0; // char index
     uint16_t n = 0; // word count
