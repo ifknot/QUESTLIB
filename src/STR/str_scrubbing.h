@@ -5,14 +5,6 @@
 
 #include "str_constants.h"
 
-uint16_t str_to_upper_case(char* string);
-
-//uint16_t str_copy_to_upper_case(const char* source, char* destination);
-
-uint16_t str_to_lower_case(char* string);
-
-//uint16_t str_copy_to_lower_case(const char* source, char* destination);
-
 /**
 * @brief remove from the zero terminated string any leading and trailing target characters and any contiguous duplicated target characters between words.
 */
