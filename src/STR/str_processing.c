@@ -5,11 +5,17 @@
 #include <ctype.h>
 
 uint16_t str_to_upper_case(char* string) {
-    
+    uint16_t i = 0; // char index
+    while(string[i]) {
+        string[i]=toupper(string[i++]);
+    }
 }
 
 uint16_t str_to_lower_case(char* string) {
-
+    uint16_t i = 0; // char index
+    while(string[i]) {
+        string[i]=tolower(string[i++]);
+    }
 }
 
 uint16_t str_count_words(const char* string) {
