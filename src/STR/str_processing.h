@@ -5,6 +5,14 @@
 
 #include "str_types.h"
 
+uint16_t str_to_upper_case(char* string);
+
+//uint16_t str_copy_to_upper_case(const char* source, char* destination);
+
+uint16_t str_to_lower_case(char* string);
+
+//uint16_t str_copy_to_lower_case(const char* source, char* destination);
+
 /**
 * @brief count the number of distinct alpha-numeric locale specific "words" in a zero terminated string as separated by non-alpha-numeric character(s).
 */
