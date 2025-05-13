@@ -16,8 +16,9 @@ uint16_t str_count_words(const char* string);
 */
 uint16_t str_enumarate_words(const char* string, char** string_array);
 
-//str_token_t str_tokenize(char* string, char** dictionary, str_token_t* tokens);
-
-//uint16_t str_binary_search_dictionary(char* word, str_word_token_t* dictionary);
+/**
+* @brief binary search dictionary for zero terminated string containing 1 alpha-numeric word and return its token value, or zero if not found.
+*/
+str_token_t str_tokenize(const char* word, const str_word_token_t* dictionary);
 
 #endif
