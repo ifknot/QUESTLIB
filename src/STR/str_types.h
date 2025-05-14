@@ -12,9 +12,4 @@ typedef struct {
     str_token_t token;
 } str_word_token_t;
 
-typdef struct {
-    str_word_token_t* first;
-    str_word_token_t* last;
-} str_token_dictionary_t; 
-
 #endif
