@@ -4,11 +4,10 @@
 //#include <stdio.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <assert.h>
 
 uint16_t str_trim_character(char* string, const char target) {
-    if(!string) {
-        return 0;
-    }
+    assert(string);
     uint16_t i = 0; // search index;
     uint16_t j = 0; // copy index;
     bool islead = (string[i++] == target) ? true : false; // leading target?
@@ -30,9 +29,7 @@ uint16_t str_trim_character(char* string, const char target) {
 }
 
 uint16_t str_trim_characters(char* string, const char* targets) {
-     if(!string || !targets) {
-        return 0;
-    }
+     assert(string && targets);
     uint16_t i = 0; // source index
     while (targets[i]) { // convert all targets to target[0]
        uint16_t j = 0;
@@ -48,9 +45,7 @@ uint16_t str_trim_characters(char* string, const char* targets) {
 }
 
 uint16_t str_remove_punctuation(char* string) {
-     if(!string) {
-        return 0;
-    }
+     assert(string);
     uint16_t i = 0; // search index;
     uint16_t j = 0; // copy index;
     while(string[i]) {
