@@ -12,7 +12,7 @@
 int demo_strings(int argc, char** argv) {
     char s[] = "  \n\tKill,  the\n   C3PO!     with   \ta    axe ! ?       ";
     char* list[] = {"1apple","2apple","3apple","4apple","5apple","6apple", 0};
-    str_word_token_t dict[] = {{"",0},{"LOOK", TOK_LOOK}, {"L", TOK_LOOK}, {"EXAMINE", TOK_EXAMINE}, {"X", TOK_EXAMINE}, 0};
+    str_word_token_t dict[] = {{"",0},{"LOOK", TOK_LOOK}, {"L", TOK_LOOK}, {"EXAMINE", TOK_EXAMINE}, {"X", TOK_EXAMINE}};
     str_token_dictionary_t d;
     d.first = dict[0];
     d.last = dict[4]; 
