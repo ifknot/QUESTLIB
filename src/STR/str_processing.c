@@ -4,6 +4,7 @@
 //#include <stdio.h>
 #include <ctype.h>
 #include <assert.h>
+#include <string.h>
 
 char* str_to_upper_case(char* string) {
    assert(string);
@@ -12,7 +13,7 @@ char* str_to_upper_case(char* string) {
     return string;
 }
 
-char* void str_to_lower_case(char* string) {
+char* str_to_lower_case(char* string) {
     assert(string);
     char* p = string;
     for (; *p; *p = tolower(*p), p++);
@@ -63,15 +64,15 @@ uint16_t str_enumarate_words(const char* string, char** string_array) {
 *    > 0 if the first string is "greater than" the second.
 * The actual value (not just -1 or 1) is implementation-dependent.
 */
-str_token_t str_tokenize(const str_word_token_t* dictionary, uint16_t size, const char* target);
+str_token_t str_tokenize(const str_word_token_t* dictionary, uint16_t size, const char* target) {
     assert(dictionary && target);
     uint16_t i = 0; // start of dictionary
-    uint16_t j = size - 1; // end of dictionary 
+    uint16_t j = size - 1; // end of dictionary
     while (i <= j) {
         int m = i + (j - i) / 2; // calculate new midpoint
         int found = strcmp(dictionary[m].word , target);
         if (found) {
-            return dictionary[m].token
+            return dictionary[m].token;
         } else if (found < 0) { // target is in the 'upper' half
             i = m + 1;
         } else { // target is in the 'lower' half
@@ -80,4 +81,3 @@ str_token_t str_tokenize(const str_word_token_t* dictionary, uint16_t size, cons
     }
     return 0;
 }
-

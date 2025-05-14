@@ -1,4 +1,3 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/DEMOS/demo_strings.c(15): Warning! W202: Symbol 'tokens' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/DEMOS/demo_strings.c(11): Warning! W303: Parameter 'argv' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/DEMOS/demo_strings.c(11): Warning! W303: Parameter 'argc' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/DEMOS/demo_strings.c(12): Warning! W303: Parameter 'argv' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/DEMOS/demo_strings.c(12): Warning! W303: Parameter 'argc' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/DEMOS/../STR/str_constants.h(8): Warning! W202: Symbol 'STR_PUNCTUATION' has been defined, but not referenced
