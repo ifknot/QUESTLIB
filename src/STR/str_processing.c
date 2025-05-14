@@ -56,6 +56,8 @@ uint16_t str_enumarate_words(const char* string, char** string_array) {
 }
 
 str_token_t str_tokenize(const char* word, const str_word_token_t* dictionary) {
-
+    uint16_t i = 0; // start of dictionary
+    uint16_t j = size - 1; // end of dictionary 
+    
 }
 
