@@ -1,3 +1,65 @@
+Text Adventure 
+
+[ ] Parser
+[ ] data tables
+[ ] subroutines
+
+Items have attributes (rooms are items)
+
+Spatial arrangements 
+
+Containment arrangements
+
+Parent/Root/Off stage - root of item tree 
+
+Tables to the rescue 
+
+	ID  	owner	description	N S E W U D	Properties
+root	0						00000000
+player	1	1					01011000
+rm1	2				2		10100010
+rm2 	3				  1	  	10011001
+lamp	4	0					00001110	
+
+But... We need lots of tables 
+
+Articles	Prepositions	Dictionary	Token-Verbs 	
+a		in		old		0 get
+an		on		rusty		0 take
+the		under		iron		0 pick up
+		over		sword		1 look at
+		at		box		2 examine
+		with		strange		3 inspect
+
+*Object-Word-Table* maps word table to items rusty-iron-lamp via rusty or iron or lamp to item id 5 
+id 5 looks up the data for item and describes or changes ownership etc 
+
+*Jump Table* maps user input to subroutines
+
+verb#	direct obj#	preposition#	indirect obj# 	subroutine
+kill	troll		with		sword		attack_troll_with_sword
+eat	cake		255		255		eat_cake
+eat 	254		255		255		eat_inedible
+
+255=nothing	254= anything
+
+*String Tables* (names, descriptions, messages, etc)   
+id 	length	stringz 
+
+
+Parsing
+
+1. clean input (conform case, remove articles, white space)
+2. identify parts of speech (?verb ?direct object ?indirect object) 
+3. verify words in dictionary 
+4. try map words to objects 
+
+Pick   up the  Iron Sword 
+1. pick up iron sword
+2. 
+a. first thing always verb, ?compound verb, ?dangling preposition (if the last word is a preposition its the second part of the verb) 
+b. scan for verb in table ?
+
 sample sentence 1 
 Pick up the iron sword 			uppercase
 PICK UP THE IRON SWORD 			remove articles (?tokenize first single token for article then remove)  
