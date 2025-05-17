@@ -17,7 +17,7 @@ void dos_get_disk_free_space(uint8_t drive_number, dos_file_disk_space_info_t* i
 dos_file_handle_t dos_create_file(const char * path_name, dos_file_attributes_t create_attributes);
 
 // 3D  Open file using handle
-dos_file_handle_t dos_open_file(const char * path_name, uint8_t access_attributes);
+dos_file_handle_t dos_open_file(const char * path_name, dos_file_access_attributes_t access_attributes);
 
 // 3E  Close file using handle
 dos_error_code_t dos_close_file(dos_file_handle_t fhandle);
