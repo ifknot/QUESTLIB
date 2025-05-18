@@ -13,9 +13,9 @@ typedef int32_t dos_file_position_t;            // N.B. signed offset
 typedef uint32_t dos_file_size_t;
 
 typedef enum {
-        FSEEK_SET,
-        FSEEK_CUR,
-        FSEEK_END
+        FSEEK_SET,          // beginning of file
+        FSEEK_CUR,          // current position in file
+        FSEEK_END           // end of file
 } dos_file_seek_attributes_t;
 
 /**

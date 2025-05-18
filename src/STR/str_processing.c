@@ -27,7 +27,7 @@ str_size_t str_count_words(const char* string) {
     while(string[i]) {
         if(isalnum(string[i])) {
             n++;    // found a word
-            while(isalnum(string[i])) { // skip rest of word
+            while(isalnum(string[i]) || string[i] == '-') { // skip rest of word (hyphen signifies a compound word)
                 i++;
             };
         } else {
@@ -45,7 +45,7 @@ str_size_t str_enumarate_words(const char* string, char** string_array) {
         if(isalnum(string[i])) { // found a word
             str_size_t j = 0;
             string_array[n][j++] = string[i++]; // copy first letter into list slot
-            while(isalnum(string[i])) {
+            while(isalnum(string[i])|| string[i] == '-') { // (hyphen signifies a compound word)
                 string_array[n][j++] = string[i++]; // copy any other letters
             }
             string_array[n++][j] = 0; // terminate the copied string and count the word
