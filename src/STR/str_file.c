@@ -61,3 +61,7 @@ str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* string, con
     string[i] = 0;
     return i;
 }
+
+str_size_t str_load_words(const char * path_name, char** string_array, const str_size_t limit) {
+
+}

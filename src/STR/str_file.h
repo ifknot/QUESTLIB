@@ -32,8 +32,8 @@ str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* string, con
 */
 str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* string, const str_size_t limit);
 
-//str_size_t str_load_words(const char * path_name, const str_size_t limit, char** string_array);
+str_size_t str_load_words(const char * path_name, char** string_array, const str_size_t limit);
 
-//str_size_t str_load_dictionary(const char * path_name, sconst tr_size_t limit, str_word_token_t* dictionary);
+//str_size_t str_load_dictionary(const char * path_name, str_word_token_t* dictionary, const str_size_t limit);
 
 #endif

@@ -22,7 +22,7 @@ str_size_t str_count_words(const char* string);
 * @brief copy distinct alpha-numeric locale specific "words" from a zero terminated string into an array of zero terminated strings.
 * @note no bounds checking for the size of string_array!
 */
-str_size_t str_enumarate_words(const char* string, char** string_array);
+str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t string_limit, const str_size_t array_limit);
 
 /**
 * @brief binary search dictionary for zero terminated string containing 1 alpha-numeric word and return its token value, or zero if not found.

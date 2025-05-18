@@ -16,7 +16,7 @@ int demo_strings(int argc, char** argv) {
     char line[254];
     str_size_t sz;
     char s[] = "  \n\tKill,  the\n   C3PO!     with   \ta    axe ! ?       ";
-    char* list[] = {"1apple","2apple","3apple","4apple","5apple","6apple", 0};
+    char* list[] = {"1apple","2apple","3apple","4apple","5apple","6apple",0};
     int i = 0; while(list[i]) printf("%s\n", list[i++]);
 
     printf("DEMO STRINGS...\n");
@@ -24,7 +24,7 @@ int demo_strings(int argc, char** argv) {
     printf("%s=%i\n", s, str_remove_punctuation(s));
     printf("%s=%i\n", s, str_trim_whitespace(s));
     printf("%s=%i\n", s, str_count_words(s));
-    printf("%s=%i\n", s, str_enumarate_words(s, list));
+    printf("%s=%i\n", s, str_enumarate_words(s, list, sizeof(list[0]), sizeof(list)));
     i = 0; while(list[i]) printf("%s\n", list[i++]);
 
     printf("Enter the file name: ");

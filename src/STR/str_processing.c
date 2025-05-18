@@ -1,4 +1,5 @@
 #include "str_processing.h"
+#include "str_types.h"
 
 //#include <stdio.h>
 #include <ctype.h>
@@ -37,15 +38,15 @@ str_size_t str_count_words(const char* string) {
     return n;
 }
 
-str_size_t str_enumarate_words(const char* string, char** string_array) {
+str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t string_limit, const str_size_t array_limit) {
    assert(string && string_array);
     str_size_t i = 0; // source index
     str_size_t n = 0; // word count
-    while(string[i]) {
+    while(n < array_limit && string[i]) {
         if(isalnum(string[i])) { // found a word
             str_size_t j = 0;
             string_array[n][j++] = string[i++]; // copy first letter into list slot
-            while(isalnum(string[i]) || string[i] == '\'' || string[i] == '-') { // include compound words and words with number e.g C3PO
+            while(j < string_limit && (isalnum(string[i]) || string[i] == '\'' || string[i] == '-')) { // include compound words and words with number e.g C3PO
                 string_array[n][j++] = string[i++]; // copy any other letters
             }
             string_array[n++][j] = 0; // terminate the copied string and count the word
