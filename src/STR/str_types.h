@@ -5,6 +5,8 @@
 
 #include "str_constants.h"
 
+typedef uint32_t str_size_t;
+
 typedef uint16_t str_token_t;
 
 typedef struct {

@@ -6,10 +6,10 @@
 #include <ctype.h>
 #include <assert.h>
 
-uint16_t str_trim_character(char* string, const char target) {
+str_size_t str_trim_character(char* string, const char target) {
     assert(string);
-    uint16_t i = 0; // search index;
-    uint16_t j = 0; // copy index;
+    str_size_t i = 0; // search index;
+    str_size_t j = 0; // copy index;
     bool islead = (string[i++] == target) ? true : false; // leading target?
     while(islead && string[i] == target && string[i++]); // skip them
     while (string[i]) {
@@ -28,11 +28,11 @@ uint16_t str_trim_character(char* string, const char target) {
     return i - j;
 }
 
-uint16_t str_trim_characters(char* string, const char* targets) {
+str_size_t str_trim_characters(char* string, const char* targets) {
      assert(string && targets);
-    uint16_t i = 0; // source index
+    str_size_t i = 0; // source index
     while (targets[i]) { // convert all targets to target[0]
-       uint16_t j = 0;
+       str_size_t j = 0;
        while(string[j]) {
            if(string[j] == targets[i]) {
                string[j] = targets[0];
@@ -44,10 +44,10 @@ uint16_t str_trim_characters(char* string, const char* targets) {
     return str_trim_character(string, targets[0]);
 }
 
-uint16_t str_remove_punctuation(char* string) {
+str_size_t str_remove_punctuation(char* string) {
      assert(string);
-    uint16_t i = 0; // search index;
-    uint16_t j = 0; // copy index;
+    str_size_t i = 0; // search index;
+    str_size_t j = 0; // copy index;
     while(string[i]) {
         if(ispunct(string[i])) {
             i++;

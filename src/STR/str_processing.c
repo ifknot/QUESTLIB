@@ -21,10 +21,10 @@ char* str_to_lower_case(char* string) {
 }
 
 
-uint16_t str_count_words(const char* string) {
+str_size_t str_count_words(const char* string) {
     assert(string);
-    uint16_t i = 0; // char index
-    uint16_t n = 0; // word count
+    str_size_t i = 0; // char index
+    str_size_t n = 0; // word count
     while(string[i]) {
         if(isalnum(string[i])) {
             n++;    // found a word
@@ -38,13 +38,13 @@ uint16_t str_count_words(const char* string) {
     return n;
 }
 
-uint16_t str_enumarate_words(const char* string, char** string_array) {
+str_size_t str_enumarate_words(const char* string, char** string_array) {
    assert(string && string_array);
-    uint16_t i = 0; // source index
-    uint16_t n = 0; // word count
+    str_size_t i = 0; // source index
+    str_size_t n = 0; // word count
     while(string[i]) {
         if(isalnum(string[i])) { // found a word
-            uint16_t j = 0;
+            str_size_t j = 0;
             string_array[n][j++] = string[i++]; // copy first letter into list slot
             while(isalnum(string[i])) {
                 string_array[n][j++] = string[i++]; // copy any other letters
@@ -64,10 +64,10 @@ uint16_t str_enumarate_words(const char* string, char** string_array) {
 *    > 0 if the first string is "greater than" the second.
 * The actual value (not just -1 or 1) is implementation-dependent.
 */
-str_token_t str_tokenize(const str_word_token_t* dictionary, uint16_t size, const char* target) {
+str_token_t str_tokenize(const str_word_token_t* dictionary, str_size_t size, const char* target) {
     assert(dictionary && target);
-    uint16_t i = 0; // start of dictionary
-    uint16_t j = size - 1; // end of dictionary
+    str_size_t i = 0; // start of dictionary
+    str_size_t j = size - 1; // end of dictionary
     while (i <= j) {
         int m = i + (j - i) / 2; // calculate new midpoint
         int found = strcmp(dictionary[m].word , target);

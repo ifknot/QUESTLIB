@@ -3,14 +3,22 @@
 
 #include <stdint.h>
 
+#include "../DOS/dos_services_files.h"
+
 #include "str_types.h"
 
-uint32_t str_file_count_lines(char* filepath);
+str_size_t str_file_count_lines(char* filepath);
 
-uint32_t str_file_count_words(char* filepath);
+str_size_t str_file_count_words(char* filepath);
 
-uint32_t str_file_load_words(char* filepath, char** string_array);
+inline str_size_t str_file_read_char(dos_file_handle_t fhandle, char* chr) {
+    return dos_read_file(fhandle, chr, 1);
+}
 
-uint32_t str_file_load_dictionary(char* filepath, str_word_token_t* dictionary);
+str_size_t str_file_read_line(char* filepath, char* string);
+
+str_size_t str_file_read_words(char* filepath, char** string_array);
+
+str_size_t str_file_load_dictionary(char* filepath, str_word_token_t* dictionary);
 
 #endif

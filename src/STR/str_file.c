@@ -24,15 +24,15 @@ uint32_t str_file_count_lines(char* filepath) {
 
 uint32_t str_file_count_words(char* filepath) {
     uint32_t words = 0;
-    char ch;
+    char chr;
     dos_file_handle_t f = dos_open_file(filepath, ACCESS_READ_ONLY);
     if(!f) {
         return words;
     }
-    while(dos_read_file(f, &ch, 1)) {
-        if(isalnum(ch)) { // counted as one word because the hyphen signifies a compound word
+    while(str_file_read_char(f, &chr)) {
+        if(isalnum(chr)) {
             words++;
-            while(dos_read_file(f, &ch, 1) && (isalnum(ch) || ch == '-'));
+            while(str_file_read_char(f, &chr) && (isalnum(chr) || chr == '-')); // hyphen signifies a compound word
         }
     }
     dos_close_file(f);
