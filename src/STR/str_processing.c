@@ -1,6 +1,5 @@
 #include "str_processing.h"
 
-#include <stdint.h>
 //#include <stdio.h>
 #include <ctype.h>
 #include <assert.h>

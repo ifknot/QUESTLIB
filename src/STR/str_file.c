@@ -13,8 +13,8 @@ uint32_t str_file_count_lines(char* filepath) {
     if(!f) {
         return lines;
     }
-    while(dos_read_file(f, &ch, 1)) {
-        if (ch == '\n') {
+    while(str_file_read_char(f, &chr)) {
+        if (chr == '\n') {
             lines++;
         }
     }
@@ -37,4 +37,8 @@ uint32_t str_file_count_words(char* filepath) {
     }
     dos_close_file(f);
     return words;
+}
+
+str_size_t str_file_read_line(char* filepath, char* string) {
+ return 0;
 }

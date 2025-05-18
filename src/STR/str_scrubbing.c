@@ -1,6 +1,5 @@
 #include "str_scrubbing.h"
 
-#include <stdint.h>
 //#include <stdio.h>
 #include <stdbool.h>
 #include <ctype.h>
