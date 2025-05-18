@@ -19,6 +19,7 @@ add_compile_options(
 file(GLOB SOURCES
     *.c
     DOS/*.c
+    FILE/*.c
     MEM/*.c
     STR/*.c
     DEMOS/*.c
