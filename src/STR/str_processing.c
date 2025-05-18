@@ -38,6 +38,8 @@ str_size_t str_count_words(const char* string) {
     return n;
 }
 
+str_size_t str_read_word(const char* string, char* word, const str_size_t limit) TODO
+
 str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t string_limit, const str_size_t array_limit) {
    assert(string && string_array);
     str_size_t i = 0; // source index

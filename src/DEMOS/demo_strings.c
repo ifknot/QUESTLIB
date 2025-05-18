@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "../FILE/file_tools.h"
 
@@ -30,6 +31,7 @@ int demo_strings(int argc, char** argv) {
     printf("Enter the file name: ");
     scanf("%s", filepath);
     dos_file_handle_t f = dos_open_file(filepath, ACCESS_READ_ONLY);
+    assert(f);
     printf("counting...%i\n",f);
     printf("%s=%i lines\n", filepath, str_file_count_lines(f));
     printf("counting...%i\n",f);

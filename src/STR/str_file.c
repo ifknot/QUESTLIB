@@ -62,6 +62,10 @@ str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* string, con
     return i;
 }
 
-str_size_t str_load_words(const char * path_name, char** string_array, const str_size_t limit) {
+str_size_t str_file_enumerate_words(const char * path_name, char** string_array, const str_size_t string_limit, const str_size_t array_limit) {
+    assert(path_name && string_array);
+    dos_file_handle_t f = dos_open_file(path_name, ACCESS_READ_ONLY);
+    assert(f);
 
+    dos_close_file(f);
 }

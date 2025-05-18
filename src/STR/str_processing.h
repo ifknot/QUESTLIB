@@ -13,10 +13,16 @@ char* str_to_lower_case(char* string);
 
 //char* str_copy_to_lower_case(const char* source, char* destination);
 
+//str_size_t str_count_lines(const char* string);
+
 /**
-* @brief count the number of distinct alpha-numeric locale specific "words" in a zero terminated string as separated by non-alpha-numeric character(s).
+* @brief count the number of distinct alpha-numeric locale specific words/compound words in a zero terminated string as separated by non-alpha-numeric character(s).
 */
 str_size_t str_count_words(const char* string);
+
+str_size_t str_read_word(const char* string, char* word, const str_size_t limit);
+
+//str_size_t str_read_line(const char* string, char* line, const str_size_t limit);
 
 /**
 * @brief copy distinct alpha-numeric locale specific "words" from a zero terminated string into an array of zero terminated strings.
