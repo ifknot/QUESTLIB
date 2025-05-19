@@ -1,4 +1,4 @@
-#include "str_processing.h"
+TO#include "str_processing.h"
 #include "str_types.h"
 
 //#include <stdio.h>
@@ -70,7 +70,7 @@ str_size_t str_enumarate_words(const char* string, char** string_array, const st
 *    > 0 if the first string is "greater than" the second.
 * The actual value (not just -1 or 1) is implementation-dependent.
 */
-str_token_t str_tokenize(const str_word_token_t* dictionary, str_size_t size, const char* target) {
+str_token_t str_tokenize(const str_word_token_t* dictionary, str_size_t size, const char* target) { MOVE TO DIC
     assert(dictionary && target);
     str_size_t i = 0; // start of dictionary
     str_size_t j = size - 1; // end of dictionary
