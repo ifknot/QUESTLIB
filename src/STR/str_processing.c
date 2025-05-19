@@ -1,10 +1,10 @@
-TO#include "str_processing.h"
+#include "str_processing.h"
 #include "str_types.h"
 
 //#include <stdio.h>
 #include <ctype.h>
 #include <assert.h>
-#include <string.h>
+//#include <string.h>
 
 char* str_to_upper_case(char* string) {
    assert(string);
@@ -48,7 +48,7 @@ str_size_t str_read_word(const char* string, char* word, const str_size_t limit)
     }
      word[j++] = string[i++];
      while(j < limit && (isalnum(string[i]) || chr == '\''|| chr == '-')) { // apostophe and hyphen signify a compound word
-         word[j++] = string[i++]
+         word[j++] = string[i++];
      }
      word[j] = 0; // terminate string
     return j;
@@ -82,6 +82,8 @@ str_size_t str_enumarate_words(const char* string, char** string_array, const st
 *    > 0 if the first string is "greater than" the second.
 * The actual value (not just -1 or 1) is implementation-dependent.
 */
+/*
+// MOVE TO DIC
 str_token_t str_tokenize(const str_word_token_t* dictionary, str_size_t size, const char* target) { MOVE TO DIC
     assert(dictionary && target);
     str_size_t i = 0; // start of dictionary
@@ -98,4 +100,4 @@ str_token_t str_tokenize(const str_word_token_t* dictionary, str_size_t size, co
         }
     }
     return 0;
-}
+}*/

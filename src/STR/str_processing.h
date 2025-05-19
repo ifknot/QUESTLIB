@@ -33,6 +33,6 @@ str_size_t str_enumarate_words(const char* string, char** string_array, const st
 /**
 * @brief binary search dictionary for zero terminated string containing 1 alpha-numeric word and return its token value, or zero if not found.
 */
-str_token_t str_tokenize(const str_word_token_t* dictionary, str_size_t size, const char* target);
+//str_token_t str_tokenize(const str_word_token_t* dictionary, str_size_t size, const char* target);
 
 #endif

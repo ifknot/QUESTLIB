@@ -66,6 +66,6 @@ str_size_t str_file_enumerate_words(const char * path_name, char** string_array,
     assert(path_name && string_array && string_limit && array_limit);
     dos_file_handle_t f = dos_open_file(path_name, ACCESS_READ_ONLY);
     assert(f);
-TODO
+//TODO
     dos_close_file(f);
 }

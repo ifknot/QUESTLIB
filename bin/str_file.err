@@ -1,6 +1,1 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_file.c(65): Warning! W303: Parameter 'path_name' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_file.c(65): Warning! W303: Parameter 'limit' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_file.c(65): Warning! W303: Parameter 'string_array' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_file.c(67): Warning! W107: Missing return value for function 'str_load_words'
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_constants.h(8): Warning! W202: Symbol 'STR_PUNCTUATION' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_constants.h(6): Warning! W202: Symbol 'STR_WHITESPACE' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_file.c(71): Warning! W107: Missing return value for function 'str_file_enumerate_words'
