@@ -36,36 +36,36 @@ str_size_t str_file_count_words(const dos_file_handle_t fhandle) {
     return words;
 }
 
-str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* string, const str_size_t limit) {
-    assert(fhandle && string && limit);
+str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* word, const str_size_t limit) {
+    assert(fhandle && word && limit);
     str_size_t i = 0; // destination index
     char chr;
     while(str_file_read_char(fhandle, &chr) && !isalpha(chr)); //ignore everything until start of a word found or eof
     if(isalpha(chr)) {  // only consider a word if starts with a letter
-        string[i++] = chr;
+        word[i++] = chr;
         while(i < limit && str_file_read_char(fhandle, &chr) && (isalnum(chr) || chr == '\''|| chr == '-')) { // apostophe and hyphen signify a compound word
-            string[i++] = chr;
+            word[i++] = chr;
         }
-        string[i] = 0; // terminate string
+        word[i] = 0; // terminate string
     }
     return i;
 }
 
-str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* string, const str_size_t limit) {
-    assert(fhandle && string);
+str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* line, const str_size_t limit) {
+    assert(fhandle && line && limit);
     str_size_t i = 0;
     char chr;
     while(str_file_read_char(fhandle, &chr) && i < limit && chr != '\n') {
-        string[i++] = chr;
+        line[i++] = chr;
     }
-    string[i] = 0;
+    line[i] = 0;
     return i;
 }
 
 str_size_t str_file_enumerate_words(const char * path_name, char** string_array, const str_size_t string_limit, const str_size_t array_limit) {
-    assert(path_name && string_array);
+    assert(path_name && string_array && string_limit && array_limit);
     dos_file_handle_t f = dos_open_file(path_name, ACCESS_READ_ONLY);
     assert(f);
-
+TODO
     dos_close_file(f);
 }
