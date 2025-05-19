@@ -22,7 +22,7 @@ str_size_t str_count_words(const char* string);
 
 str_size_t str_read_word(const char* string, char* word, const str_size_t limit);
 
-//str_size_t str_read_line(const char* string, char* line, const str_size_t limit);
+str_size_t str_read_line(const char* string, char* line, const str_size_t limit);
 
 /**
 * @brief copy distinct alpha-numeric locale specific "words" from a zero terminated string into an array of zero terminated strings.
