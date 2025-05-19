@@ -1,7 +1,7 @@
 #ifndef DIC_TYPES_H
 #define DIC_TYPES_H
 
-#include "DIC_CONSTANTS.H"
+#include "dic_constants.h"
 
 typedef uint16_t dic_token_t;
 
