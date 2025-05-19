@@ -38,7 +38,21 @@ str_size_t str_count_words(const char* string) {
     return n;
 }
 
-str_size_t str_read_word(const char* string, char* word, const str_size_t limit) TODO
+str_size_t str_read_word(const char* string, char* word, const str_size_t limit) {
+   assert(string && word && limit);
+   str_size_t i = 0; // source index
+   str_size_t j = 0; // desitination index
+   char chr;
+    while(!isalpha(string[i])) { //ignore everything until start of a word found
+       i++;
+    }
+     word[j++] = string[i++];
+     while(j < limit && (isalnum(string[i]) || chr == '\''|| chr == '-')) { // apostophe and hyphen signify a compound word
+         word[j++] = string[i++]
+     }
+     word[j] = 0; // terminate string
+    return j;
+}
 
 str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t string_limit, const str_size_t array_limit) {
    assert(string && string_array);
