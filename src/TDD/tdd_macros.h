@@ -4,8 +4,8 @@
 * See usage here for example:
 * https://github.com/AxlLind/libwebb/blob/main/tests/test_http.c
 */
-#ifndef TEST_MACROS_H
-#define TEST_MACROS_H
+#ifndef TDD_MACROS_H
+#define TDD_MACROS_H
 
 #include <stddef.h>
 #include <stdio.h>
