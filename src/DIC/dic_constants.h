@@ -1,0 +1,6 @@
+#ifndef DIC_CONSTANTS_H
+#define DIC_CONSTANTS_H
+
+DIC_MAX_WORD_LENGTH   15
+
+#endif
