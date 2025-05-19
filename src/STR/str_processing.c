@@ -55,22 +55,12 @@ str_size_t str_read_word(const char* string, char* word, const str_size_t limit)
 }
 
 str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t string_limit, const str_size_t array_limit) {
-   assert(string && string_array);
-    str_size_t i = 0; // source index
-    str_size_t n = 0; // word count
-    while(n < array_limit && string[i]) {
-        if(isalnum(string[i])) { // found a word
-            str_size_t j = 0;
-            string_array[n][j++] = string[i++]; // copy first letter into list slot
-            while(j < string_limit && (isalnum(string[i]) || string[i] == '\'' || string[i] == '-')) { // include compound words and words with number e.g C3PO
-                string_array[n][j++] = string[i++]; // copy any other letters
-            }
-            string_array[n++][j] = 0; // terminate the copied string and count the word
-        } else {
-            i++;
-        }
+   assert(string && string_array && string_limit && array_limit);
+    str_size_t i = 0; // word index
+    while(i < array_limit) {
+        str_read_word(string, string_array[i], string_limit);
     }
-    return n;
+    return i;
 }
 
 /*
