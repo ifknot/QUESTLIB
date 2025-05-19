@@ -37,11 +37,11 @@ str_size_t str_file_count_words(const dos_file_handle_t fhandle) {
 }
 
 str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* string, const str_size_t limit) {
-    assert(fhandle && string);
-    str_size_t i = 0; // character index
+    assert(fhandle && string && limit);
+    str_size_t i = 0; // destination index
     char chr;
     while(str_file_read_char(fhandle, &chr) && !isalpha(chr)); //ignore everything until start of a word found or eof
-    if(i < limit) {  // only consider a word if starts with a letter
+    if(isalpha(chr)) {  // only consider a word if starts with a letter
         string[i++] = chr;
         while(i < limit && str_file_read_char(fhandle, &chr) && (isalnum(chr) || chr == '\''|| chr == '-')) { // apostophe and hyphen signify a compound word
             string[i++] = chr;
