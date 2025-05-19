@@ -3,15 +3,6 @@
 
 #include <stdint.h>
 
-#include "str_constants.h"
-
 typedef uint32_t str_size_t;
-
-typedef uint16_t str_token_t;
-
-typedef struct {
-    char word[STR_MAX_DICTIONARY_WORD_LENGTH];
-    str_token_t token;
-} str_word_token_t;
 
 #endif
