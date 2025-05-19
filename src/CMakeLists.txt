@@ -22,6 +22,7 @@ file(GLOB SOURCES
     FILE/*.c
     MEM/*.c
     STR/*.c
+    TDD/*.c
     DEMOS/*.c
 )
 

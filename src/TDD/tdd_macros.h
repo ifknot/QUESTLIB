@@ -37,8 +37,8 @@ typedef struct {
   static const TestInfo name = {name##_fn, #name}; \
   static void name##_fn(int *test_failed)
 
-#define TEST_MAIN(...)                                                      \
-  int main(void) {                                                          \
+#define RUN_TESTS(...)                                                      \
+  int run_tests() {                                                          \
     const TestInfo tests[] = {__VA_ARGS__};                                 \
     int failed_tests = 0;                                                   \
     for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {         \
@@ -47,7 +47,7 @@ typedef struct {
       failed_tests += test_failed;                                          \
       printf("%s: %s\n", test_failed ? "FAILED" : "PASSED", tests[i].name); \
     }                                                                       \
-    return failed_tests ? 1 : 0;                                            \
+    return failed_tests ? EXIT_FAILURE : EXIT_SUCCESS;                                            \
   }
 
 #endif

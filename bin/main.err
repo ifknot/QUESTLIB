@@ -1,0 +1,6 @@
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(9): Warning! W201: Unreachable code
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(13): Warning! W201: Unreachable code
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(22): Warning! W303: Parameter 'argv' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(22): Warning! W303: Parameter 'argc' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(12): Warning! W202: Symbol 'test_processing' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(7): Warning! W202: Symbol 'test_scrubbing' has been defined, but not referenced
