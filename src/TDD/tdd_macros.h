@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define FILENAME (strrchr("/" __FILE__, '/') + 1)
 
@@ -18,7 +19,7 @@
     do {                                                                \
         if (!(expr)) {                                                  \
             printf("%s:%d - expected: %s\n", FILENAME, __LINE__, #expr);\
-            (*pfailures)++;                                             \
+            *pass = false;                                              \
             if (assert)                                                 \
                 return;                                                 \
         }                                                               \
@@ -28,24 +29,26 @@
 #define ASSERT(expr) INTERNAL_ASSERT(expr, 1)
 
 typedef struct {
-  void (*fn)(int *);
+  void (*fn)(bool*);
   char *name;
 } test_t;
 
 #define TEST(name)                              \
-  static void name##_fn(int*);                  \
+  static void name##_fn(bool*);                  \
   static const test_t name = {name##_fn, #name};\
-  static void name##_fn(int* pfailures)
+  static void name##_fn(bool* pass)
 
 #define RUN_TESTS(...)                                                      \
   int run_tests(void) {                                                     \
     const test_t* tests[] = {__VA_ARGS__};                                  \
     int failures = 0;                                                       \
     for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {         \
-        tests[i]->fn(&failures);                                            \
-        printf("%s: %s\n", failures ? "FAILED" : "PASSED", tests[i]->name);  \
+        bool passed = true;                                                 \
+        tests[i]->fn(&passed);                                              \
+        printf("%s: %s\n", passed ? "PASSED" : "FAILED", tests[i]->name);   \
+        if (!passed) failures++;                                            \
     }                                                                       \
-    return failures ? EXIT_FAILURE : EXIT_SUCCESS;                      \
+    return failures ? EXIT_FAILURE : EXIT_SUCCESS;                          \
   }
 
 #endif
