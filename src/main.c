@@ -14,15 +14,7 @@ TEST(b) {
     ASSERT(1 == 0);
 }
 
-int run_tests(void) {
-  const test_t* tests[] = {&a, &b};
-  int failures = 0;
-  for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
-    tests[i]->fn(&failures);
-    printf("%s: %s\n", failures ? "FAILED" : "PASSED", tests[i]->name);
-  }
-  return failures ? 1 : 0;
-}
+RUN_TESTS(&a, &b)
 
 int main(int argc, char** argv) {
 
@@ -32,6 +24,6 @@ int main(int argc, char** argv) {
     return 0;
 #endif
 
-    return 0;
+    return run_tests();
 
 }

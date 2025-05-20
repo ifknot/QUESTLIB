@@ -1,7 +1,7 @@
 Open Watcom Linker Version 2.0 beta May  3 2025 18:23:37
 Copyright (c) 2002-2025 The Open Watcom Contributors. All Rights Reserved.
 Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
-Created on:       25/05/20 20:58:25
+Created on:       25/05/20 21:05:55
 Warning! W1027: file CMakeFiles/quest.dir/FILE/file_tools.c.obj(/Users/jeremythornton/dosbox/QUESTLIB/src/FILE/file_tools.c): redefinition of file_pointer_reset_ ignored
 Executable Image: quest.exe
 creating a DOS executable
@@ -35,7 +35,7 @@ mem_tools_TEXT         CODE           AUTO           0000:14c4       000001f2
 str_file_TEXT          CODE           AUTO           0000:16b6       0000065f
 str_processing_TEXT    CODE           AUTO           0000:1d15       0000062d
 str_scrubbing_TEXT     CODE           AUTO           0000:2342       00000417
-main_TEXT              CODE           AUTO           0000:2759       0000022e
+main_TEXT              CODE           AUTO           0000:2759       0000022f
 _TEXT                  CODE           AUTO           0000:2990       0000482a
 FAR_DATA               FAR_DATA       AUTO           071b:000a       00000000
 _NULL                  BEGDATA        DGROUP         071c:0000       00000020
@@ -126,7 +126,7 @@ Module: CMakeFiles/quest.dir/STR/str_scrubbing.c.obj(/Users/jeremythornton/dosbo
 0000:2663      str_remove_punctuation_
 Module: CMakeFiles/quest.dir/main.c.obj(/Users/jeremythornton/dosbox/QUESTLIB/src/main.c)
 0000:289b+     run_tests_
-0000:295b      main_
+0000:295a      main_
 Module: /opt/watcom/lib286/dos/clibl.lib(stk)
 0000:2995      __STK
 0000:29b5*     __STKOVERFLOW_
@@ -418,4 +418,4 @@ Module: /opt/watcom/lib286/dos/clibl.lib(doserror)
 Stack size:  0800 (2048.)
 Memory size:  de10 (56848.)
 Entry point address: 0000:2e40
-Link time: 00:00.50
+Link time: 00:00.58

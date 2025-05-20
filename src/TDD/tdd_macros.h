@@ -43,9 +43,9 @@ typedef struct {
     int failures = 0;                                                       \
     for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {         \
         tests[i]->fn(&failures);                                            \
-        printf("%s: %s\n", failures ? "FAILED" : "PASSED", tests[i].name);  \
+        printf("%s: %s\n", failures ? "FAILED" : "PASSED", tests[i]->name);  \
     }                                                                       \
-    return failed_tests ? EXIT_FAILURE : EXIT_SUCCESS;                      \
+    return failures ? EXIT_FAILURE : EXIT_SUCCESS;                      \
   }
 
 #endif

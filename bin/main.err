@@ -1,4 +1,4 @@
 /Users/jeremythornton/dosbox/QUESTLIB/src/main.c(9): Warning! W201: Unreachable code
 /Users/jeremythornton/dosbox/QUESTLIB/src/main.c(13): Warning! W201: Unreachable code
-/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(27): Warning! W303: Parameter 'argv' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(27): Warning! W303: Parameter 'argc' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(19): Warning! W303: Parameter 'argv' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(19): Warning! W303: Parameter 'argc' has been defined, but not referenced
