@@ -1,7 +1,7 @@
 Open Watcom Linker Version 2.0 beta May  3 2025 18:23:37
 Copyright (c) 2002-2025 The Open Watcom Contributors. All Rights Reserved.
 Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
-Created on:       25/05/20 21:16:06
+Created on:       25/05/20 21:51:25
 Warning! W1027: file CMakeFiles/quest.dir/FILE/file_tools.c.obj(/Users/jeremythornton/dosbox/QUESTLIB/src/FILE/file_tools.c): redefinition of file_pointer_reset_ ignored
 Executable Image: quest.exe
 creating a DOS executable
@@ -418,4 +418,4 @@ Module: /opt/watcom/lib286/dos/clibl.lib(doserror)
 Stack size:  0800 (2048.)
 Memory size:  de30 (56880.)
 Entry point address: 0000:2e60
-Link time: 00:00.70
+Link time: 00:00.11
