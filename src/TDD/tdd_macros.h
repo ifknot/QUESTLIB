@@ -14,15 +14,15 @@
 
 #define FILENAME (strrchr("/" __FILE__, '/') + 1)
 
-#define INTERNAL_ASSERT(expr, assert)                              \
-  do {                                                             \
-    if (!(expr)) {                                                 \
-      printf("%s:%d - expected: %s\n", FILENAME, __LINE__, #expr); \
-      *test_failed = 1;                                            \
-      if (assert)                                                  \
-        return;                                                    \
-    }                                                              \
-  } while (0)
+#define INTERNAL_ASSERT(expr, assert)                                   \
+    do {                                                                \
+        if (!(expr)) {                                                  \
+            printf("%s:%d - expected: %s\n", FILENAME, __LINE__, #expr);\
+            (*pfailures)++;                                             \
+            if (assert)                                                 \
+                return;                                                 \
+        }                                                               \
+    } while (0)
 
 #define EXPECT(expr) INTERNAL_ASSERT(expr, 0)
 #define ASSERT(expr) INTERNAL_ASSERT(expr, 1)
@@ -30,24 +30,22 @@
 typedef struct {
   void (*fn)(int *);
   char *name;
-} TestInfo;
+} test_t;
 
-#define TEST(name)                                 \
-  static void name##_fn(int *);                    \
-  static const TestInfo name = {name##_fn, #name}; \
-  static void name##_fn(int *test_failed)
+#define TEST(name)                              \
+  static void name##_fn(int*);                  \
+  static const test_t name = {name##_fn, #name};\
+  static void name##_fn(int* pfailures)
 
 #define RUN_TESTS(...)                                                      \
-  int run_tests() {                                                          \
-    const TestInfo tests[] = {__VA_ARGS__};                                 \
-    int failed_tests = 0;                                                   \
+  int run_tests(void) {                                                     \
+    const test_t* tests[] = {__VA_ARGS__};                                  \
+    int failures = 0;                                                       \
     for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {         \
-      int test_failed = 0;                                                  \
-      tests[i].fn(&test_failed);                                            \
-      failed_tests += test_failed;                                          \
-      printf("%s: %s\n", test_failed ? "FAILED" : "PASSED", tests[i].name); \
+        tests[i]->fn(&failures);                                            \
+        printf("%s: %s\n", failures ? "FAILED" : "PASSED", tests[i].name);  \
     }                                                                       \
-    return failed_tests ? EXIT_FAILURE : EXIT_SUCCESS;                                            \
+    return failed_tests ? EXIT_FAILURE : EXIT_SUCCESS;                      \
   }
 
 #endif
