@@ -1,20 +1,67 @@
 #ifndef TEST_STR_H
 #define TEST_STR_H
 
+#include <string.h>
+
 #include "../TDD/tdd_macros.h"
 
-str_size_t str_trim_character(char* string, const char target);
+#include "str_scrubbing.h"
 
-str_size_t str_trim_characters(char* string, const char* targets);
+#define STR_TESTS &test_str_scrubbing, &test_str_processing, &str_file
 
-//str_size_t str_copy_trim_characters(const char* const source, destination, const char* targets_array);
+static char s[] = "  \n\tKill,  the\n   C3PO!     with   \ta    axe ! ?       ";
 
-str_size_t str_trim_whitespace(char* string)
+TEST(test_str_scrubbing) {
+    printf("%s", s);
+    ASSERT(str_trim_character(s,'x') == 1);
+    printf("%s", s);
+    EXPECT(strcmp(s, "  \n\tKill,  the\n   C3PO!     with   \ta    ae ! ?       ") == 0);
+    ASSERT(str_trim_character(s,"K3a") == 2);
+    printf("%s", s);
+    EXPECT(strcmp(s, "  \n\till,  the\n   CPO!     with   \t    e ! ?       ") == 0);
+    ASSERT(str_trim_whitespace(s) == 28);
+    printf("%s", s);
+    EXPECT(strcmp(s, "ill, the C3PO! with e ! ?") == 0);
+    ASSERT(str_remove_punctuation(s) == 3);
+    printf("%s", s);
+    EXPECT(strcmp(s, "ill, the C3PO! with e  ") == 0);
+    ASSERT(str_trim_whitespace(s) == 2);
+    printf("%s", s);
+    EXPECT(strcmp(s, "ill, the C3PO! with e") == 0);
+}
 
-//str_size_t str_copy_trim_whitespace(const char* source, char* destination);
+TEST(test_str_processing) {
+    char* str_to_upper_case(char* string);
 
-//str_size_t str_remove_characters(char* source, const char* targets);
+    char* str_to_lower_case(char* string);
 
-str_size_t str_remove_punctuation(char* string);
+    str_size_t str_count_words(const char* string);
+
+     str_size_t str_count_lines(const dos_file_handle_t fhandle);
+
+    str_size_t str_read_word(const char* string, char* word, const str_size_t limit);
+
+    str_size_t str_read_line(const char* string, char* line, const str_size_t limit);
+
+    str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t string_limit, const str_size_t array_limit);
+}
+
+TEST(test_str_file_processing) {
+
+TODO: change to str_file_processing.h
+    
+    str_size_t str_file_count_lines(const dos_file_handle_t fhandle);
+
+    str_size_t str_file_count_words(const dos_file_handle_t fhandle);
+
+    str_size_t str_file_read_char(const dos_file_handle_t fhandle, char* chr)
+
+    str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* word, const str_size_t limit);
+
+    str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* line, const str_size_t limit);
+
+    str_size_t str_file_enumerate_words(const char * path_name, char** string_array, const str_size_t string_limit, const str_size_t array_limit);
+}
+
 
 #endif
