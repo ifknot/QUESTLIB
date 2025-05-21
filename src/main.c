@@ -1,20 +1,10 @@
 #include <stdio.h>
 
 //#include "DEMOS/demo_strings.h"
-//#include "STR/test_str.h"
+#include "STR/test_str.h"
 #include "TDD/tdd_macros.h"
 
-TEST(a) {
-    EXPECT(1 == 0);
-    ASSERT(1 == 1);
-}
-
-TEST(b) {
-    EXPECT(1 == 1);
-    ASSERT(1 == 0);
-}
-
-RUN_TESTS(&a, &b)
+RUN_TESTS(STR_TESTS)
 
 int main(int argc, char** argv) {
 
