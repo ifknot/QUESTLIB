@@ -31,6 +31,7 @@ TEST(test_str_scrubbing) {
 }
 
 TEST(test_str_processing) {
+    ASSERT(
     char* str_to_upper_case(char* string);
 
     char* str_to_lower_case(char* string);
