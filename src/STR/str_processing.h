@@ -30,9 +30,4 @@ str_size_t str_read_line(const char* string, char* line, const str_size_t limit)
 */
 str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t string_limit, const str_size_t array_limit);
 
-/**
-* @brief binary search dictionary for zero terminated string containing 1 alpha-numeric word and return its token value, or zero if not found.
-*/
-//str_token_t str_tokenize(const str_word_token_t* dictionary, str_size_t size, const char* target);
-
 #endif
