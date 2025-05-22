@@ -9,25 +9,24 @@
 
 #define STR_TESTS &test_str_scrubbing, &test_str_processing, &str_file
 
-static char s[] = "  \n\tKill,  the\n   C3PO!     with   \ta    axe ! ?       ";
-
 TEST(test_str_scrubbing) {
-    printf("%s", s);
-    ASSERT(str_trim_character(s,'x') == 1);
-    printf("%s", s);
-    EXPECT(strcmp(s, "  \n\tKill,  the\n   C3PO!     with   \ta    ae ! ?       ") == 0);
-    ASSERT(str_trim_character(s,"K3a") == 2);
-    printf("%s", s);
-    EXPECT(strcmp(s, "  \n\till,  the\n   CPO!     with   \t    e ! ?       ") == 0);
+     char s[] = "  \n\tKill,  the\n   C3PO!     with   \ta    axe ! ?       ";
+    printf("%s", test_string);
+    ASSERT(str_trim_character(test_string)'x') == 1);
+    printf("%s", test_string);
+    EXPECT(strcmp(test_string) "  \n\tKill,  the\n   C3PO!     with   \ta    ae ! ?       ") == 0);
+    ASSERT(str_trim_character(test_string)"K3a") == 2);
+    printf("%s", test_string);
+    EXPECT(strcmp(test_string) "  \n\till,  the\n   CPO!     with   \t    e ! ?       ") == 0);
     ASSERT(str_trim_whitespace(s) == 28);
-    printf("%s", s);
-    EXPECT(strcmp(s, "ill, the C3PO! with e ! ?") == 0);
+    printf("%s", test_string);
+    EXPECT(strcmp(test_string) "ill, the C3PO! with e ! ?") == 0);
     ASSERT(str_remove_punctuation(s) == 3);
-    printf("%s", s);
-    EXPECT(strcmp(s, "ill, the C3PO! with e  ") == 0);
+    printf("%s", test_string);
+    EXPECT(strcmp(test_string) "ill, the C3PO! with e  ") == 0);
     ASSERT(str_trim_whitespace(s) == 2);
-    printf("%s", s);
-    EXPECT(strcmp(s, "ill, the C3PO! with e") == 0);
+    printf("%s", test_string);
+    EXPECT(strcmp(test_string) "ill, the C3PO! with e") == 0);
 }
 
 TEST(test_str_processing) {
