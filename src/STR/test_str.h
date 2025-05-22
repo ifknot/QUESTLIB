@@ -14,31 +14,30 @@ TEST(test_str_scrubbing) {
     printf("%s", test_string);
     ASSERT(str_trim_character(test_string)'x') == 1);
     printf("%s", test_string);
-    EXPECT(strcmp(test_string) "  \n\tKill,  the\n   C3PO!     with   \ta    ae ! ?       ") == 0);
+    EXPECT(strcmp(test_string, "  \n\tKill,  the\n   C3PO!     with   \ta    ae ! ?       ") == 0);
     ASSERT(str_trim_character(test_string)"K3a") == 2);
     printf("%s", test_string);
-    EXPECT(strcmp(test_string) "  \n\till,  the\n   CPO!     with   \t    e ! ?       ") == 0);
+    EXPECT(strcmp(test_string, "  \n\till,  the\n   CPO!     with   \t    e ! ?       ") == 0);
     ASSERT(str_trim_whitespace(s) == 28);
     printf("%s", test_string);
-    EXPECT(strcmp(test_string) "ill, the C3PO! with e ! ?") == 0);
+    EXPECT(strcmp(test_string, "ill, the C3PO! with e ! ?") == 0);
     ASSERT(str_remove_punctuation(s) == 3);
     printf("%s", test_string);
-    EXPECT(strcmp(test_string) "ill, the C3PO! with e  ") == 0);
+    EXPECT(strcmp(test_string, "ill, the C3PO! with e  ") == 0);
     ASSERT(str_trim_whitespace(s) == 2);
     printf("%s", test_string);
     EXPECT(strcmp(test_string) "ill, the C3PO! with e") == 0);
 }
 
 TEST(test_str_processing) {
-    ASSERT(
-    char* str_to_upper_case(char* string);
-
-    char* str_to_lower_case(char* string);
-
-    str_size_t str_count_words(const char* string);
-
-     str_size_t str_count_lines(const dos_file_handle_t fhandle);
-
+    char test_string[] = "The Quick Brown fox jumps over the lazy dog.\nThis sentence uses all 26 letters of the alphabet, making it useful for testing typewriters, keyboards, and fonts.\It's also commonly used for touch-typing practice."; 
+    printf("%s", test_string);
+    ASSERT(strcmp(str_to_lower_case(test_string), "the quick brown fox jumps over the lazy dog.\nthis sentence uses all 26 letters of the alphabet, making it useful for testing typewriters, keyboards, and fonts.\it's also commonly used for touch-typing practice.") == 0);
+    printf("%s", test_string);
+    ASSERT(strcmp(str_to_upper_case(test_string), "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.\NTHIS SENTENCE USES ALL 26 LETTERS OF THE ALPHABET, MAKING IT USEFUL FOR TESTING TYPEWRITERS, KEYBOARDS, AND FONTS.\IT'S ALSO COMMONLY USED FOR TOUCH-TYPING PRACTICE.") == 0);
+    printf("%s", test_string);
+    ASSERT(str_count_words(test_string) == 34);
+    ASSERT(str_count_lines(test_string) == 3);
     str_size_t str_read_word(const char* string, char* word, const str_size_t limit);
 
     str_size_t str_read_line(const char* string, char* line, const str_size_t limit);
