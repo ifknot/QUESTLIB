@@ -20,7 +20,6 @@ char* str_to_lower_case(char* string) {
     return string;
 }
 
-
 str_size_t str_count_words(const char* string) {
     assert(string);
     str_size_t i = 0; // char index
@@ -38,29 +37,27 @@ str_size_t str_count_words(const char* string) {
     return n;
 }
 
-str_size_t str_read_word(const char* string, char* word, const str_size_t limit) {
+str_size_t str_read_word(const char* string, str_iterator_t* i, char* word, const str_size_t limit) {
    assert(string && word && limit);
-   str_size_t i = 0; // source index
    str_size_t j = 0; // desitination index
    char chr;
-    while(!isalpha(string[i])) { //ignore everything until start of a word found
-       i++;
+    while(string[*i] && !isalpha(string[*i])) { //ignore everything until start of a word found or zero terminator
+       (*i)++;
     }
-     word[j++] = string[i++];
-     while(j < limit && (isalnum(string[i]) || chr == '\''|| chr == '-')) { // apostophe and hyphen signify a compound word
-         word[j++] = string[i++];
+     word[j++] = string[(*i)++];
+     while(j < limit && string[*i] && (isalnum(string[*i]) || chr == '\''|| chr == '-')) { // apostophe and hyphen signify a compound word
+         word[j++] = string[(*i)++];
      }
-     word[j] = 0; // terminate string
+     word[j] = 0; // terminate word string
     return j;
 }
 
-str_size_t str__read_line(const char* string, char* line, const str_size_t limit) {
+str_size_t str_read_line(const char* string, str_iterator_t* i, char* line, const str_size_t limit) {
    assert(string && line && limit);
-   str_size_t i = 0; // source index
    str_size_t j = 0; // desitination index
    char chr;
-   while(j < limit && string[i] != '\n') {
-        line[j++] = string[i++];
+   while(j < limit && string[*i] && string[*i] != '\n') {
+        line[j++] = string[(*i)++];
     }
     line[j] = 0;
     return j;
@@ -69,8 +66,8 @@ str_size_t str__read_line(const char* string, char* line, const str_size_t limit
 str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t string_limit, const str_size_t array_limit) {
    assert(string && string_array && string_limit && array_limit);
     str_size_t i = 0; // word index
-    while(i < array_limit) {
-        str_read_word(string, string_array[i], string_limit);
+    while(i < array_limit && string[*i]) {
+        str_read_word(string, &i, string_array[i], string_limit);
     }
     return i;
 }
