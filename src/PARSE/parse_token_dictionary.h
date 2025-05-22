@@ -3,6 +3,8 @@
 
 #include "../STR/str_types.h"
 
+#include "parse_types.h" 
+
 /**
 * @brief binary search dictionary for zero terminated string containing 1 alpha-numeric word and return its token value, or zero if not found.
 */
