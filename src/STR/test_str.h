@@ -60,7 +60,7 @@ TEST(test_str_processing) {
 
 TEST(test_str_file_processing) {
 
-TODO: change to str_file_processing.h
+/*
     
     str_size_t str_file_count_lines(const dos_file_handle_t fhandle);
 
@@ -73,6 +73,7 @@ TODO: change to str_file_processing.h
     str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* line, const str_size_t limit);
 
     str_size_t str_file_enumerate_words(const char * path_name, char** string_array, const str_size_t string_limit, const str_size_t array_limit);
+*/
 }
 
 
