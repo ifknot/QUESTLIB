@@ -12,10 +12,10 @@
 TEST(test_str_scrubbing) {
     char test_string[] = "  \n\tKill,  the\n   C3PO!     with   \ta    axe ! ?       ";
     printf("%s", test_string);
-    ASSERT(str_trim_character(test_string)'x') == 1);
+    ASSERT(str_trim_character(test_string, 'x') == 1);
     printf("%s", test_string);
     EXPECT(strcmp(test_string, "  \n\tKill,  the\n   C3PO!     with   \ta    ae ! ?       ") == 0);
-    ASSERT(str_trim_character(test_string)"K3a") == 2);
+    ASSERT(str_trim_character(test_string, "K3a") == 2);
     printf("%s", test_string);
     EXPECT(strcmp(test_string, "  \n\till,  the\n   CPO!     with   \t    e ! ?       ") == 0);
     ASSERT(str_trim_whitespace(s) == 28);
@@ -26,7 +26,7 @@ TEST(test_str_scrubbing) {
     EXPECT(strcmp(test_string, "ill, the C3PO! with e  ") == 0);
     ASSERT(str_trim_whitespace(s) == 2);
     printf("%s", test_string);
-    EXPECT(strcmp(test_string) "ill, the C3PO! with e") == 0);
+    EXPECT(strcmp(test_string, "ill, the C3PO! with e") == 0);
 }
 
 TEST(test_str_processing) {
