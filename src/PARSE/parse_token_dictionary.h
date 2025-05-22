@@ -1,5 +1,7 @@
-#ifndef PARSE_TOKE_DICTIONARY_H
-#define PARSE_TOKE_DICTIONARY_H
+#ifndef PARSE_TOKEN_DICTIONARY_H
+#define PARSE_TOKEN_DICTIONARY_H
+
+#include "../STR/str_types.h"
 
 /**
 * @brief binary search dictionary for zero terminated string containing 1 alpha-numeric word and return its token value, or zero if not found.
