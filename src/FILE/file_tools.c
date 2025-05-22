@@ -26,7 +26,7 @@ file_size_t file_get_size(const dos_file_handle_t fhandle) {
    	return fsize;
 }
 
-bool file_pointer_is_eof(const dos_file_handle_t fhandle) {
+bool file_position_indicator_is_eof(const dos_file_handle_t fhandle) {
     dos_file_position_t fpos, fend;
    	fpos = dos_move_file_pointer(fhandle, 0, FSEEK_CUR);	// get current position
    	fend = dos_move_file_pointer(fhandle, 0, FSEEK_END);	// get size ie end position
