@@ -10,7 +10,7 @@
 #define STR_TESTS &test_str_scrubbing, &test_str_processing, &str_file
 
 TEST(test_str_scrubbing) {
-     char s[] = "  \n\tKill,  the\n   C3PO!     with   \ta    axe ! ?       ";
+    char test_string[] = "  \n\tKill,  the\n   C3PO!     with   \ta    axe ! ?       ";
     printf("%s", test_string);
     ASSERT(str_trim_character(test_string)'x') == 1);
     printf("%s", test_string);
