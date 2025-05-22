@@ -1,0 +1,4 @@
+#ifndef PARSE_TOKE_DICTIONARY_H
+#define PARSE_TOKE_DICTIONARY_H
+
+#endif
