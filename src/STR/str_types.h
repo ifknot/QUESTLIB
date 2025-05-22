@@ -5,4 +5,6 @@
 
 typedef uint32_t str_size_t;
 
+typedef uint32_t str_iterator_t;
+
 #endif
