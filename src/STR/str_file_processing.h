@@ -1,5 +1,5 @@
-#ifndef STR_FILE_H
-#define STR_FILE_H
+#ifndef STR_FILE_PROCESSING_H
+#define STR_FILE_PROCESSING_H
 
 #include <stdint.h>
 
