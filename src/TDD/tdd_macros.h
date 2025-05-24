@@ -13,6 +13,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+static bool verbose = false;
+
+#define V(expr) do { if(verbose) { expr } } while(0)
+
 #define FILENAME (strrchr("/" __FILE__, '/') + 1)
 
 #define ASSERT_HALT(expr, halt)                                     \

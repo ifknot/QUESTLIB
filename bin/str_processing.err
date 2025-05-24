@@ -1,3 +1,2 @@
-/Users/jeremythornton/DOS/QUESTLIB/src/STR/str_processing.c(43): Warning! W200: 'chr' has been referenced but never assigned a value
-/Users/jeremythornton/DOS/QUESTLIB/src/STR/str_processing.c(58): Warning! W202: Symbol 'chr' has been defined, but not referenced
-/Users/jeremythornton/DOS/QUESTLIB/src/STR/str_processing.c(69): Error! E1029: Expression must be 'pointer to ...'
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(43): Warning! W200: 'chr' has been referenced but never assigned a value
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(58): Warning! W202: Symbol 'chr' has been defined, but not referenced

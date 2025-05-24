@@ -1,4 +1,6 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(9): Warning! W201: Unreachable code
-/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(13): Warning! W201: Unreachable code
-/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(19): Warning! W303: Parameter 'argv' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(19): Warning! W303: Parameter 'argc' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/test_str.h(53): Warning! W300: Nested comment found in comment started on line 32
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/test_str.h(31): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/test_str.h(61): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(9): Warning! W303: Parameter 'argv' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(9): Warning! W303: Parameter 'argc' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_constants.h(6): Warning! W202: Symbol 'STR_PUNCTUATION' has been defined, but not referenced

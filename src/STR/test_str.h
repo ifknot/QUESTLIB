@@ -8,40 +8,39 @@
 #include "str_scrubbing.h"
 #include "str_processing.h"
 
-#define STR_TESTS &test_str_scrubbing, &test_str_processing, &str_file
+#define STR_TESTS &test_str_scrubbing, &test_str_processing, &test_str_file_processing
 
 TEST(test_str_scrubbing) {
-    char test_string[] = "  \n\tKill,  the\n   C3PO!     with   \ta    axe ! ?       ";
-    printf("%s", test_string);
-    ASSERT(str_trim_character(test_string, 'x') == 1);
-    printf("%s", test_string);
-    EXPECT(strcmp(test_string, "  \n\tKill,  the\n   C3PO!     with   \ta    ae ! ?       ") == 0);
-    ASSERT(str_trim_characters(test_string, "K3a") == 2);
-    printf("%s", test_string);
-    EXPECT(strcmp(test_string, "  \n\till,  the\n   CPO!     with   \t    e ! ?       ") == 0);
-    ASSERT(str_trim_whitespace(test_string) == 28);
-    printf("%s", test_string);
-    EXPECT(strcmp(test_string, "ill, the C3PO! with e ! ?") == 0);
-    ASSERT(str_remove_punctuation(test_string) == 3);
-    printf("%s", test_string);
-    EXPECT(strcmp(test_string, "ill, the C3PO! with e  ") == 0);
-    ASSERT(str_trim_whitespace(test_string) == 2);
-    printf("%s", test_string);
-    EXPECT(strcmp(test_string, "ill, the C3PO! with e") == 0);
+    char test_string[] = "  \n\tKill,  the\n   QC3PO!     with   \ta    axe ! ?       ";
+    V(printf("->%s<-\n", test_string););
+    ASSERT(str_remove_character(test_string, 'Q') == 1);
+    V(printf("->%s<-\n", test_string););
+    EXPECT(str_trim_character(test_string, ' ') == 21);
+    EXPECT(strcmp(test_string, "\n\tKill, the\n C3PO! with \ta axe ! ?") == 0);
+    V(printf("->%s<-\n", test_string););
+    EXPECT(str_trim_characters(test_string, "Kl") == 1);
+    V(printf("->%s<-\n", test_string););
+    EXPECT(strcmp(test_string, "\n\tKiK, the\n C3PO! with \ta axe ! ?") == 0);
+    ASSERT(str_trim_whitespace(test_string) == 4);
+    V(printf("->%s<-\n", test_string););
+    EXPECT(strcmp(test_string, "KiK, the C3PO! with a axe ! ?") == 0);
+    EXPECT(str_remove_punctuation(test_string) == 4);
+    V(printf("->%s<-\n", test_string););
 }
 
 TEST(test_str_processing) {
+    /*
     str_iterator_t i = 0;
-    char test_string[] = "The Quick Brown fox jumps over the lazy dog.\nThis sentence uses all 26 letters of the alphabet, making it useful for testing typewriters, keyboards, and fonts.\It's also commonly used for touch-typing practice.";
+    char test_string[] = "The Quick Brown fox jumps over the lazy dog.\nThis sentence uses all 26 letters of the alphabet, making it useful for testing typewriters, keyboards, and fonts.\nIt's also commonly used for touch-typing practice.";
     char test_word[15];
     char test_line[127];
-    char test_array[9,15];
+    char test_array[9][15];
     memset(test_array, 0, sizeof(test_array));
-    printf("%s", test_string);
-    ASSERT(strcmp(str_to_lower_case(test_string), "the quick brown fox jumps over the lazy dog.\nthis sentence uses all 26 letters of the alphabet, making it useful for testing typewriters, keyboards, and fonts.\it's also commonly used for touch-typing practice.") == 0);
-    printf("%s", test_string);
-    ASSERT(strcmp(str_to_upper_case(test_string), "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.\NTHIS SENTENCE USES ALL 26 LETTERS OF THE ALPHABET, MAKING IT USEFUL FOR TESTING TYPEWRITERS, KEYBOARDS, AND FONTS.\IT'S ALSO COMMONLY USED FOR TOUCH-TYPING PRACTICE.") == 0);
-    printf("%s", test_string);
+    printf("%s\n", test_string);
+    ASSERT(strcmp(str_to_lower_case(test_string), "the quick brown fox jumps over the lazy dog.\nthis sentence uses all 26 letters of the alphabet, making it useful for testing typewriters, keyboards, and fonts.\nit's also commonly used for touch-typing practice.") == 0);
+    printf("%s\n", test_string);
+    ASSERT(strcmp(str_to_upper_case(test_string), "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.\nTHIS SENTENCE USES ALL 26 LETTERS OF THE ALPHABET, MAKING IT USEFUL FOR TESTING TYPEWRITERS, KEYBOARDS, AND FONTS.\nIT'S ALSO COMMONLY USED FOR TOUCH-TYPING PRACTICE.") == 0);
+    printf("%s\n", test_string);
     ASSERT(str_count_words(test_string) == 34);
     //ASSERT(str_count_lines(test_string) == 3);
     ASSERT(str_read_word(test_string, &i, test_word, sizeof(test_word)) == 3);

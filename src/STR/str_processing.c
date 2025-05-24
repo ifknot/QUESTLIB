@@ -66,7 +66,7 @@ str_size_t str_read_line(const char* string, str_iterator_t* i, char* line, cons
 str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t string_limit, const str_size_t array_limit) {
    assert(string && string_array && string_limit && array_limit);
     str_size_t i = 0; // word index
-    while(i < array_limit && string[*i]) {
+    while(i < array_limit && string[i]) {
         str_read_word(string, &i, string_array[i], string_limit);
     }
     return i;

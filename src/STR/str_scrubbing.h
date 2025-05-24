@@ -7,12 +7,17 @@
 #include "str_types.h"
 
 /**
+* @brief remove a character from the zero terminated string
+*/
+str_size_t str_remove_character(char* string, const char target);
+
+/**
 * @brief remove from the zero terminated string any leading and trailing target characters and any contiguous duplicated target characters between words.
+* @note trimming is not the same as removing characters.
 */
 str_size_t str_trim_character(char* string, const char target);
 
 //str_size_t str_copy_trim_character(const char* source, char* destination, const char* targets_array);
-
 
 /**
 * @brief convert any target characters in the zero terminated string to the first charcter in the target character array then trim that character from the string
