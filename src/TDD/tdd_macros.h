@@ -51,7 +51,12 @@ typedef struct {
         for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {         \
             bool passed = true;                                                 \
             tests[i]->fn(&passed);                                              \
-            printf("%s: %s\n", passed ? "PASSED" : "FAILED", tests[i]->name);   \
+            if (verbose) {                                                      \
+                printf("%s: %s\n", passed ? "PASS" : "FAIL", tests[i]->name);   \
+            }                                                                   \
+            else {                                                              \
+                printf("%c", passed ? '+' : '-');                             \
+            }                                                                   \
             if (!passed)                                                        \
                 failures++;                                                     \
         }                                                                       \
