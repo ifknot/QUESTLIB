@@ -1,3 +1,28 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/DEMOS/demo_strings.c(14): Warning! W303: Parameter 'argv' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/DEMOS/demo_strings.c(14): Warning! W303: Parameter 'argc' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/DEMOS/../STR/str_constants.h(6): Warning! W202: Symbol 'STR_PUNCTUATION' has been defined, but not referenced
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(12): Error! E1055: Unable to open '../STR/str_file.h'
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(36): Warning! W131: No prototype found for function 'str_file_count_lines'
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(38): Warning! W131: No prototype found for function 'str_file_count_words'
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(40): Warning! W131: No prototype found for function 'str_file_read_word'
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(45): Warning! W131: No prototype found for function 'file_pointer_is_eof'
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(46): Warning! W131: No prototype found for function 'file_pointer_reset'
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(49): Warning! W131: No prototype found for function 'str_file_read_line'
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(14): Warning! W303: Parameter 'argv' has been defined, but not referenced
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(14): Warning! W303: Parameter 'argc' has been defined, but not referenced
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(36): Warning! W308: The function 'str_file_count_lines' without prototyped parameters called
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(36): Note! I2002: 'str_file_count_lines' defined in: /Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(36)
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(38): Warning! W308: The function 'str_file_count_words' without prototyped parameters called
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(38): Note! I2002: 'str_file_count_words' defined in: /Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(38)
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(40): Warning! W308: The function 'str_file_read_word' without prototyped parameters called
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(40): Note! I2002: 'str_file_read_word' defined in: /Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(40)
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(43): Warning! W308: The function 'str_file_read_word' without prototyped parameters called
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(43): Note! I2002: 'str_file_read_word' defined in: /Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(40)
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(45): Warning! W308: The function 'file_pointer_is_eof' without prototyped parameters called
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(45): Note! I2002: 'file_pointer_is_eof' defined in: /Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(45)
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(46): Warning! W308: The function 'file_pointer_reset' without prototyped parameters called
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(46): Note! I2002: 'file_pointer_reset' defined in: /Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(46)
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(47): Warning! W308: The function 'file_pointer_is_eof' without prototyped parameters called
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(47): Note! I2002: 'file_pointer_is_eof' defined in: /Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(45)
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(48): Warning! W308: The function 'file_pointer_is_eof' without prototyped parameters called
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(48): Note! I2002: 'file_pointer_is_eof' defined in: /Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(45)
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(49): Warning! W308: The function 'str_file_read_line' without prototyped parameters called
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(49): Note! I2002: 'str_file_read_line' defined in: /Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/demo_strings.c(49)
+/Users/jeremythornton/DOS/QUESTLIB/src/DEMOS/../STR/str_constants.h(6): Warning! W202: Symbol 'STR_PUNCTUATION' has been defined, but not referenced

@@ -38,7 +38,7 @@ str_size_t str_file_count_words(const dos_file_handle_t fhandle) {
 
 str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* word, const str_size_t limit) {
     assert(fhandle && word && limit);
-    str_size_t j = 0; // destination index the source index is implicit in the file position indicator 
+    str_size_t j = 0; // destination index the source index is implicit in the file position indicator
     char chr;
     while(str_file_read_char(fhandle, &chr) && !isalpha(chr)); //ignore everything until start of a word found or eof
     if(isalpha(chr)) {  // only consider a word if starts with a letter
@@ -53,13 +53,13 @@ str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* word, const
 
 str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* line, const str_size_t limit) {
     assert(fhandle && line && limit);
-    str_size_t j = 0; // destination index the source index is implicit in the file position indicator 
+    str_size_t j = 0; // destination index the source index is implicit in the file position indicator
     char chr;
     while(j < limit && str_file_read_char(fhandle, &chr) && chr != '\n') {
         line[j++] = chr;
     }
-    line[i] = 0;
-    return i;
+    line[j] = 0;
+    return j;
 }
 
 str_size_t str_file_enumerate_words(const char * path_name, char** string_array, const str_size_t string_limit, const str_size_t array_limit) {
@@ -68,4 +68,5 @@ str_size_t str_file_enumerate_words(const char * path_name, char** string_array,
     assert(f);
 //TODO
     dos_close_file(f);
+    return 0;
 }
