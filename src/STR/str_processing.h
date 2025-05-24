@@ -28,6 +28,6 @@ str_size_t str_read_line(const char* string, str_iterator_t* i, char* line, cons
 * @brief copy distinct alpha-numeric locale specific "words" from a zero terminated string into an array of zero terminated strings.
 * @note no bounds checking for the size of string_array!
 */
-str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t string_limit, const str_size_t array_limit);
+str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t word_limit, const str_size_t array_limit);
 
 #endif

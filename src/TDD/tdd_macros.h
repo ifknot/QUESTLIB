@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-static bool verbose = false;
+static bool verbose = true;
 
 #define V(expr) do { if(verbose) { expr } } while(0)
 
