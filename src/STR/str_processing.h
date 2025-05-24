@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+#include "str_constants.h"
 #include "str_types.h"
 
 char* str_to_upper_case(char* string);
@@ -20,14 +21,14 @@ str_size_t str_count_lines(const char* string);
 */
 str_size_t str_count_words(const char* string);
 
-str_size_t str_read_word(const char* string, str_iterator_t* i, char* word, const str_size_t limit);
+str_size_t str_read_word(const char* string, str_iterator_t* i, char* word, const str_size_t word_size);
 
-str_size_t str_read_line(const char* string, str_iterator_t* i, char* line, const str_size_t limit);
+str_size_t str_read_line(const char* string, str_iterator_t* i, char* line, const str_size_t line_size);
 
 /**
 * @brief copy distinct alpha-numeric locale specific "words" from a zero terminated string into an array of zero terminated strings.
 * @note no bounds checking for the size of string_array!
 */
-str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t word_limit, const str_size_t array_limit);
+str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t array_size, const str_size_t word_size);
 
 #endif

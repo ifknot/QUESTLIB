@@ -1,4 +1,5 @@
 #include "str_processing.h"
+#include "str_constants.h"
 #include "str_types.h"
 
 #include <stdio.h>
@@ -50,42 +51,39 @@ str_size_t str_count_words(const char* string) {
     return n;
 }
 
-str_size_t str_read_word(const char* string, str_iterator_t* i, char* word, const str_size_t limit) {
-   assert(string);
-   assert(word);
-   assert(limit);
-   str_size_t j = 0; // desitination index
-   char chr;
+str_size_t str_read_word(const char* string, str_iterator_t* i, char* word, const str_size_t word_size) {
+    assert(string);
+    assert(word);
+    assert(word_size);
+    str_size_t j = 0; // desitination index
+    char chr;
     while(string[*i] && !isalpha(string[*i])) { //ignore everything until start of a word found or zero terminator
        (*i)++;
     }
-     word[j++] = string[(*i)++];
-     while(j < limit && string[*i] && (isalnum(string[*i]) || chr == '\''|| chr == '-')) { // apostophe and hyphen signify a compound word
-         word[j++] = string[(*i)++];
-     }
-     word[j] = 0; // terminate word string
+    while(j < word_size && string[*i] && (isalnum(string[*i]) || chr == '\''|| chr == '-')) { // apostophe and hyphen signify a compound word
+        word[j++] = string[(*i)++];
+    }
+    word[j] = 0; // terminate word string
     return j;
 }
 
-str_size_t str_read_line(const char* string, str_iterator_t* i, char* line, const str_size_t limit) {
-   assert(string && line && limit);
+str_size_t str_read_line(const char* string, str_iterator_t* i, char* line, const str_size_t line_size) {
+   assert(string && line && line_size);
    str_size_t j = 0; // desitination index
    char chr;
-   while(j < limit && string[*i] && string[*i] != '\n') { // iterate through string until newline or limit reached
+   while(j < line_size && string[*i] && string[*i] != '\n') { // iterate through string until newline or limit reached
         line[j++] = string[(*i)++]; // copy character to line and increment index
     }
     line[j] = 0; // terminate line string
     return j;
 }
 
-str_size_t str_enumarate_words(const char* string, char** string_array, const str_size_t array_limit, const str_size_t word_limit) {
-   assert(string && string_array && array_limit && word_limit);
-    str_size_t i = 0; // word index
-    //while(i < array_limit && string[i]) {
-    printf("->%s<-\n", string_array[i]);
-        //str_read_word(string, &i, string_array[i], word_limit);
-        //}
-    return i;
+str_size_t str_enumarate_words(const char* string,char** string_array, const str_size_t array_size, const str_size_t word_size) {
+    assert(string && string_array && array_size && word_size);
+    str_size_t i = 0; // string iterator
+    int j = 0; // array index
+    while(j < array_size && str_read_word(string, &i, string_array[j++], word_size)) {}
+    return j - 1;
 }
 
 /*

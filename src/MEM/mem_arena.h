@@ -1,5 +1,4 @@
 /**
- *
  *  @brief     The memory arena paradigm - one lifetime to bind them all.
  *  @details   Untangling lifetimes with absurdly simple linear allocator, lightning fast allocation and
  *  deallocation, eliminating lifetime soup of per-allocation freeing/stack fragility/garbage collection requirements.
@@ -22,7 +21,7 @@ typedef enum {
   MEM_ARENA_POLICY_C
 } mem_arena_policy_t;
 
-static const char mem_policy_info[2][64] = {
+static const char mem_policy_info[2][31] = {
 	 "MEM_POLICY_DOS",
 	 "MEM_POLICY_C"
 };

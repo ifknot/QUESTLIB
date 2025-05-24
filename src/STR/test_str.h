@@ -5,8 +5,10 @@
 
 #include "../TDD/tdd_macros.h"
 
+#include "str_constants.h"
 #include "str_scrubbing.h"
 #include "str_processing.h"
+#include "str_memory.h"
 
 #define STR_TESTS &test_str_scrubbing, &test_str_processing, &test_str_file_processing
 
@@ -29,12 +31,14 @@ TEST(test_str_scrubbing) {
 }
 
 TEST(test_str_processing) {
+    mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, 2048);
     str_iterator_t i = 0;
     char test_string[] = "The Quick Brown fox jumps over the lazy dog.\nThis sentence uses all 26 letters of the alphabet, making it useful for testing typewriters, keyboards, and fonts.\nIt's also commonly used for touch-typing practice.";
-    char test_word[15];
-    char test_line[127];
-    char test_array[9][15] = {"1            ", "2            ", "3            ", "4            ", "5            ", "6            ", "7            ", "8            ", "9            "};
-
+    char* test_word = str_make_string(arena, STR_MAX_WORD_LENGTH);
+    V(printf("bytes used %i\n", mem_arena_used(arena)););
+    char* test_line = str_make_string(arena, 128);
+    V(printf("bytes used %i\n", mem_arena_used(arena)););
+    char** test_array = str_make_string_array(arena, 20, STR_MAX_WORD_LENGTH);
     V(printf("%s\n", test_string););
     ASSERT(strcmp(str_to_upper_case(test_string), "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.\nTHIS SENTENCE USES ALL 26 LETTERS OF THE ALPHABET, MAKING IT USEFUL FOR TESTING TYPEWRITERS, KEYBOARDS, AND FONTS.\nIT'S ALSO COMMONLY USED FOR TOUCH-TYPING PRACTICE.") == 0);
     V(printf("%s\n", test_string););
@@ -42,19 +46,20 @@ TEST(test_str_processing) {
     V(printf("%s\n", test_string););
     ASSERT(str_count_words(test_string) == 34);
     ASSERT(str_count_lines(test_string) == 3);
-    ASSERT(str_read_word(test_string, &i, test_word, sizeof(test_word)) == 3);
+    EXPECT(str_read_word(test_string, &i, test_word, STR_MAX_WORD_LENGTH) == 3);
+    V(printf("%s\n",test_word););
     EXPECT(strcmp(test_word, "the") == 0);
-    ASSERT(str_read_word(test_string, &i, test_word, sizeof(test_word)) == 5);
+    EXPECT(str_read_word(test_string, &i, test_word, STR_MAX_WORD_LENGTH) == 5);
+    V(printf("%s\n",test_word););
     EXPECT(strcmp(test_word, "quick") == 0);
-    EXPECT(str_read_line(test_string, &i, test_line, sizeof(test_line)) == 35);
+    EXPECT(str_read_line(test_string, &i, test_line, 128) == 35);
     V(printf("%s\n", test_line););
     EXPECT(strcmp(test_line, "brown fox jumps over the lazy dog."));
-
-    //str_enumarate_words(test_string, (char**)test_array, 15,9);
-        //ASSERT(str_enumarate_words(test_string, test_array, 15, 9) == 9);
-    printf("%s\n", test_array[0]);
-
-
+    EXPECT(str_enumarate_words(test_line, test_array, 9, STR_MAX_WORD_LENGTH) == 7);
+    V(for(int i =0; i < 9; ++i) printf("->%s<-\n", test_array[i]););
+    V(printf("bytes used %i\n", mem_arena_used(arena)););
+    V(printf("bytes spare %i\n", mem_arena_size(arena)););
+    mem_arena_delete(arena);
 }
 
 TEST(test_str_file_processing) {
