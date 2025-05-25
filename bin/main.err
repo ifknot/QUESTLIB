@@ -1,4 +1,5 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/test_str.h(65): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/test_str.h(31): Warning! W202: Symbol 'ss' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/test_str.h(89): Warning! W303: Parameter 'pass' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/main.c(9): Warning! W303: Parameter 'argv' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/main.c(9): Warning! W303: Parameter 'argc' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_constants.h(8): Warning! W202: Symbol 'STR_PUNCTUATION' has been defined, but not referenced

@@ -5,6 +5,7 @@
 #include "mem_arena.h"
 
 #include "../DOS/dos_services.h"
+#include "mem_constants.h"
 
 typedef struct private_mem_arena {
 
@@ -29,13 +30,13 @@ static const mem_arena_t default_dos_mem_arena_t = { MEM_ARENA_POLICY_DOS, NULL,
 */
 mem_arena_t* private_mem_arena_dos_new(mem_size_t byte_count) {
 	mem_arena_t* arena = (mem_arena_t*)malloc(sizeof(mem_arena_t));
-	mem_size_t paragraphs = ((byte_count / PARAGRAPH_SIZE) + ((byte_count & 0xF) ? 1 : 0));  // ? need extra paragraph for any remainder
+	mem_size_t paragraphs = ((byte_count / MEM_SIZE_PARAGRAPH) + ((byte_count & 0xF) ? 1 : 0));  // ? need extra paragraph for any remainder
 	assert(arena != NULL);
 	*arena = default_dos_mem_arena_t;
 	arena->start.segoff.segment = dos_allocate_memory_blocks(paragraphs);	// ask DOS for the memory
 	if (arena->start.segoff.segment) {								// success DOS could fulfill the memory request
 		arena->free = arena->start.ptr;
-		arena->end = arena->start.ptr + paragraphs * PARAGRAPH_SIZE;
+		arena->end = arena->start.ptr + paragraphs * MEM_SIZE_PARAGRAPH;
 	}
 #ifndef NDEBUG
 	else {

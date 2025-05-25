@@ -13,9 +13,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-static bool verbose = true;
+static bool tdd_verbose = true;
 
-#define V(expr) do { if(verbose) { expr } } while(0)
+#define V(expr) do { if(tdd_verbose) { expr } } while(0)
 
 #define FILENAME (strrchr("/" __FILE__, '/') + 1)
 
@@ -51,16 +51,17 @@ typedef struct {
         for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {         \
             bool passed = true;                                                 \
             tests[i]->fn(&passed);                                              \
-            if (verbose) {                                                      \
-                printf("%s: %s\n", passed ? "PASS" : "FAIL", tests[i]->name);   \
+            if (tdd_verbose) {                                                  \
+                printf("\n%s: %s\n", passed ? "PASS" : "FAIL", tests[i]->name); \
             }                                                                   \
             else {                                                              \
-                printf("%c", passed ? '+' : '-');                             \
+                printf("%c", passed ? '+' : '-');                               \
             }                                                                   \
             if (!passed)                                                        \
                 failures++;                                                     \
         }                                                                       \
-        return failures ? EXIT_FAILURE : EXIT_SUCCESS;                          \
+        V(printf("Failures = %i", failures););                                  \
+        return failures;                                                        \
     }
 
 #endif

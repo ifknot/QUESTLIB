@@ -11,7 +11,7 @@ char* str_make_string(mem_arena_t* arena, str_size_t string_size) {
 }
 
 char* str_make_copy(mem_arena_t* arena, const char* source) {
-    char* string = str_make_string(arena, strlen(source));
+    char* string = str_make_string(arena, strlen(source) + 1);  // +1 for the trailing zero string terminator
     return strcpy(string, source);
 }
 
