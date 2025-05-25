@@ -92,7 +92,8 @@ TEST(test_str_processing) {
 TEST(test_str_file_processing) {
     tdd_verbose = true;
     char c = ' ';
-    char s[40] = {0};
+    char s[15] = {0};
+    char l[40] = {0};
     dos_file_handle_t f = dos_open_file("assets/poem.txt", ACCESS_READ_ONLY);
     V(printf("words %li\n",str_file_count_words(f)););
     ASSERT(str_file_count_words(f) == 90);
@@ -104,9 +105,12 @@ TEST(test_str_file_processing) {
     ASSERT(str_file_read_char(f, &c) == 1);
     EXPECT(c == 'h');
     V(printf("%c\n",c););
-    EXPECT(str_file_read_word(f, s, 40) == 2);
+    EXPECT(str_file_read_word(f, s, 15) == 2);
     EXPECT(strcmp(s, "is") == 0);
     V(printf("%s\n",s););
+    EXPECT(str_file_read_line(f, l, 40) == 12);
+    EXPECT(strcmp(l, "Be The Verse") == 0);
+    V(printf("->%s<-\n",l););
     dos_close_file(f);
 /*
 

@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <assert.h>
-//#include <stdio.h>
+#include <stdio.h>
 
 #include "../DOS/dos_services_files.h"
 

@@ -50,9 +50,7 @@ str_size_t str_count_words(const char* string) {
 }
 
 str_size_t str_read_word(const char* string, str_iterator_t* i, char* word, const str_size_t word_size) {
-    assert(string);
-    assert(word);
-    assert(word_size);
+    assert(string && word && word_size);
     str_size_t j = 0; // desitination index
     char chr;
     while(string[*i] && !isalpha(string[*i])) { //ignore everything until start of a word found or zero terminator
