@@ -58,7 +58,7 @@ TEST(test_str_scrubbing) {
 
 TEST(test_str_processing) {
     tdd_verbose = false;
-    mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_4K);
+    mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_1K);
     str_iterator_t i = 0;
     char test_string[] = "The Quick Brown fox jumps over the lazy dog.\nThis sentence uses all 26 letters of the alphabet, making it useful for testing typewriters, keyboards, and fonts.\nIt's also commonly used for touch-typing practice.";
     char* test_word = str_make_string(arena, STR_MAX_WORD_LENGTH);
@@ -81,14 +81,16 @@ TEST(test_str_processing) {
     V(printf("%s\n", test_line););
     EXPECT(strcmp(test_line, "brown fox jumps over the lazy dog."));
     EXPECT(str_enumerate_words(test_line, test_array, 9, STR_MAX_WORD_LENGTH) == 7);
-    V(for(int i =0; i < 9; ++i) printf("->%s<-\n", test_array[i]););
-    V(printf("bytes used %i\n", mem_arena_used(arena)););
+    V(for(int i =0; i < 9; ++i) printf("%s ", test_array[i]););
+    str_sort_words(test_array, 9);
+    V(for(int i =0; i < 9; ++i) printf("%s ", test_array[i]););
+    V(printf("\nbytes used %i\n", mem_arena_used(arena)););
     V(printf("bytes spare %i\n", mem_arena_size(arena)););
     mem_arena_delete(arena);
 }
 
 TEST(test_str_file_processing) {
-    tdd_verbose = false;
+    tdd_verbose = true;
     mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_4K);
     char c = ' ';
     char s[15] = {0};
@@ -112,8 +114,9 @@ TEST(test_str_file_processing) {
     EXPECT(strcmp(l, "Be The Verse") == 0);
     V(printf("->%s<-\n",l););
     EXPECT(str_file_enumerate_words("assets/poem.txt", test_array, 92, STR_MAX_WORD_LENGTH) == 90);
+    str_sort_words_case_insensitive(test_array, 92);
     V(for(int i =0; i < 92; ++i) printf("%s ", test_array[i]););
-    V(printf("bytes used %i\n", mem_arena_used(arena)););
+    V(printf("\nbytes used %i\n", mem_arena_used(arena)););
     V(printf("bytes spare %i\n", mem_arena_size(arena)););
     dos_close_file(f);
     mem_arena_delete(arena);

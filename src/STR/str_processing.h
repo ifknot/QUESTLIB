@@ -1,3 +1,11 @@
+/**
+ * @file str_processing.h
+ * @brief String conversion utilities
+ *
+ * @defgroup string_processing String Processing Functions
+ * @{
+ */
+
 #ifndef STR_PROCESSING_H
 #define STR_PROCESSING_H
 
@@ -212,8 +220,79 @@ str_size_t str_read_line(const char* string, str_iterator_t* i, char* line, cons
 str_size_t str_enumerate_words(const char* string, char** string_array, const str_size_t array_size, const str_size_t word_size);
 
 /**
-* @brief sort the words in string array into lexicographical (dictionary) order
-*/
+ * @brief Comparison function for qsort to sort strings alphabetically
+ * @param a Pointer to first string (cast from void*)
+ * @param b Pointer to second string (cast from void*)
+ * @return <0 if a < b, 0 if equal, >0 if a > b (per strcmp semantics)
+ *
+ * @details Case-sensitive comparison using standard strcmp().
+ *          Designed specifically for use with qsort() on char* arrays.
+ *
+ * @note This is a comparator function following qsort's required signature
+ */
+int str_compare_strings(const void *a, const void *b);
+
+/**
+ * @brief Sorts an array of strings in ascending alphabetical order
+ * @param[in,out] string_array Array of null-terminated strings to sort
+ * @param[in] array_size Number of elements in the array
+ *
+ * @details Performs case-sensitive sort using the system's qsort() with these properties:
+ *          - In-place O(n log n) sort (modifies original array)
+ *          - Lexicographical order using strcmp() semantics
+ *          - Handles all valid ASCII/UTF-8 strings
+ *          - Sorts NULL pointers safely if present
+ *
+ * @pre string_array != NULL (asserted)
+ * @pre array_size > 0 (asserted)
+ * @pre Each element points to valid memory (not verified)
+ *
+ * @warning Modifies the input array directly
+ * @warning Not a stable sort (equal elements may change order)
+ * @warning Case-sensitive ("Zebra" comes before "apple")
+ */
 void str_sort_words(char** string_array, const str_size_t array_size);
 
+/**
+ * @brief Case-insensitive string comparison function for qsort
+ * @param a Pointer to first string (cast from void*)
+ * @param b Pointer to second string (cast from void*)
+ * @return <0 if a < b, 0 if equal, >0 if a > b (per strcasecmp semantics)
+ *
+ * @details Case-insensitive comparison using strcasecmp().
+ *          Compares strings alphabetically ignoring case differences.
+ *          Example: "apple" == "Apple", "zebra" > "Apple"
+ *
+ * @note This is a comparator function following qsort's required signature
+ * @see str_sort_words_case_insensitive()
+ * @see strcmp() (for case-sensitive version)
+ */
+int str_compare_strings_case_insensitive(const void *a, const void *b);
+
+/**
+ * @brief Sorts an array of strings alphabetically (case-insensitive)
+ * @param[in,out] string_array Array of null-terminated strings to sort
+ * @param[in] array_size Number of strings in the array
+ *
+ * @details Uses qsort() with strcasecmp() to perform:
+ *          - In-place case-insensitive sorting
+ *          - O(n log n) time complexity
+ *          - "Apple" will sort next to "apple"
+ *
+ * @pre string_array != NULL (asserted)
+ * @pre array_size > 0 (asserted)
+ * @pre Each string_array element must point to valid null-terminated string
+ *
+ * @warning Modifies the input array directly
+ * @warning Not stable sort (order of equal elements may change)
+ * @warning Locale-dependent behavior (strcasecmp)
+ *
+ * @see str_compare_strings_case_insensitive()
+ * @see str_sort_words() (for case-sensitive version)
+ * @see qsort()
+ */
+void str_sort_words_case_insensitive(char** string_array, const str_size_t array_size);
+
 #endif
+
+/** @} */ // end of string_processing group

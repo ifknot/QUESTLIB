@@ -1,5 +1,5 @@
-#ifndef PARSE_TOKEN_DICTIONARY_H
-#define PARSE_TOKEN_DICTIONARY_H
+#ifndef PARSE_DICTIONARY_H
+#define PARSE_DICTIONARY_H
 
 #include "../STR/str_types.h"
 

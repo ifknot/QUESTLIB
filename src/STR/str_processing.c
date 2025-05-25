@@ -2,8 +2,10 @@
 #include "str_types.h"
 
 //#include <stdio.h>
+
 #include <ctype.h>
 #include <assert.h>
+#include <string.h>
 
 char* str_to_upper_case(char* string) {
    assert(string);
@@ -79,4 +81,22 @@ str_size_t str_enumerate_words(const char* string,char** string_array, const str
     int j = 0; // array index
     while(j < array_size && str_read_word(string, &i, string_array[j++], word_size)) {}
     return j - 1;
+}
+
+int str_compare_strings(const void *a, const void *b) {
+    return strcmp(*(const char **)a, *(const char **)b);
+}
+
+void str_sort_words(char** string_array, const str_size_t array_size) {
+    assert(string_array && array_size);
+    qsort(string_array, (size_t )array_size, sizeof(char *), str_compare_strings); // case sensitive
+}
+
+int str_compare_strings_case_insensitive(const void *a, const void *b) {
+    return strcasecmp(*(const char **)a, *(const char **)b);
+}
+
+void str_sort_words_case_insensitive(char** string_array, const str_size_t array_size) {
+    assert(string_array && array_size);
+    qsort(string_array, (size_t)array_size, sizeof(char *), str_compare_strings_case_insensitive);
 }

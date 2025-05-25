@@ -1,3 +1,11 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(68): Warning! W202: Symbol 'chr' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(70): Warning! W202: Symbol 'chr' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(92): Warning! W131: No prototype found for function 'qsort'
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(96): Warning! W131: No prototype found for function 'strcasecmp'
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(92): Warning! W308: The function 'qsort' without prototyped parameters called
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(92): Note! I2002: 'qsort' defined in: /Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(92)
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(96): Warning! W308: The function 'strcasecmp' without prototyped parameters called
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(96): Note! I2002: 'strcasecmp' defined in: /Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(96)
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(101): Warning! W308: The function 'qsort' without prototyped parameters called
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(101): Note! I2002: 'qsort' defined in: /Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c(92)
 /Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_constants.h(48): Warning! W202: Symbol 'STR_PUNCTUATION' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_constants.h(34): Warning! W202: Symbol 'STR_WHITESPACE' has been defined, but not referenced
