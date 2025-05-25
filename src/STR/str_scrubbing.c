@@ -1,15 +1,14 @@
 #include "str_scrubbing.h"
 #include "str_types.h"
 
-#include <stdio.h>
 #include <stdbool.h>
 #include <ctype.h>
 #include <assert.h>
 
 str_size_t str_remove_character(char* string, const char target) {
     assert(string);
-    str_size_t i = 0; // search index;
-    str_size_t j = 0; // copy index;
+    str_size_t i = 0; // search index
+    str_size_t j = 0; // copy index
     while(string[i]) {
         if(string[i] == target) {
             i++;

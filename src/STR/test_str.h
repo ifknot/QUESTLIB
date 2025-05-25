@@ -80,7 +80,7 @@ TEST(test_str_processing) {
     EXPECT(str_read_line(test_string, &i, test_line, 128) == 35);
     V(printf("%s\n", test_line););
     EXPECT(strcmp(test_line, "brown fox jumps over the lazy dog."));
-    EXPECT(str_enumarate_words(test_line, test_array, 9, STR_MAX_WORD_LENGTH) == 7);
+    EXPECT(str_enumerate_words(test_line, test_array, 9, STR_MAX_WORD_LENGTH) == 7);
     V(for(int i =0; i < 9; ++i) printf("->%s<-\n", test_array[i]););
     V(printf("bytes used %i\n", mem_arena_used(arena)););
     V(printf("bytes spare %i\n", mem_arena_size(arena)););
@@ -118,6 +118,5 @@ TEST(test_str_file_processing) {
     dos_close_file(f);
     mem_arena_delete(arena);
 }
-
 
 #endif

@@ -52,11 +52,10 @@ str_size_t str_count_words(const char* string) {
 str_size_t str_read_word(const char* string, str_iterator_t* i, char* word, const str_size_t word_size) {
     assert(string && word && word_size);
     str_size_t j = 0; // desitination index
-    char chr;
     while(string[*i] && !isalpha(string[*i])) { //ignore everything until start of a word found or zero terminator
        (*i)++;
     }
-    while(j < word_size && string[*i] && (isalnum(string[*i]) || chr == '\''|| chr == '-')) { // apostophe and hyphen signify a compound word
+    while(j < word_size && string[*i] && (isalnum(string[*i]) || string[*i] == '\''|| string[*i] == '-')) { // apostophe and hyphen signify a compound word
         word[j++] = string[(*i)++];
     }
     word[j] = 0; // terminate word string
@@ -65,7 +64,7 @@ str_size_t str_read_word(const char* string, str_iterator_t* i, char* word, cons
 
 str_size_t str_read_line(const char* string, str_iterator_t* i, char* line, const str_size_t line_size) {
    assert(string && line && line_size);
-   str_size_t j = 0; // desitination index
+   str_size_t j = 0; // destination index
    char chr;
    while(j < line_size && string[*i] && string[*i] != '\n') { // iterate through string until newline or limit reached
         line[j++] = string[(*i)++]; // copy character to line and increment index
@@ -74,7 +73,7 @@ str_size_t str_read_line(const char* string, str_iterator_t* i, char* line, cons
     return j;
 }
 
-str_size_t str_enumarate_words(const char* string,char** string_array, const str_size_t array_size, const str_size_t word_size) {
+str_size_t str_enumerate_words(const char* string,char** string_array, const str_size_t array_size, const str_size_t word_size) {
     assert(string && string_array && array_size && word_size);
     str_size_t i = 0; // string iterator
     int j = 0; // array index
