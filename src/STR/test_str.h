@@ -62,10 +62,8 @@ TEST(test_str_processing) {
     str_iterator_t i = 0;
     char test_string[] = "The Quick Brown fox jumps over the lazy dog.\nThis sentence uses all 26 letters of the alphabet, making it useful for testing typewriters, keyboards, and fonts.\nIt's also commonly used for touch-typing practice.";
     char* test_word = str_make_string(arena, STR_MAX_WORD_LENGTH);
-    V(printf("bytes used %i\n", mem_arena_used(arena)););
     char* test_line = str_make_string(arena, 128);
-    V(printf("bytes used %i\n", mem_arena_used(arena)););
-    char** test_array = str_make_string_array(arena, 50, STR_MAX_WORD_LENGTH);
+    char** test_array = str_make_string_array(arena, 9, STR_MAX_WORD_LENGTH);
     V(printf("%s\n", test_string););
     ASSERT(strcmp(str_to_upper_case(test_string), "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.\nTHIS SENTENCE USES ALL 26 LETTERS OF THE ALPHABET, MAKING IT USEFUL FOR TESTING TYPEWRITERS, KEYBOARDS, AND FONTS.\nIT'S ALSO COMMONLY USED FOR TOUCH-TYPING PRACTICE.") == 0);
     V(printf("%s\n", test_string););
@@ -82,18 +80,20 @@ TEST(test_str_processing) {
     EXPECT(str_read_line(test_string, &i, test_line, 128) == 35);
     V(printf("%s\n", test_line););
     EXPECT(strcmp(test_line, "brown fox jumps over the lazy dog."));
-    EXPECT(str_enumarate_words(test_line, test_array, 50, STR_MAX_WORD_LENGTH) == 7);
-    V(for(int i =0; i < 50; ++i) printf("->%s<-\n", test_array[i]););
+    EXPECT(str_enumarate_words(test_line, test_array, 9, STR_MAX_WORD_LENGTH) == 7);
+    V(for(int i =0; i < 9; ++i) printf("->%s<-\n", test_array[i]););
     V(printf("bytes used %i\n", mem_arena_used(arena)););
     V(printf("bytes spare %i\n", mem_arena_size(arena)););
     mem_arena_delete(arena);
 }
 
 TEST(test_str_file_processing) {
-    tdd_verbose = true;
+    tdd_verbose = false;
+    mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_4K);
     char c = ' ';
     char s[15] = {0};
     char l[40] = {0};
+    char** test_array = str_make_string_array(arena, 92, STR_MAX_WORD_LENGTH);
     dos_file_handle_t f = dos_open_file("assets/poem.txt", ACCESS_READ_ONLY);
     V(printf("words %li\n",str_file_count_words(f)););
     ASSERT(str_file_count_words(f) == 90);
@@ -111,21 +111,12 @@ TEST(test_str_file_processing) {
     EXPECT(str_file_read_line(f, l, 40) == 12);
     EXPECT(strcmp(l, "Be The Verse") == 0);
     V(printf("->%s<-\n",l););
+    EXPECT(str_file_enumerate_words("assets/poem.txt", test_array, 92, STR_MAX_WORD_LENGTH) == 90);
+    V(for(int i =0; i < 92; ++i) printf("%s ", test_array[i]););
+    V(printf("bytes used %i\n", mem_arena_used(arena)););
+    V(printf("bytes spare %i\n", mem_arena_size(arena)););
     dos_close_file(f);
-/*
-
-    str_size_t str_file_count_lines(const dos_file_handle_t fhandle);
-
-    str_size_t str_file_count_words(const dos_file_handle_t fhandle);
-
-    str_size_t str_file_read_char(const dos_file_handle_t fhandle, char* chr)
-
-    str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* word, const str_size_t limit);
-
-    str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* line, const str_size_t limit);
-
-    str_size_t str_file_enumerate_words(const char * path_name, char** string_array, const str_size_t string_limit, const str_size_t array_limit);
-*/
+    mem_arena_delete(arena);
 }
 
 

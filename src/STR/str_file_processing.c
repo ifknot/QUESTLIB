@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <assert.h>
-#include <stdio.h>
+//#include <stdio.h>
 
 #include "../DOS/dos_services_files.h"
 
@@ -36,14 +36,14 @@ str_size_t str_file_count_words(const dos_file_handle_t fhandle) {
     return words;
 }
 
-str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* word, const str_size_t limit) {
-    assert(fhandle && word && limit);
+str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* word, const str_size_t word_size) {
+    assert(fhandle && word && word_size);
     str_size_t j = 0; // destination index the source index is implicit in the file position indicator
     char chr;
     while(str_file_read_char(fhandle, &chr) && !isalpha(chr)); //ignore everything until start of a word found or eof
     if(isalpha(chr)) {  // only consider a word if starts with a letter
         word[j++] = chr;
-        while(j < limit && str_file_read_char(fhandle, &chr) && (isalnum(chr) || chr == '\''|| chr == '-')) { // apostophe and hyphen signify a compound word
+        while(j < word_size && str_file_read_char(fhandle, &chr) && (isalnum(chr) || chr == '\''|| chr == '-')) { // apostophe and hyphen signify a compound word
             word[j++] = chr;
         }
         word[j] = 0; // terminate string
@@ -51,22 +51,23 @@ str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* word, const
     return j;
 }
 
-str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* line, const str_size_t limit) {
-    assert(fhandle && line && limit);
+str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* line, const str_size_t line_size) {
+    assert(fhandle && line && line_size);
     str_size_t j = 0; // destination index the source index is implicit in the file position indicator
     char chr;
-    while(j < limit && str_file_read_char(fhandle, &chr) && chr != '\n') {
+    while(j < line_size && str_file_read_char(fhandle, &chr) && chr != '\n') {
         line[j++] = chr;
     }
     line[j] = 0;
     return j;
 }
 
-str_size_t str_file_enumerate_words(const char * path_name, char** string_array, const str_size_t string_limit, const str_size_t array_limit) {
-    assert(path_name && string_array && string_limit && array_limit);
+str_size_t str_file_enumerate_words(const char * path_name, char** string_array, const str_size_t array_size, const str_size_t word_size) {
+    assert(path_name && string_array && word_size && array_size);
     dos_file_handle_t f = dos_open_file(path_name, ACCESS_READ_ONLY);
     assert(f);
-//TODO
+    int j = 0; // array index
+    while(j < array_size && str_file_read_word(f, string_array[j++], word_size)) {}
     dos_close_file(f);
-    return 0;
+    return j - 1;
 }
