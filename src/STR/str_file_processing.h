@@ -7,12 +7,12 @@
 
 #include "str_types.h"
 
-str_size_t str_file_count_lines(const dos_file_handle_t fhandle);
-
 /**
 * @note a word is only counted if starts with a letter, may contain numbers, may be compound (hyphen and/or apostrophe)
 */
 str_size_t str_file_count_words(const dos_file_handle_t fhandle);
+
+str_size_t str_file_count_lines(const dos_file_handle_t fhandle);
 
 /**
 * @note advances the file position pointer to the next character

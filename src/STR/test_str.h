@@ -4,15 +4,18 @@
 #include <string.h>
 
 #include "../TDD/tdd_macros.h"
+#include "../DOS/dos_services_files.h"
 
 #include "str_constants.h"
 #include "str_memory.h"
 #include "str_scrubbing.h"
 #include "str_processing.h"
+#include "str_file_processing.h"
 
 #define STR_TESTS &test_str_memory, &test_str_scrubbing, &test_str_processing, &test_str_file_processing
 
 TEST(test_str_memory) {
+    tdd_verbose = false;
     mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_1K);
     ASSERT(mem_arena_capacity(arena) == MEM_SIZE_1K);
     ASSERT(mem_arena_size(arena) == mem_arena_capacity(arena));
@@ -87,7 +90,24 @@ TEST(test_str_processing) {
 }
 
 TEST(test_str_file_processing) {
-
+    tdd_verbose = true;
+    char c = ' ';
+    char s[40] = {0};
+    dos_file_handle_t f = dos_open_file("assets/poem.txt", ACCESS_READ_ONLY);
+    V(printf("words %li\n",str_file_count_words(f)););
+    ASSERT(str_file_count_words(f) == 90);
+    V(printf("lines %li\n",str_file_count_lines(f)););
+    ASSERT(str_file_count_lines(f) == 17);
+    ASSERT(str_file_read_char(f, &c) == 1);
+    EXPECT(c == 'T');
+    V(printf("%c\n",c););
+    ASSERT(str_file_read_char(f, &c) == 1);
+    EXPECT(c == 'h');
+    V(printf("%c\n",c););
+    EXPECT(str_file_read_word(f, s, 40) == 2);
+    EXPECT(strcmp(s, "is") == 0);
+    V(printf("%s\n",s););
+    dos_close_file(f);
 /*
 
     str_size_t str_file_count_lines(const dos_file_handle_t fhandle);

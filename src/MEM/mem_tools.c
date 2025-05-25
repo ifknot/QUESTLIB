@@ -6,8 +6,6 @@
 
 #include "../DOS/dos_services_files.h"
 
-#include "mem_constants.h"
-
 uint16_t mem_available_low_paragraphs() {
     uint16_t paragraphs, err_code;
     paragraphs = err_code = 0;

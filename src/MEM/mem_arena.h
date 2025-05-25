@@ -46,4 +46,8 @@ void* mem_arena_dealloc(mem_arena_t* arena, mem_size_t byte_request);
 
 void mem_arena_dump(mem_arena_t* arena);
 
+// mem_size_t mem_arena_load_from_file(const char path_name);
+
+// mem_size_t mem_arena_save_to_file(const char path_name);
+
 #endif
