@@ -14,7 +14,7 @@ typedef struct private_mem_arena {
   char*			free;		// pointer to start of free memory within arena, initially free = start
   char*			end;		// end address limit of useable arena memory
 
-} mem_arean_t;
+} mem_arena_t;
 
 static const mem_arena_t default_dos_mem_arena_t = { MEM_ARENA_POLICY_DOS, NULL, NULL, NULL };
 
@@ -121,8 +121,13 @@ void* mem_arena_dealloc(mem_arena_t* arena, mem_size_t byte_request) {
 	return arena->free;
 }
 
-void mem_arena_dump(mem_arena_t* arena) {
-	fprintf(stderr, "\nmem_arena_t @%P\npolicy\t%i %s\nstart\t%P\nfree\t%P\nend\t%P\ncapacity\t%li\nsize\t\t%li\nused\t\t%li",
+void mem_arena_dump(FILE* output_stream, mem_arena_t* arena) {
+    assert(output_stream);
+	assert(
+	    fprintf(output_stream, "\nmem_arena_t @%P\npolicy\t%i %s\nstart\t%P\nfree\t%P\nend\t%P\ncapacity\t%li\nsize\t\t%li\nused\t\t%li",
 		arena, arena->policy, mem_policy_info[arena->policy],arena->start.ptr,arena->free,arena->end,
-		mem_arena_capacity(arena),mem_arena_size(arena),mem_arena_used(arena));
+		mem_arena_capacity(arena),mem_arena_size(arena),mem_arena_used(arena))
+		>= 0
+	);
+	assert(fflush(output_stream) != EOF); // flush error
 }

@@ -1,6 +1,9 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/test_str.h(30): Warning! W202: Symbol 'ss' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(9): Warning! W303: Parameter 'argv' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(9): Warning! W303: Parameter 'argc' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(12): Warning! W303: Parameter 'argv' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(12): Warning! W303: Parameter 'argc' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_constants.h(48): Warning! W202: Symbol 'STR_PUNCTUATION' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/STR/../MEM/mem_types.h(20): Warning! W202: Symbol 'default_mem_segoff_t' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/../MEM/mem_arena.h(24): Warning! W202: Symbol 'mem_policy_info' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/../MEM/mem_arena.h(26): Warning! W202: Symbol 'mem_policy_info' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/test_str.h(26): Warning! W202: Symbol 'test_str_memory' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/test_str.h(94): Warning! W202: Symbol 'test_str_processing' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/test_str.h(62): Warning! W202: Symbol 'test_str_scrubbing' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/STR/test_str.h(144): Warning! W202: Symbol 'test_str_file_processing' has been defined, but not referenced

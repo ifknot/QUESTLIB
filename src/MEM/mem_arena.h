@@ -13,6 +13,8 @@
 #ifndef MEM_ARENA_H
 #define MEM_ARENA_H
 
+#include <stdio.h>
+
 #include "mem_constants.h"
 #include "mem_types.h"
 
@@ -44,7 +46,7 @@ void* mem_arena_alloc(mem_arena_t* arena, mem_size_t byte_request);
 
 void* mem_arena_dealloc(mem_arena_t* arena, mem_size_t byte_request);
 
-void mem_arena_dump(mem_arena_t* arena);
+void mem_arena_dump(FILE* output_stream, mem_arena_t* arena);
 
 // mem_size_t mem_arena_load_from_file(const char path_name);
 

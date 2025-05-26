@@ -23,7 +23,7 @@ file(GLOB SOURCES
     MEM/*.c
     STR/*.c
     TDD/*.c
-    DEMOS/*.c
+    PARSE/*.c
 )
 
 message(Source list="${SOURCES}")

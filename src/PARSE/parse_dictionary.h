@@ -1,15 +1,23 @@
 #ifndef PARSE_DICTIONARY_H
 #define PARSE_DICTIONARY_H
 
-#include "../STR/str_types.h"
+#include <stddef.h>
+#include <stddef.h>
+
+#include "../MEM/mem_arena.h"
+#include "../DOS/dos_services_files.h"
 
 #include "parse_types.h"
 
-/**
-* @brief binary search dictionary for zero terminated string containing 1 alpha-numeric word and return its token value, or zero if not found.
-*/
-//parse_token_t parse_tokenize(const parse_word_token_t* dictionary, str_size_t size, const char* target);
+typedef struct private_parse_dictionary parse_dictionary_t;
 
+parse_dictionary_t* parse_dictionary_create(mem_arena_t* arena, size_t size);
+
+//parse_dictionary_t* parse_dictionary_create_from_file(mem_arena_t* arena, const char * path_name, parse_dictionary_t* dictionary);
+
+size_t parse_dictionary_size(const parse_dictionary_t* dictionary);
+
+void parse_dictionary_dump(FILE* output_stream, parse_dictionary_t* dictionary);
 
 #endif
 
