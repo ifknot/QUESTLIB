@@ -1,4 +1,4 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/PARSE/parse_dictionary.c(44): Error! E1033: Expression for '->' must be 'pointer to struct or union'
-/Users/jeremythornton/dosbox/QUESTLIB/src/PARSE/parse_dictionary.c(44): Error! E1033: Expression for '->' must be 'pointer to struct or union'
+/Users/jeremythornton/dosbox/QUESTLIB/src/PARSE/parse_dictionary.c(71): Warning! W303: Parameter 'dict' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/PARSE/parse_dictionary.c(71): Warning! W303: Parameter 'lexeme' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/PARSE/../MEM/mem_types.h(20): Warning! W202: Symbol 'default_mem_segoff_t' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/PARSE/../MEM/mem_arena.h(26): Warning! W202: Symbol 'mem_policy_info' has been defined, but not referenced

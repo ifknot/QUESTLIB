@@ -15,9 +15,19 @@ parse_dictionary_t* parse_dictionary_create(mem_arena_t* arena, size_t size);
 
 //parse_dictionary_t* parse_dictionary_create_from_file(mem_arena_t* arena, const char * path_name, parse_dictionary_t* dictionary);
 
-size_t parse_dictionary_size(const parse_dictionary_t* dictionary);
+void parse_dictionary_add(parse_dictionary_t* dict, char* lexeme, parse_token_t token);
 
-void parse_dictionary_dump(FILE* output_stream, parse_dictionary_t* dictionary);
+void parse_dictionary_remove(parse_dictionary_t* dict, size_t index);
+
+void parse_dictionary_sort(parse_dictionary_t* dict);
+
+size_t parse_dictionary_find(parse_dictionary_t* dict, char* lexeme);
+
+size_t parse_dictionary_size(const parse_dictionary_t* dict);
+
+size_t parse_dictionary_capacity(const parse_dictionary_t* dict);
+
+void parse_dictionary_dump(FILE* output_stream, parse_dictionary_t* dict);
 
 #endif
 
