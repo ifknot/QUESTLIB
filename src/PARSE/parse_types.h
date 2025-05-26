@@ -6,8 +6,8 @@
 typedef uint16_t parse_token_t;
 
 typedef struct {
-    char* word;
+    char* lexeme;
     parse_token_t token;
-} parse_word_token_pair_t;
+} parse_lexeme_token_pair_t;
 
 #endif
