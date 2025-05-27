@@ -18,67 +18,93 @@ typedef struct private_mem_arena {
 
 static const mem_arena_t default_dos_mem_arena_t = { MEM_ARENA_POLICY_DOS, NULL, NULL, NULL };
 
+/* ----------------- DOS-Specific Implementation ----------------- */
+
 /**
-* The DOS INT 21,48 - Allocate Memory function takes a 16 bit word size request in paragraphs (16 bytes)
-* and returns a memory segment address as a 16 bit value.
-* Because the request is a 16 bit word the, *theoretical*, maximum number of paragraphs requestable to
-* allocate is 65535 paragraphs or 65535 x 16 = 1048560 bytes.
-* Which is 16 bytes, one paragraph, less than 1 Mebibyte (MiB)
-* @note 1MiB Max the original 8086/8088 microprocessors' 20-bit address bus can address 1,048,576 bytes.
-* However, the actual amount of allocatable RAM is restricted 640K or less (+ possible upper memory area)
-* and will depend on installed RAM.
-*/
+ * @brief Creates a DOS memory arena via INT 21h
+ * @param byte_count Requested size in bytes
+ * @return Initialized arena or NULL on failure
+ * 
+ * @details Memory Allocation:
+ * @code
+ * Paragraphs = (bytes / 16) + (bytes % 16 ? 1 : 0)
+ * INT 21h, AH=48h:
+ *   BX = Paragraphs requested
+ *   Returns:
+ *     AX = Segment address (success)
+ *     BX = Max available (failure)
+ * @endcode
+ * 
+ * @warning Maximum allocatable:
+ *          - 65535 paragraphs (1MB - 16 bytes)
+ *          - Typically limited to 640KB in practice
+ */
 mem_arena_t* private_mem_arena_dos_new(mem_size_t byte_count) {
+	assert(byte_count);
 	mem_arena_t* arena = (mem_arena_t*)malloc(sizeof(mem_arena_t));
-	mem_size_t paragraphs = ((byte_count / MEM_SIZE_PARAGRAPH) + ((byte_count & 0xF) ? 1 : 0));  // ? need extra paragraph for any remainder
-	assert(arena != NULL);
-	*arena = default_dos_mem_arena_t;
-	arena->start.segoff.segment = dos_allocate_memory_blocks(paragraphs);	// ask DOS for the memory
-	if (arena->start.segoff.segment) {								// success DOS could fulfill the memory request
-		arena->free = arena->start.ptr;
-		arena->end = arena->start.ptr + paragraphs * MEM_SIZE_PARAGRAPH;
-	}
+    assert(arena != NULL);
+    *arena = default_dos_mem_arena_t;
+    mem_size_t paragraphs = (byte_count / MEM_SIZE_PARAGRAPH) + ((byte_count % MEM_SIZE_PARAGRAPH) ? 1 : 0);
+    arena->start.segoff.segment = dos_allocate_memory_blocks(paragraphs);
+    if (arena->start.segoff.segment) {
+        arena->free = arena->start.ptr;
+        arena->end = arena->start.ptr + (paragraphs * MEM_SIZE_PARAGRAPH);
+    }
 #ifndef NDEBUG
-	else {
-		fprintf(stderr, "ERROR memory request %li too large for DOS to provide!", byte_count);
-	}
+    else {
+        fprintf(stderr, "DOS allocation failed: Requested %lu bytes (%u paragraphs)\n", byte_count, paragraphs);
+    }
 #endif
-	return arena;
+    return arena;
 }
 
+/**
+ * @brief Releases DOS memory arena
+ * @param arena Valid DOS arena
+ * @return Bytes freed
+ * 
+ * @details Uses INT 21h, AH=49h:
+ *          - ES = Segment to free
+ *          - All allocations become invalid
+ */
 mem_size_t private_mem_arena_dos_delete(mem_arena_t* arena) {
-	mem_size_t freed = mem_arena_capacity(arena);					// capture the capacity of the arena
-	dos_free_allocated_memory_blocks(arena->start.segoff.segment);	// ask DOS to free the memory block
-	*arena = default_dos_mem_arena_t;								// default arena
-	free(arena);													// free up heap memory
-	return freed;													// return amount freed up
+	assert(arena);
+    mem_size_t freed = mem_arena_capacity(arena);
+    dos_free_allocated_memory_blocks(arena->start.segoff.segment);
+    free(arena);
+    return freed;
 }
+/* ----------------- Public Interface ----------------- */
 
 mem_arena_t* mem_arena_new(mem_arena_policy_t policy, mem_size_t byte_request) {
-	switch(policy) {
-		case MEM_ARENA_POLICY_DOS:
-			return private_mem_arena_dos_new(byte_request);
-		case MEM_ARENA_POLICY_C:	// to do
-		default:
-			fprintf(stderr, "Invalid memory policy type %i", policy);
-			return NULL;
-	}
+	assert(byte_request);
+    switch(policy) {
+        case MEM_ARENA_POLICY_DOS:
+            return private_mem_arena_dos_new(byte_request);
+        case MEM_ARENA_POLICY_C:
+        default:
+            fprintf(stderr, "Unimplemented policy: %d\n", policy);
+            return NULL;
+    }
 }
 
 mem_size_t mem_arena_delete(mem_arena_t* arena) {
-	switch(arena->policy) {
-		case MEM_ARENA_POLICY_DOS:
-			return private_mem_arena_dos_delete(arena);
-		case MEM_ARENA_POLICY_C:	// to do
-		default:
-			fprintf(stderr, "Invalid memory policy type %i", arena->policy);
-			return 0;
-	}
+    assert(arena);   
+    switch(arena->policy) {
+        case MEM_ARENA_POLICY_DOS:
+            return private_mem_arena_dos_delete(arena);
+        case MEM_ARENA_POLICY_C:	// TODO
+        default:
+            fprintf(stderr, "Unimplemented policy: %d\n", arena->policy);
+            return 0;
+    }
 }
 
+/* ----------------- Accessors ----------------- */
+
 char* mem_arena_dos_mcb(mem_arena_t* arena) {
+	assert(arena && arena->policy == MEM_ARENA_POLICY_DOS);
 	mem_address_t m = arena->start;
-	assert(arena->policy == MEM_ARENA_POLICY_DOS);
 	m.segoff.segment --;
 	return m.ptr;
 }
@@ -95,39 +121,57 @@ mem_size_t mem_arena_used(mem_arena_t* arena) {
 	return mem_arena_capacity(arena) - mem_arena_size(arena);
 }
 
+/* ----------------- Allocation ----------------- */
+
 void* mem_arena_alloc(mem_arena_t* arena, mem_size_t byte_request) {
-	char* p = NULL;							// default return to null
-	if (byte_request <= mem_arena_size(arena)) {		// can fulfill request
-		p = arena->free;					// initialize return value points to requested block
-		arena->free += byte_request;		// shrink pool size
-	}
+	assert(arena && byte_request);
+	if (byte_request <= mem_arena_size(arena)) {
+        void* ptr = arena->free;
+        arena->free += byte_request;
+        return ptr;
+    }
 #ifndef NDEBUG
-	else {
-		fprintf(stderr, "\nERROR memory request %li bytes too large for ARENA to ALLOC!\nLargest block of memory available %li bytes.", byte_request, mem_arena_size(arena));
-	}
+    fprintf(stderr, "Allocation failed: Requested %lu, Available %lu\n",
+           byte_request, mem_arena_size(arena));
 #endif
-	return p;
+    return NULL;
 }
 
 void* mem_arena_dealloc(mem_arena_t* arena, mem_size_t byte_request) {
-	if (byte_request <= mem_arena_used(arena)) {	// can fulfill request
-		arena->free -= byte_request;		// point to the start of enlarged free memory
-	}
+	assert(arena && byte_request);
+	if (byte_request <= mem_arena_used(arena)) {
+        arena->free -= byte_request;
+        return arena->free;
+    }  
 #ifndef NDEBUG
-	else {
-		fprintf(stderr, "\nERROR memory request %li bytes too large for ARENA to DEALLOC!\nLargest block of memory available %li bytes.",byte_request , mem_arena_used(arena));
-	}
+    fprintf(stderr, "Deallocation failed: Requested %lu, Used %lu\n", byte_request, mem_arena_used(arena));
 #endif
-	return arena->free;
+    return NULL;
 }
 
+/* ----------------- Debugging ----------------- */
+
 void mem_arena_dump(FILE* output_stream, mem_arena_t* arena) {
-    assert(output_stream);
-	assert(
-	    fprintf(output_stream, "\nmem_arena_t @%P\npolicy\t%i %s\nstart\t%P\nfree\t%P\nend\t%P\ncapacity\t%li\nsize\t\t%li\nused\t\t%li",
-		arena, arena->policy, mem_policy_info[arena->policy],arena->start.ptr,arena->free,arena->end,
-		mem_arena_capacity(arena),mem_arena_size(arena),mem_arena_used(arena))
-		>= 0
-	);
-	assert(fflush(output_stream) != EOF); // flush error
+    if (!output_stream || !arena) return;
+    
+    fprintf(output_stream,
+           "\nArena @%p\n"
+           "Policy: %s\n"
+           "Range: [%p - %p]\n"
+           "Capacity: %lu bytes\n"
+           "Used: %lu bytes\n"
+           "Free: %lu bytes\n",
+           arena,
+           mem_policy_info[arena->policy],
+           arena->start.ptr,
+           arena->end,
+           mem_arena_capacity(arena),
+           mem_arena_used(arena),
+           mem_arena_size(arena));
+    
+    if (arena->policy == MEM_ARENA_POLICY_DOS) {
+        fprintf(output_stream, "MCB: %p\n", mem_arena_dos_mcb(arena));
+    }
+    
+    fflush(output_stream);
 }
