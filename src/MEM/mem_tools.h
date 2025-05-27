@@ -42,12 +42,14 @@ uint16_t mem_available_low_paragraphs();
  * @pre mcb != NULL (asserted)
  * @pre stream != NULL (asserted)
  * 
- * @note Example usage:
+* @details DOS Version Compatibility:
  * @code
- * mem_dump_mcb_to_stream(mcb, stdout);  // Print to console
- * FILE* log = fopen("mcb.log", "w");
- * mem_dump_mcb_to_stream(mcb, log);     // Log to file
- * fclose(log);
+ * | Feature        | DOS 2.0 | DOS 3.0 | DOS 4.0 | DOS 5.0+ |
+ * |----------------|---------|---------|---------|----------|
+ * | MCB Chain      |   Yes   |   Yes   |   Yes   |   Yes    |
+ * | PSP Ownership  |   Yes   |   Yes   |   Yes   |   Yes    |
+ * | Program Name   |   No    |   No    |   Yes   |   Yes    |
+ * | INT 21h/52h    |   No    |   Yes   |   Yes   |   Yes    |
  * @endcode
  * 
  * @warning MCB structure is DOS-specific and undocumented
