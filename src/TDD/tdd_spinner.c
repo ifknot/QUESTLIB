@@ -12,7 +12,7 @@ tdd_spinner_t tdd_spinner_start(const char* frames) {
 void tdd_spinner_step(tdd_spinner_t* s, int delay_ms) {
     printf("\r%c", s->spinner_frames[s->counter++ % strlen(s->spinner_frames)]);
     fflush(stdout);
-    if (delay_ms > 0) usleep(delay_ms * 1000);
+    // NOTE not needed in slow DOS environment eg IBM XT if (delay_ms > 0) usleep(delay_ms * 1000);
 }
 
 void tdd_spinner_end(tdd_spinner_t* s) {
