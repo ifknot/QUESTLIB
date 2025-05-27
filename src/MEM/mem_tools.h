@@ -1,16 +1,31 @@
+/**
+ * @file mem_tools.h
+ * @brief DOS memory management utilities
+ * @defgroup memory_tools Memory Tools
+ * @{
+ */
 #ifndef MEM_TOOLS_H
 #define MEM_TOOLS_H
 
 #include <stdint.h>
+#include <stdio.h>
 
 #include "../DOS/dos_services_files_types.h"
 
+/* ----------------- Memory Analysis ----------------- */
+
 /**
-* @brief Use DOS INT 21h, Function 48h, to determine the amount of memory available to a user's program.
-* @note By setting BX=FFFFh before calling, this function can be used to find the amount of
-* available memory, which will be returned in BX. (The call will return an error, which can be ignored,
-* since DOS cannot allocate more than 640k of memory.)
-*/
+ * @brief Queries available DOS memory
+ * @return Available memory in paragraphs (uint16_t)
+ * 
+ * @details Uses DOS INT 21h, Function 48h:
+ *          - Sets BX=FFFFh to probe maximum available memory
+ *          - Returns actual available paragraphs in BX
+ *          - Error can be safely ignored (DOS 640K limit)
+ * 
+ * @note 1 paragraph = 16 bytes
+ * @see mem_dump_mcb()
+ */
 uint16_t mem_available_low_paragraphs();
 
  /**
@@ -32,21 +47,48 @@ uint16_t mem_available_low_paragraphs();
  */
 void mem_dump_mcb(char* mcb);
 
+/* ----------------- File Operations ----------------- */
+
 /**
-* @brief loads unformatted *upto* a page (64K bytes or 4096 paragraphs) of data from file to memory
-* @note loads raw bytes
-*
-* @return dos_file_size_t - the actual byte count loaded
-*/
+ * @brief Loads raw data from file to memory
+ * @param[in] path_name File to load (must be non-empty)
+ * @param[out] start Destination memory address
+ * @param[in] nbytes Maximum bytes to load (≤64KB, must be >0)
+ * @return Actual bytes loaded (dos_file_size_t)
+ * 
+ * @details Features:
+ *          - Handles up to one 64K page
+ *          - Preserves raw byte values
+ *          - No format conversion
+ * 
+ * @pre path_name != NULL && strlen(path_name) > 0 (asserted)
+ * @pre start != NULL (asserted)
+ * @pre nbytes > 0 (asserted)
+ * @warning No bounds checking on destination
+ * @see mem_save_to_file()
+ */
 dos_file_size_t mem_load_from_file(const char* path_name, char* start, uint16_t nbytes);
 
 /**
-* @brief saves unformatted *upto* a page (64K bytes or 4096 paragraphs) of memory to file
-* @note saves raw bytes
-*
-* @return dos_file_size_t - the actual byte count saved
-*/
+ * @brief Saves raw memory to file
+ * @param[in] path_name Destination file (must be non-empty)
+ * @param[in] start Source memory address
+ * @param[in] nbytes Bytes to save (≤64KB, must be >0)
+ * @return Actual bytes saved (dos_file_size_t)
+ * 
+ * @details Features:
+ *          - Handles up to one 64K page
+ *          - Writes unmodified memory contents
+ *          - Creates/overwrites files
+ * 
+ * @pre path_name != NULL && strlen(path_name) > 0 (asserted)
+ * @pre start != NULL (asserted)
+ * @pre nbytes > 0 (asserted)
+ * @see mem_load_from_file()
+ */
 dos_file_size_t mem_save_to_file(const char* path_name, char* start, uint16_t nbytes);
 
 
 #endif
+
+/** @} */ // end of memory_tools group
