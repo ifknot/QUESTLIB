@@ -24,16 +24,30 @@ uint16_t mem_available_low_paragraphs() {
     return paragraphs;
 }
 
-void mem_dump_mcb(char* mcb) {
-    assert(mcb);
-    fprintf(stderr, "\nMCB - DOS Memory Control Block @%P\nOffset\tSize\tValue\n"
-        "00\tbyte\t%c\n"
-        "01\tword\t%04X\n"
-        "03\tword\t%i\n"
-        "05\tbytes\treserved\n"
-        "08\t8bytes\t%s\n"
-        , mcb, *mcb, *(uint16_t*)(mcb + 1), *(uint16_t*)(mcb + 3), (char*)(mcb + 8));
+void mem_dump_mcb_to_stream( FILE* stream, const char* mcb) {
+    assert(mcb != NULL);
+    assert(stream != NULL);
+    
+    fprintf(stream, 
+        "\nMCB - DOS Memory Control Block @%p\n"
+        "Offset\tSize\tValue\n"
+        "00h\tbyte\t%c (%s)\n"
+        "01h\tword\t%04X (%s)\n"
+        "03h\tword\t%u paragraphs (%u bytes)\n"
+        "08h\t8bytes\t\"%.8s\"\n",
+        mcb,
+        mcb[0], 
+        (mcb[0] == 'M') ? "Middle block" : 
+        (mcb[0] == 'Z') ? "Last block" : "Invalid",
+        *(const uint16_t*)(mcb + 1),
+        (*(const uint16_t*)(mcb + 1) == 0) ? "Free" :
+        (*(const uint16_t*)(mcb + 1) == 8) ? "DOS System" : "Program Owned",
+        *(const uint16_t*)(mcb + 3),
+        *(const uint16_t*)(mcb + 3) * 16,  // Convert paragraphs to bytes
+        mcb + 8
+    );
 }
+    
 
 dos_file_size_t mem_load_from_file(const char* path_name, char* start, uint16_t nbytes) {
     assert(path_name && assert(strlen(pathname) > 0) && start && nybtes);
