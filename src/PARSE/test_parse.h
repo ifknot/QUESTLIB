@@ -8,20 +8,25 @@
  */
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
+#include <time.h>
 #include "mem_arena.h"
 #include "../TDD/tdd_macros.h"
 
 /// @brief Array of all test cases for the arena library
-#define PARSE_TESTS 
+#define PARSE_TESTS                             /
         test_arena_creation,                    /
         test_basic_allocation,                  /
         test_allocation_limits,                 /
         test_deallocation,                      /
         test_zero_allocation,                   /
         test_null_arena_handling,               /
-        test_arena_dump                         /
+        test_arena_dump,                        /
+        test_fuzz_allocations
 
 #define TEST_ARENA_SIZE (MEM_SIZE_1K)  // 1KB test arena
+#define FUZZ_ITERATIONS 1000           // Fuzz test iterations
+#define MAX_FUZZ_ALLOC  256            // Max single allocation size
 
 /* ----------------- Test Fixtures ----------------- */
 
@@ -29,6 +34,7 @@ static mem_arena_t* test_arena = NULL;
 
 void setup() {
     test_arena = mem_arena_new(MEM_ARENA_POLICY_DOS, TEST_ARENA_SIZE);
+    srand(time(NULL));  // Seed for fuzz testing
 }
 
 void teardown() {
@@ -141,6 +147,69 @@ TEST(test_arena_dump) {
     // Allocate some memory and dump again
     mem_arena_alloc(test_arena, 128);
     mem_arena_dump(stderr, test_arena);
+    
+    teardown();
+}
+
+/* ----------------- Fuzz Testing ----------------- */
+
+/**
+ * @test Randomized allocation patterns
+ * @covers mem_arena_alloc(), mem_arena_dealloc(), mem_arena_size()
+ * 
+ * @details Performs:
+ *          - Random-sized allocations/deallocations
+ *          - Verifies arena integrity after each operation
+ *          - Tests edge cases through randomness
+ */
+TEST(test_fuzz_allocations) {
+    setup();
+    
+    void* blocks[FUZZ_ITERATIONS] = {0};
+    size_t block_sizes[FUZZ_ITERATIONS] = {0};
+    size_t total_allocated = 0;
+    size_t active_blocks = 0;
+    
+    for (int i = 0; i < FUZZ_ITERATIONS; i++) {
+        // Randomly choose to allocate or deallocate
+        if (rand() % 2 == 0 || active_blocks == 0) {
+            // Allocate random block (1-256 bytes)
+            size_t size = (rand() % MAX_FUZZ_ALLOC) + 1;
+            void* block = mem_arena_alloc(test_arena, size);
+            
+            if (total_allocated + size <= TEST_ARENA_SIZE) {
+                ASSERT(block != NULL);
+                blocks[active_blocks] = block;
+                block_sizes[active_blocks] = size;
+                total_allocated += size;
+                active_blocks++;
+                
+                // Verify arena accounting
+                ASSERT(mem_arena_used(test_arena) == total_allocated);
+                ASSERT(mem_arena_size(test_arena) == TEST_ARENA_SIZE - total_allocated);
+            } else {
+                ASSERT(block == NULL);  // Should reject if full
+            }
+        } else {
+            // Deallocate random existing block
+            size_t idx = rand() % active_blocks;
+            size_t size = block_sizes[idx];
+            
+            mem_arena_dealloc(test_arena, size);
+            total_allocated -= size;
+            
+            // Shift remaining blocks down
+            for (size_t j = idx; j < active_blocks - 1; j++) {
+                blocks[j] = blocks[j + 1];
+                block_sizes[j] = block_sizes[j + 1];
+            }
+            active_blocks--;
+            
+            // Verify arena accounting
+            ASSERT(mem_arena_used(test_arena) == total_allocated);
+            ASSERT(mem_arena_size(test_arena) == TEST_ARENA_SIZE - total_allocated);
+        }
+    }
     
     teardown();
 }
