@@ -1,5 +1,7 @@
 #include "tdd_progress.h"
 
+/* ----------------- Percent Progress ----------------- */
+
 tdd_progress_t tdd_progress_start(size_t total) {
     return (tdd_progress_t){
         .total_iterations = total,
