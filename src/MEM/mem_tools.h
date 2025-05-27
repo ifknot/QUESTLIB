@@ -28,24 +28,32 @@
  */
 uint16_t mem_available_low_paragraphs();
 
- /**
- * Offset Size		Description
- *	00   byte		'M' 4Dh  member of a MCB chain, (not last)
- *					'Z' 5Ah  indicates last entry in MCB chain
- *					other values cause "Memory Allocation Failure" on exit
- *	01   word		PSP segment address of MCB owner (Process Id)
- *					possible values:
- *						0 = free
- *						8 = Allocated by DOS before first user pgm loaded
- *						other = Process Id/PSP segment address of owner
- *	03   word		number of paras related to this MCB (excluding MCB)
- *	05	3bytes		reserved
- *	08  8bytes		ASCII program name, NULL terminated if less than max length (DOS 4.x+)
- *	10  nbytes	first byte of actual allocated memory block
- *
- * @note  An undocumented way to find the first or 'base' MemBlockRec to use DOS Fn 52H.
+/**
+ * @brief Dumps Memory Control Block (MCB) information to a specified stream
+ * @param[in] mcb Pointer to the Memory Control Block
+ * @param[in] stream Output stream (e.g., stdout, stderr, file)
+ * 
+ * @details Prints formatted MCB information including:
+ *          - Chain marker ('M' or 'Z')
+ *          - Owner PSP segment
+ *          - Paragraph count
+ *          - Program name (if available)
+ * 
+ * @pre mcb != NULL (asserted)
+ * @pre stream != NULL (asserted)
+ * 
+ * @note Example usage:
+ * @code
+ * mem_dump_mcb_to_stream(mcb, stdout);  // Print to console
+ * FILE* log = fopen("mcb.log", "w");
+ * mem_dump_mcb_to_stream(mcb, log);     // Log to file
+ * fclose(log);
+ * @endcode
+ * 
+ * @warning MCB structure is DOS-specific and undocumented
+ * @see mem_available_low_paragraphs()
  */
-void mem_dump_mcb(char* mcb);
+void mem_dump_mcb_to_stream(FILE* stream, const char* mcb);
 
 /* ----------------- File Operations ----------------- */
 
