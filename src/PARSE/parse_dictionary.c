@@ -15,13 +15,13 @@ typedef struct private_parse_dictionary {
 } parse_dictionary_t;
 
 // private helper functions
-static int __compare_pairs(const void *a, const void *b) {
+static int private_compare_pairs(const void *a, const void *b) {
     const parse_lexeme_token_pair_t* pair_a = (const parse_lexeme_token_pair_t*)a;
     const parse_lexeme_token_pair_t* pair_b = (const parse_lexeme_token_pair_t*)b;
     return strcmp(pair_a->lexeme, pair_b->lexeme);
 }
 
-static void __reset_pair(parse_dictionary_t* dict, size_t index) {
+static void private_reset_pair(parse_dictionary_t* dict, size_t index) {
     dict->pairs[index].lexeme[0] = '\0';  // Null string
     dict->pairs[index].token = 0;         // Token 0
 }
@@ -35,7 +35,7 @@ parse_dictionary_t* parse_dictionary_create(mem_arena_t* arena, size_t capacity)
     dict->capacity = capacity;
     dict->pairs = mem_arena_alloc(arena, dict->capacity * sizeof(parse_lexeme_token_pair_t));
     for (size_t i = 0; i < dict->capacity; i++) { // initialize dictionary entries
-        __reset_pair(dict, i);
+        private_reset_pair(dict, i);
     }
     return dict;
 }
@@ -59,13 +59,13 @@ void parse_dictionary_remove(parse_dictionary_t* dict, size_t index) {
     if (index < dict->size - 1) {
         memmove(&dict->pairs[index], &dict->pairs[index + 1], (dict->size - index - 1) * sizeof(parse_lexeme_token_pair_t));
     }
-    __reset_pair(dict, dict->size - 1); // clear last entry
+    private_reset_pair(dict, dict->size - 1); // clear last entry
     dict->size--;
 }
 
 void parse_dictionary_sort(parse_dictionary_t* dict) {
     assert(dict && dict->size > 1);
-    qsort(dict->pairs, dict->size, sizeof(parse_lexeme_token_pair_t), __compare_pairs);
+    qsort(dict->pairs, dict->size, sizeof(parse_lexeme_token_pair_t), private_compare_pairs);
 }
 
 size_t parse_dictionary_find(parse_dictionary_t* dict, char* lexeme) {
