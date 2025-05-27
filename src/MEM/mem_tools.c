@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 #include "../DOS/dos_services_files.h"
 
@@ -34,6 +35,7 @@ void mem_dump_mcb(char* mcb) {
 }
 
 dos_file_size_t mem_load_from_file(const char* path_name, char* start, uint16_t nbytes) {
+    assert(path_name && assert(strlen(pathname) > 0) && start && nybtes);
     dos_file_handle_t fhandle = dos_open_file(path_name, ACCESS_READ_ONLY);
     dos_file_size_t bytes_loaded = 0;
     if (fhandle) {
@@ -44,6 +46,7 @@ dos_file_size_t mem_load_from_file(const char* path_name, char* start, uint16_t 
 }
 
 dos_file_size_t mem_save_to_file(const char* path_name, char* start, uint16_t nbytes){
+     assert(path_name && assert(strlen(pathname) > 0) && start && nybtes);
     dos_file_size_t bytes_saved = 0;
     dos_file_handle_t fhandle = dos_open_file(path_name, ACCESS_WRITE_ONLY);
     if (fhandle) {
