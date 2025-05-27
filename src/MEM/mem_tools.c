@@ -25,6 +25,7 @@ uint16_t mem_available_low_paragraphs() {
 }
 
 void mem_dump_mcb(char* mcb) {
+    assert(mcb);
     fprintf(stderr, "\nMCB - DOS Memory Control Block @%P\nOffset\tSize\tValue\n"
         "00\tbyte\t%c\n"
         "01\tword\t%04X\n"
