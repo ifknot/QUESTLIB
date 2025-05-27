@@ -1,3 +1,9 @@
+/**
+ * @file mem_arena.c
+ * @brief Linear memory allocator implementation
+ * @defgroup memory_arena_impl Memory Arena Internals
+ * @{
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -7,16 +13,34 @@
 #include "../DOS/dos_services.h"
 #include "mem_constants.h"
 
+/* ----------------- Arena Structure ----------------- */
+
+/**
+ * @brief Internal arena representation
+ * @dot
+ * digraph arena_struct {
+ *     node [shape=record, fontname="Courier New"];
+ *     arena [label="{
+ *         <policy> policy|
+ *         <start> start (base address)|
+ *         <free> free (current position)|
+ *         <end> end (boundary)
+ *     }"];
+ * }
+ * @enddot
+ */
 typedef struct private_mem_arena {
-
-  uint8_t		policy;		// e.g. MEM_POLICY_DOS or MEM_POLICY_C
-  mem_address_t	start;		// base address of the arena
-  char*			free;		// pointer to start of free memory within arena, initially free = start
-  char*			end;		// end address limit of useable arena memory
-
+    uint8_t policy;         ///< MEM_ARENA_POLICY_DOS or MEM_ARENA_POLICY_C
+    mem_address_t start;    ///< Base address of allocated memory
+    char* free;             ///< Current allocation pointer
+    char* end;              ///< End of available memory
 } mem_arena_t;
 
-static const mem_arena_t default_dos_mem_arena_t = { MEM_ARENA_POLICY_DOS, NULL, NULL, NULL };
+/// Default-initialized DOS arena template
+static const mem_arena_t default_dos_mem_arena_t = { 
+    MEM_ARENA_POLICY_DOS, 
+    {NULL}, NULL, NULL 
+};
 
 /* ----------------- DOS-Specific Implementation ----------------- */
 
@@ -175,3 +199,5 @@ void mem_arena_dump(FILE* output_stream, mem_arena_t* arena) {
     
     fflush(output_stream);
 }
+
+/** @} */ // end of memory_arena_impl group
