@@ -1,17 +1,11 @@
 /**
  * @file tdd_spinner.h
- * @brief Test progress reporting utilities (now with spinner!)
+ * @brief Test progress reporting utilities 
  * @defgroup test_utils Test Utilities
  * @{
  */
 #ifndef TDD_SPINNER_H
 #define TDD_SPINNER_H
-
-#include <stdio.h>
-#include <time.h>
-//#include <unistd.h> // For usleep() - not needed for IBM XT and similar
-
-/* ----------------- Spinner Progress ----------------- */
 
 typedef struct {
     size_t counter;
