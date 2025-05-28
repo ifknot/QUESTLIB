@@ -29,7 +29,7 @@ size_t parse_dictionary_find(const parse_dictionary_t* dict, const char* lexeme)
 parse_token_t parse_dictionary_get(const parse_dictionary_t* dict, size_t index);
 
 inline parse_token_t parse_dictionary_tokenize(parse_dictionary_t* dict, char* lexeme) {
-    return parse_dictionary_get(dict, parse_dictionary_find(dict, lexeme)).token;
+    return parse_dictionary_at(dict, parse_dictionary_search(dict, lexeme)).token;
 }
 
 size_t parse_dictionary_size(const parse_dictionary_t* dict);
