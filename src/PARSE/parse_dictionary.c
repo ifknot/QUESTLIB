@@ -35,7 +35,7 @@ parse_dictionary_t* parse_dictionary_create(mem_arena_t* arena, size_t capacity)
     assert(dict);
     dict->size = 0;
     dict->capacity = capacity;
-    dict->sorted = false;
+    dict->is_sorted = false;
     dict->pairs = mem_arena_alloc(arena, dict->capacity * sizeof(parse_lexeme_token_pair_t));
     for (size_t i = 0; i < dict->capacity; i++) { // initialize dictionary entries
         private_reset_pair(dict, i);
@@ -52,6 +52,7 @@ void parse_dictionary_add(parse_dictionary_t* dict, char* lexeme, parse_token_t 
     dict->pairs[dict->size].lexeme[PARSE_MAX_LEXEME_LENGTH] = '\0'; // strncpy if no null byte among the first n bytes of src, the string placed in dest will not be null-terminated.
     dict->pairs[dict->size].token = token;
     dict->size++;
+    dict->is_sorted = false;
 }
 
 void parse_dictionary_remove(parse_dictionary_t* dict, size_t index) {
@@ -64,11 +65,13 @@ void parse_dictionary_remove(parse_dictionary_t* dict, size_t index) {
     }
     private_reset_pair(dict, dict->size - 1); // clear last entry
     dict->size--;
+    dict->is_sorted = false;
 }
 
 void parse_dictionary_sort(parse_dictionary_t* dict) {
     assert(dict && dict->size > 1);
     qsort(dict->pairs, dict->size, sizeof(parse_lexeme_token_pair_t), private_compare_pairs);
+    dict->is_sorted = true;
 }
 
 /*
@@ -78,8 +81,21 @@ void parse_dictionary_sort(parse_dictionary_t* dict) {
 *    > 0 if the first string is "greater than" the second.
 * The actual value (not just -1 or 1) is implementation-dependent.
 */
-size_t parse_dictionary_search(const parse_dictionary_t* dict, const char* lexeme) {
-
+size_t parse_dictionary_search(const parse_dictionary_t* dict, const char* target) {
+    assert(dictionary && target && dict->size && dict->is_sorted);
+    str_size_t i = 0; // first entry in dictionary
+    str_size_t j = dict->size - 1; // last entry in dictionary
+    while (i <= j) {
+        int midpoint = i + (j - i) / 2; // calculate new midpoint
+        int found = strcmp(dictionary->pairs[midpoint].lexeme, target);
+        if (found) {
+            return dictionary[midpoint].token;
+        } else if (found < 0) { // target is in the 'upper' half
+            i = midpoint + 1;
+        } else { // target is in the 'lower' half
+            j = midpoint - 1;
+        }
+    }
 }
 
 parse_token_t parse_dictionary_at(const parse_dictionary_t* dict, size_t index) {
@@ -96,6 +112,10 @@ size_t parse_dictionary_capacity(const parse_dictionary_t* dict) {
     return dict->capacity;
 }
 
+bool parse_dictionary_is_sorted(const parse_dictionary_t* dict) {
+    assert(dict);
+    return dict->is_sorted;
+}
 
 void parse_dictionary_dump(FILE* output_stream, const parse_dictionary_t* dict) { // dumps entire dictionary including empty slots
     assert(output_stream);
