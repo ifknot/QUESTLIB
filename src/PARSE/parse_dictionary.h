@@ -15,9 +15,9 @@ parse_dictionary_t* parse_dictionary_create(mem_arena_t* arena, size_t size);
 
 parse_dictionary_t* parse_dictionary_create_from_file(mem_arena_t* arena, const char * path_name, parse_dictionary_t* dictionary);
 
-void parse_dictionary_add(parse_dictionary_t* dict, char* lexeme, parse_token_t token);
+bool parse_dictionary_add(parse_dictionary_t* dict, char* lexeme, parse_token_t token);
 
-void parse_dictionary_remove(parse_dictionary_t* dict, size_t index);
+bool parse_dictionary_remove(parse_dictionary_t* dict, size_t index);
 
 void parse_dictionary_sort(parse_dictionary_t* dict);
 
