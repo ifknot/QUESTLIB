@@ -2,11 +2,10 @@
 
 
 #include "STR/test_str.h"
-#include "PARSE/test_parse.h"
+//#include "PARSE/test_parse.h"
 
 RUN_TESTS(
-    //STR_TESTS,
-    PARSE_TESTS
+    STR_TESTS
 )
 
 int main(int argc, char** argv) {

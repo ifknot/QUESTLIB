@@ -27,8 +27,8 @@ uint16_t mem_available_low_paragraphs() {
 void mem_dump_mcb_to_stream( FILE* stream, const char* mcb) {
     assert(mcb != NULL);
     assert(stream != NULL);
-    
-    fprintf(stream, 
+
+    fprintf(stream,
         "\nMCB - DOS Memory Control Block @%p\n"
         "Offset\tSize\tValue\n"
         "00h\tbyte\t%c (%s)\n"
@@ -36,8 +36,8 @@ void mem_dump_mcb_to_stream( FILE* stream, const char* mcb) {
         "03h\tword\t%u paragraphs (%u bytes)\n"
         "08h\t8bytes\t\"%.8s\"\n",
         mcb,
-        mcb[0], 
-        (mcb[0] == 'M') ? "Middle block" : 
+        mcb[0],
+        (mcb[0] == 'M') ? "Middle block" :
         (mcb[0] == 'Z') ? "Last block" : "Invalid",
         *(const uint16_t*)(mcb + 1),
         (*(const uint16_t*)(mcb + 1) == 0) ? "Free" :
@@ -47,10 +47,10 @@ void mem_dump_mcb_to_stream( FILE* stream, const char* mcb) {
         mcb + 8
     );
 }
-    
+
 
 dos_file_size_t mem_load_from_file(const char* path_name, char* start, uint16_t nbytes) {
-    assert(path_name && assert(strlen(pathname) > 0) && start && nybtes);
+    assert(path_name && strlen(path_name) > 0 && start && nbytes);
     dos_file_handle_t fhandle = dos_open_file(path_name, ACCESS_READ_ONLY);
     dos_file_size_t bytes_loaded = 0;
     if (fhandle) {
@@ -61,7 +61,7 @@ dos_file_size_t mem_load_from_file(const char* path_name, char* start, uint16_t 
 }
 
 dos_file_size_t mem_save_to_file(const char* path_name, char* start, uint16_t nbytes){
-     assert(path_name && assert(strlen(pathname) > 0) && start && nybtes);
+    assert(path_name && strlen(path_name) > 0 && start && nbytes);
     dos_file_size_t bytes_saved = 0;
     dos_file_handle_t fhandle = dos_open_file(path_name, ACCESS_WRITE_ONLY);
     if (fhandle) {

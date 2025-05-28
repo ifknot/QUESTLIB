@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
-#include <boolean.h>
+#include <stdbool.h>
 
 #include "parse_constants.h"
 #include "parse_types.h"
@@ -12,7 +12,7 @@
 typedef struct private_parse_dictionary {
     size_t size;
     size_t capacity;
-    bool sorted;
+    bool is_sorted;
     parse_lexeme_token_pair_t* pairs;
 } parse_dictionary_t;
 
@@ -43,15 +43,17 @@ parse_dictionary_t* parse_dictionary_create(mem_arena_t* arena, size_t capacity)
     return dict;
 }
 
-parse_dictionary_t* parse_dictionary_create_from_file(mem_arena_t* arena, const char * path_name, parse_dictionary_t* dictionary) {
-
-}
+//parse_dictionary_t* parse_dictionary_create_from_file(mem_arena_t* arena, const char * path_name, parse_dictionary_t* dictionary) {
+//
+//}
 
 int parse_dictionary_add(parse_dictionary_t* dict, char* lexeme, parse_token_t token) {
-    assert(dict && lexeme)
-        dict->size >= dict->capacity FULL
-    if(parse_dictionary_search(dict, token.lexeme) < 0 {
-        return false;
+    assert(dict && lexeme);
+    if(dict->size >= dict->capacity) {
+        return PARSE_DICTIONARY_FULL;
+    }
+    if(parse_dictionary_search(dict, lexeme) >= 0) {
+        return PARSE_DICTIONARY_DUPLICATE;
     }
     strncpy(dict->pairs[dict->size].lexeme, lexeme, PARSE_MAX_LEXEME_LENGTH);
     dict->pairs[dict->size].lexeme[PARSE_MAX_LEXEME_LENGTH] = '\0'; // strncpy if no null byte among the first n bytes of src, the string placed in dest will not be null-terminated.
@@ -60,13 +62,13 @@ int parse_dictionary_add(parse_dictionary_t* dict, char* lexeme, parse_token_t t
     return dict->size++;
 }
 
-bool parse_dictionary_remove(parse_dictionary_t* dict, size_t index) {
+int parse_dictionary_remove(parse_dictionary_t* dict, size_t index) {
     assert(dict && index < dict->size);
-    if(index >= dict->size                           // index out of range 
-        || index < 0                                 // out of rang or passed a search result error
-        || dict->pairs[index].lexeme[0] == '\0')     // indexed entry is a null string
-    { 
-        return false;
+    if(index >= dict->size                              // out of range
+        || index < 0                                    // out of range or passed a search result error
+        || dict->pairs[index].lexeme[0] == '\0'         // indexed entry is a null string
+    ) {
+        return PARSE_DICTIONARY_OUT_OF_BOUNDS;
     }
     if (index < dict->size - 1) {
         memmove(&dict->pairs[index], &dict->pairs[index + 1], (dict->size - index - 1) * sizeof(parse_lexeme_token_pair_t));
@@ -74,7 +76,7 @@ bool parse_dictionary_remove(parse_dictionary_t* dict, size_t index) {
     private_reset_pair(dict, dict->size - 1); // clear last entry
     dict->size--;
     dict->is_sorted = false;
-    return true;
+    return dict->size;
 }
 
 void parse_dictionary_sort(parse_dictionary_t* dict) {
@@ -91,18 +93,18 @@ void parse_dictionary_sort(parse_dictionary_t* dict) {
 * The actual value (not just -1 or 1) is implementation-dependent.
 */
 int parse_dictionary_search(const parse_dictionary_t* dict, const char* target) {
-    assert(dictionary && target);
+    assert(dict && target);
     if(!dict->size) {
         return PARSE_DICTIONARY_EMPTY;
     }
     if(!dict->is_sorted) {
         return PARSE_DICTIONARY_NOT_SORTED;
     }
-    str_size_t i = 0; // first entry in dictionary
-    str_size_t j = dict->size - 1; // last entry in dictionary
+    size_t i = 0;   // first entry in dictionary
+    size_t j = dict->size - 1; // last entry in dictionary
     while (i <= j) {
         int midpoint = i + (j - i) / 2; // calculate new midpoint
-        int found = strcmp(dictionary->pairs[midpoint].lexeme, target);
+        int found = strcmp(dict->pairs[midpoint].lexeme, target);
         if (found) {
             return midpoint;
         } else if (found < 0) { // target is in the 'upper' half
@@ -111,12 +113,16 @@ int parse_dictionary_search(const parse_dictionary_t* dict, const char* target) 
             j = midpoint - 1;
         }
     }
-    return PARSE_DICTIONARY_NOT_FOUND; 
+    return PARSE_DICTIONARY_NOT_FOUND;
 }
 
-parse_token_t parse_dictionary_at(const parse_dictionary_t* dict, size_t index) {
-    assert(dict);
-    return dict->pairs[index]; 
+parse_token_t parse_dictionary_tokenize(const parse_dictionary_t* dict, char* lexeme) {
+    return parse_dictionary_at(dict, parse_dictionary_search(dict, lexeme)).token;
+}
+
+parse_lexeme_token_pair_t parse_dictionary_at(const parse_dictionary_t* dict, size_t index) {
+    assert(dict && index >= 0 && index < dict->size);
+    return dict->pairs[index];
 }
 
 size_t parse_dictionary_size(const parse_dictionary_t* dict) {

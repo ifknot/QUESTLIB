@@ -1,11 +1,13 @@
 /**
  * @file tdd_spinner.h
- * @brief Test progress reporting utilities 
+ * @brief Test progress reporting utilities
  * @defgroup test_utils Test Utilities
  * @{
  */
 #ifndef TDD_SPINNER_H
 #define TDD_SPINNER_H
+
+#include <stdlib.h>
 
 typedef struct {
     size_t counter;
@@ -16,7 +18,7 @@ typedef struct {
  * @brief Initializes a spinner
  * @param frames Optional: Custom animation frames (default "|/-\\")
  * @return Initialized spinner
- * 
+ *
  * @example
  * tdd_spinner_t spin = tdd_spinner_start();
  * while (working) {
@@ -30,9 +32,8 @@ tdd_spinner_t tdd_spinner_start(const char* frames);
 /**
  * @brief Updates spinner animation
  * @param s Spinner instance
- * @param delay_ms Delay between frames (0 for no delay)
  */
-void tdd_spinner_step(tdd_spinner_t* s, int delay_ms);
+void tdd_spinner_step(tdd_spinner_t* s);
 
 /**
  * @brief Cleans up spinner display

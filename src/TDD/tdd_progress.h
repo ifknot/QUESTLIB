@@ -15,7 +15,6 @@
 typedef struct {
     size_t total_iterations;
     size_t current_iteration;
-    time_t start_time;
 } tdd_progress_t;
 
 /**
@@ -28,8 +27,8 @@ tdd_progress_t tdd_progress_start(size_t total);
 /**
  * @brief Updates and displays progress bar
  * @param p Progress tracker pointer
- * @param width Bar width in characters (0 for default 50)
- * 
+ * @param width Bar width in characters
+ *
  * @example
  * tdd_progress_t p = tdd_progress_start(1000);
  * for (int i=0; i<1000; i++) {
@@ -37,14 +36,15 @@ tdd_progress_t tdd_progress_start(size_t total);
  *     // Test logic...
  * }
  */
-void tdd_progress_bar(tdd_progress_t* p, int width);
+void tdd_progress_bar(tdd_progress_t* p, size_t width);
 
 /**
  * @brief Updates and displays percentage progress
  * @param p Progress tracker pointer
  * @param steps Number of percentage steps (0 for default 20)
  */
-void tdd_progress_percent(tdd_progress_t* p, int steps;
+void tdd_progress_percent(tdd_progress_t* p, size_t steps);
+
 /**
  * @brief Finishes progress display
  * @param p Progress tracker pointer
