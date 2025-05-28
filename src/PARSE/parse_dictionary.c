@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <boolean.h>
 
 #include "parse_constants.h"
 #include "parse_types.h"
@@ -11,6 +12,7 @@
 typedef struct private_parse_dictionary {
     size_t size;
     size_t capacity;
+    bool sorted;
     parse_lexeme_token_pair_t* pairs;
 } parse_dictionary_t;
 
@@ -33,6 +35,7 @@ parse_dictionary_t* parse_dictionary_create(mem_arena_t* arena, size_t capacity)
     assert(dict);
     dict->size = 0;
     dict->capacity = capacity;
+    dict->sorted = false;
     dict->pairs = mem_arena_alloc(arena, dict->capacity * sizeof(parse_lexeme_token_pair_t));
     for (size_t i = 0; i < dict->capacity; i++) { // initialize dictionary entries
         private_reset_pair(dict, i);
@@ -68,8 +71,19 @@ void parse_dictionary_sort(parse_dictionary_t* dict) {
     qsort(dict->pairs, dict->size, sizeof(parse_lexeme_token_pair_t), private_compare_pairs);
 }
 
-size_t parse_dictionary_find(parse_dictionary_t* dict, char* lexeme) {
-    return 0;
+/*
+* NB The C standard only guarantees that strcmp returns:
+*    < 0 if the first string is "less than" the second.
+*    0 if they are equal.
+*    > 0 if the first string is "greater than" the second.
+* The actual value (not just -1 or 1) is implementation-dependent.
+*/
+size_t parse_dictionary_find(const parse_dictionary_t* dict, const char* lexeme) {
+
+}
+
+parse_token_t parse_dictionary_get(const parse_dictionary_t* dict, size_t index) {
+    return dict->pairs[index]; 
 }
 
 size_t parse_dictionary_size(const parse_dictionary_t* dict) {
@@ -83,10 +97,10 @@ size_t parse_dictionary_capacity(const parse_dictionary_t* dict) {
 }
 
 
-void parse_dictionary_dump(FILE* output_stream, parse_dictionary_t* dict) { // dumps entire dictionary including empty slots
+void parse_dictionary_dump(FILE* output_stream, const parse_dictionary_t* dict) { // dumps entire dictionary including empty slots
     assert(output_stream);
     for(int i = 0; i < dict->capacity; i++) {
-        fprintf(output_stream, "->%s<- = %i\n", dict->pairs[i].lexeme, dict->pairs[i].token);
+        fprintf(output_stream, "%s = %i\n", dict->pairs[i].lexeme, dict->pairs[i].token);
     }
     assert(fflush(output_stream) != EOF);
 }
