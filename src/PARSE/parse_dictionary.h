@@ -21,13 +21,22 @@ void parse_dictionary_remove(parse_dictionary_t* dict, size_t index);
 
 void parse_dictionary_sort(parse_dictionary_t* dict);
 
-parse_token_t parse_dictionary_tokenize(parse_dictionary_t* dict, char* lexeme);
+/*
+Binary search for token index *requires* sorted dictionary 
+*/
+size_t parse_dictionary_find(const parse_dictionary_t* dict, const char* lexeme);
+
+parse_token_t parse_dictionary_get(const parse_dictionary_t* dict, size_t index);
+
+inline parse_token_t parse_dictionary_tokenize(parse_dictionary_t* dict, char* lexeme) {
+    return parse_dictionary_get(dict, parse_dictionary_find(dict, lexeme)).token;
+}
 
 size_t parse_dictionary_size(const parse_dictionary_t* dict);
 
 size_t parse_dictionary_capacity(const parse_dictionary_t* dict);
 
-void parse_dictionary_dump(FILE* output_stream, parse_dictionary_t* dict);
+void parse_dictionary_dump(FILE* output_stream, const parse_dictionary_t* dict);
 
 #endif
 
