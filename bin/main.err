@@ -1,5 +1,5 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(11): Warning! W303: Parameter 'argv' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(11): Warning! W303: Parameter 'argc' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_constants.h(48): Warning! W202: Symbol 'STR_PUNCTUATION' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/../MEM/mem_types.h(47): Warning! W202: Symbol 'default_mem_segoff_t' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/STR/../MEM/mem_arena.h(33): Warning! W202: Symbol 'mem_policy_info' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/TDD/test_tdd.h(13): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/TDD/test_tdd.h(25): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/TDD/test_tdd.h(36): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(13): Warning! W303: Parameter 'argv' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/main.c(13): Warning! W303: Parameter 'argc' has been defined, but not referenced

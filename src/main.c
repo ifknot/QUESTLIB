@@ -1,11 +1,13 @@
 #include <stdio.h>
 
 
-#include "STR/test_str.h"
+//#include "STR/test_str.h"
 //#include "PARSE/test_parse.h"
+#include "TDD/test_tdd.h"
 
 RUN_TESTS(
-    STR_TESTS
+    //STR_TESTS
+    TDD_TESTS
 )
 
 int main(int argc, char** argv) {

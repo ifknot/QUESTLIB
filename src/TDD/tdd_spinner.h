@@ -39,7 +39,7 @@ void tdd_spinner_step(tdd_spinner_t* s);
  * @brief Cleans up spinner display
  * @param s Spinner instance
  */
-static inline void tdd_spinner_end(tdd_spinner_t* s);
+void tdd_spinner_end(tdd_spinner_t* s);
 
 #endif
 
