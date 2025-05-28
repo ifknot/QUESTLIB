@@ -36,6 +36,8 @@ size_t parse_dictionary_size(const parse_dictionary_t* dict);
 
 size_t parse_dictionary_capacity(const parse_dictionary_t* dict);
 
+bool parse_dictionary_is_sorted(const parse_dictionary_t* dict)
+
 void parse_dictionary_dump(FILE* output_stream, const parse_dictionary_t* dict);
 
 #endif
