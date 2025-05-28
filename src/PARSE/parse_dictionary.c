@@ -78,11 +78,11 @@ void parse_dictionary_sort(parse_dictionary_t* dict) {
 *    > 0 if the first string is "greater than" the second.
 * The actual value (not just -1 or 1) is implementation-dependent.
 */
-size_t parse_dictionary_find(const parse_dictionary_t* dict, const char* lexeme) {
+size_t parse_dictionary_search(const parse_dictionary_t* dict, const char* lexeme) {
 
 }
 
-parse_token_t parse_dictionary_get(const parse_dictionary_t* dict, size_t index) {
+parse_token_t parse_dictionary_at(const parse_dictionary_t* dict, size_t index) {
     return dict->pairs[index]; 
 }
 
