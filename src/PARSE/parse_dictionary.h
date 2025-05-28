@@ -22,7 +22,7 @@ void parse_dictionary_remove(parse_dictionary_t* dict, size_t index);
 void parse_dictionary_sort(parse_dictionary_t* dict);
 
 /*
-Binary search for token index *requires* sorted dictionary 
+Binary search for token index *requires* sorted dictionary and assert fails if not
 */
 size_t parse_dictionary_find(const parse_dictionary_t* dict, const char* lexeme);
 
