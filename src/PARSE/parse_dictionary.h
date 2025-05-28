@@ -21,7 +21,7 @@ void parse_dictionary_remove(parse_dictionary_t* dict, size_t index);
 
 void parse_dictionary_sort(parse_dictionary_t* dict);
 
-size_t parse_dictionary_find(parse_dictionary_t* dict, char* lexeme);
+parse_token_t parse_dictionary_tokenize(parse_dictionary_t* dict, char* lexeme);
 
 size_t parse_dictionary_size(const parse_dictionary_t* dict);
 
