@@ -47,17 +47,17 @@ parse_dictionary_t* parse_dictionary_create_from_file(mem_arena_t* arena, const 
 
 }
 
-bool parse_dictionary_add(parse_dictionary_t* dict, char* lexeme, parse_token_t token) {
-    assert(dict && lexeme && dict->size < dict->capacity);
+int parse_dictionary_add(parse_dictionary_t* dict, char* lexeme, parse_token_t token) {
+    assert(dict && lexeme)
+        dict->size >= dict->capacity FULL
     if(parse_dictionary_search(dict, token.lexeme) < 0 {
         return false;
     }
     strncpy(dict->pairs[dict->size].lexeme, lexeme, PARSE_MAX_LEXEME_LENGTH);
     dict->pairs[dict->size].lexeme[PARSE_MAX_LEXEME_LENGTH] = '\0'; // strncpy if no null byte among the first n bytes of src, the string placed in dest will not be null-terminated.
     dict->pairs[dict->size].token = token;
-    dict->size++;
     dict->is_sorted = false;
-    return true;
+    return dict->size++;
 }
 
 bool parse_dictionary_remove(parse_dictionary_t* dict, size_t index) {
@@ -91,7 +91,13 @@ void parse_dictionary_sort(parse_dictionary_t* dict) {
 * The actual value (not just -1 or 1) is implementation-dependent.
 */
 int parse_dictionary_search(const parse_dictionary_t* dict, const char* target) {
-    assert(dictionary && target && dict->size && dict->is_sorted);
+    assert(dictionary && target);
+    if(!dict->size) {
+        return PARSE_DICTIONARY_EMPTY;
+    }
+    if(!dict->is_sorted) {
+        return PARSE_DICTIONARY_NOT_SORTED;
+    }
     str_size_t i = 0; // first entry in dictionary
     str_size_t j = dict->size - 1; // last entry in dictionary
     while (i <= j) {
@@ -105,13 +111,11 @@ int parse_dictionary_search(const parse_dictionary_t* dict, const char* target) 
             j = midpoint - 1;
         }
     }
-    return -1; // not found
-    //NOT_FOUND -1 
-    //EMPTY -2
-    //SORTED -3
+    return PARSE_DICTIONARY_NOT_FOUND; 
 }
 
 parse_token_t parse_dictionary_at(const parse_dictionary_t* dict, size_t index) {
+    assert(dict);
     return dict->pairs[index]; 
 }
 
