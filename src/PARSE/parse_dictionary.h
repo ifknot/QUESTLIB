@@ -24,7 +24,7 @@ void parse_dictionary_sort(parse_dictionary_t* dict);
 /*
 Binary search for token index *requires* sorted dictionary and assert fails if not
 */
-size_t parse_dictionary_find(const parse_dictionary_t* dict, const char* lexeme);
+int parse_dictionary_search(const parse_dictionary_t* dict, const char* target)
 
 parse_token_t parse_dictionary_at(const parse_dictionary_t* dict, size_t index);
 
