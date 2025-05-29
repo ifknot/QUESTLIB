@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "tdd_constants.h"
+
 typedef struct {
     size_t counter;
     const char* spinner_frames;
@@ -11,7 +13,7 @@ typedef struct {
 tdd_spinner_t tdd_spinner_start(const char* frames) {
     tdd_spinner_t spin;
     spin.counter = 0;
-    spin.spinner_frames = (frames) ? frames : "|/-\\";
+    spin.spinner_frames = (frames) ? frames : TDD_SPINNER_DEFAULT_CHARS;
     return spin;
 }
 
