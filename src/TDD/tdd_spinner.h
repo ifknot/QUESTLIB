@@ -9,8 +9,6 @@
 
 #include <stdlib.h>
 
-#include "tdd_constants.h"
-
 typedef private_tdd_spinner_t tdd_spinner_t;
 
 /**
@@ -19,7 +17,7 @@ typedef private_tdd_spinner_t tdd_spinner_t;
  * @return Initialized spinner
  *
  * @example
- * tdd_spinner_t spin = tdd_spinner_start(TDD_SPINNER_1_CHARS);
+ * tdd_spinner_t spin = tdd_spinner_start(TDD_SPINNER_CP437_CHARS);
  * while (working) {
  *     tdd_spinner_step(&spin);
  *     // Work...
