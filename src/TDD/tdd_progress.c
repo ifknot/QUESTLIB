@@ -1,14 +1,16 @@
 #include "tdd_progress.h"
 
+#include <stdio.h>
+
 /* ----------------- Percent Progress ----------------- */
 
 tdd_progress_t tdd_progress_start(size_t total, size_t current, size_t step, size_t width) {
-    tdd_progress_t prg;
-    prg.total = total;
-    prg.current = current;
-    prg.step = step;
-    prg.width = width;
-    return prg;
+    tdd_progress_t progress;
+    progress.total = total;
+    progress.current = current;
+    progress.step = step;
+    progress.width = width;
+    return progress;
 }
 
 void tdd_progress_bar(tdd_progress_t* progress) {
