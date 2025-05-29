@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include "tdd_constants.h"
 #include "tdd_progress.h"
 #include "tdd_spinner.h"
 #include "../TDD/tdd_macros.h"
@@ -39,6 +40,7 @@ TEST(test_spinner) {
         // Test logic here...
     }
     tdd_spinner_clear(&spin);
+    printf("%s", TDD_SPINNER_CP437_CHARS);
 }
 
 #endif
