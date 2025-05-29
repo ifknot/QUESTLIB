@@ -7,11 +7,13 @@
 #include "../DOS/dos_services_files.h"
 #include "../DOS/dos_services_files_types.h"
 
-
-const char* file_get_extension(const char* pfile_path) {
-	const char* p = strrchr(pfile_path, FILE_EXTENSION_DELIM);
-	if (!p || p == pfile_path) {
-		return 0;
+const char* file_get_extension(const char* file_path) {
+	if (!file_path) {
+		return NULL;
+	}
+	const char* last_dot = strrchr(file_path, FILE_EXTENSION_DELIM);
+	if (!last_dot || p == file_path) {
+		return NULL;
 	}
 	else {
 		return ++p;
@@ -19,17 +21,15 @@ const char* file_get_extension(const char* pfile_path) {
 }
 
 file_size_t file_get_size(const dos_file_handle_t fhandle) {
-   	dos_file_position_t fpos, fsize;
-   	fpos = dos_move_file_pointer(fhandle, 0, FSEEK_CUR);	// get current position
-   	fsize = dos_move_file_pointer(fhandle, 0, FSEEK_END);	// get size ie end position
-   	dos_move_file_pointer(fhandle, fpos, FSEEK_SET);		// restore file pointer
-   	return fsize;
+    const dos_file_position_t original_pos = dos_move_file_pointer(fhandle, 0, FSEEK_CUR);
+    const dos_file_position_t size = dos_move_file_pointer(fhandle, 0, FSEEK_END);
+    dos_move_file_pointer(fhandle, original_pos, FSEEK_SET); // Restore position using original call's return value
+    return size;
 }
 
 bool file_position_indicator_is_eof(const dos_file_handle_t fhandle) {
-    dos_file_position_t fpos, fend;
-   	fpos = dos_move_file_pointer(fhandle, 0, FSEEK_CUR);	// get current position
-   	fend = dos_move_file_pointer(fhandle, 0, FSEEK_END);	// get size ie end position
-   	dos_move_file_pointer(fhandle, fpos, FSEEK_SET);		// restore file pointer
-   	return fpos == fend;
+    const dos_file_position_t current_pos = dos_move_file_pointer(fhandle, 0, FSEEK_CUR);
+    const dos_file_position_t end_pos = dos_move_file_pointer(fhandle, 0, FSEEK_END);
+    dos_move_file_pointer(fhandle, current_pos, FSEEK_SET);
+    return current_pos == end_pos;
 }
