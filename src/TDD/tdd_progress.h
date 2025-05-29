@@ -17,8 +17,6 @@ void tdd_progress_bar(tdd_progress_t* p);
 
 void tdd_progress_percent(tdd_progress_t* p);
 
-void tdd_progress_end(tdd_progress_t* p);
-
 #endif
 
 /** @} */ // end of test_utils group
