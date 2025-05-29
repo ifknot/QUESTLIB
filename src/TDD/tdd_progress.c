@@ -12,7 +12,7 @@ tdd_progress_t tdd_progress_start(size_t total, size_t current, size_t step, siz
 }
 
 void tdd_progress_bar(tdd_progress_t* progress) {
-    if (current >= total) {
+    if (progress->current >= progress->total) {
         return;
     }
     printf("\r[");
@@ -20,13 +20,13 @@ void tdd_progress_bar(tdd_progress_t* progress) {
     for (int i = 0; i < width; i++) {
         putchar(i < n ? '=' : ' ');
     }
-    printf("] %3d%%", (int)((progress->current * 100) / progress->total));
+    printf("]%3d%%", (int)((progress->current_iteration * 100) / progress->total_iterations))
     progress->current++;
     fflush(stdout);
 }
 
 void tdd_progress_percent(tdd_progress_t* progress) {
-    if (progress->current_iteration++ % (progress->total_iterations / steps) != 0) {
+    if (progress->current >= progress->total) {
         return;
     }
     printf("\r%3d%% complete", (int)((progress->current_iteration * 100) / progress->total_iterations));
@@ -34,5 +34,5 @@ void tdd_progress_percent(tdd_progress_t* progress) {
 }
 
 void tdd_progress_end(tdd_progress_t* p) {
-
+    // future proofing and consistent interface
 }
