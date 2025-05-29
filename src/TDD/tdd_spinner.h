@@ -9,15 +9,17 @@
 
 #include <stdlib.h>
 
+#include "tdd_constants.h"
+
 typedef private_tdd_spinner_t tdd_spinner_t;
 
 /**
  * @brief Initializes a spinner
- * @param frames Optional: Custom animation frames (default "|/-\\")
+ * @param frames Optional: Custom animation frames 
  * @return Initialized spinner
  *
  * @example
- * tdd_spinner_t spin = tdd_spinner_start();
+ * tdd_spinner_t spin = tdd_spinner_start(TDD_SPINNER_1_CHARS);
  * while (working) {
  *     tdd_spinner_step(&spin);
  *     // Work...
