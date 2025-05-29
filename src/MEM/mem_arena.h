@@ -45,10 +45,10 @@ static const char mem_policy_info[2][31] = {
  *     arena [label="<f0> Policy|<f1> Base Ptr|<f2> Used|<f3> Capacity|<f4> MCB Ptr"];
  * }
  * @enddot
- * 
+ *
  * @warning Contents are private - use accessor functions
  */
-typedef struct private_mem_arena mem_arena_t;
+typedef struct private_mem_arena_t mem_arena_t;
 
 /* ----------------- Core Operations ----------------- */
 
@@ -57,7 +57,7 @@ typedef struct private_mem_arena mem_arena_t;
  * @param policy Allocation strategy (DOS/C)
  * @param byte_request Initial size in bytes
  * @return Arena handle or NULL on failure
- * 
+ *
  * @details DOS Version Compatibility:
  * @code
  * | Feature       | DOS 2.0 | DOS 3.0+ |
@@ -66,7 +66,7 @@ typedef struct private_mem_arena mem_arena_t;
  * | >64KB Arenas  |   No    |   Yes    |
  * | MCB Chain     | Partial |   Full   |
  * @endcode
- * 
+ *
  * @note For DOS policy, maximum initial size is 65535 paragraphs (≈1MB)
  * @see mem_arena_delete()
  */
@@ -76,7 +76,7 @@ mem_arena_t* mem_arena_new(mem_arena_policy_t policy, mem_size_t byte_request);
  * @brief Destroys an arena and all its allocations
  * @param arena Valid arena handle
  * @return Bytes freed (0 if arena was NULL)
- * 
+ *
  * @warning All pointers from this arena become invalid
  */
 mem_size_t mem_arena_delete(mem_arena_t* arena);
@@ -87,7 +87,7 @@ mem_size_t mem_arena_delete(mem_arena_t* arena);
  * @brief Gets DOS Memory Control Block for arena
  * @param arena Arena created with DOS policy
  * @return MCB pointer or NULL if C policy
- * 
+ *
  * @pre arena != NULL
  * @see mem_dump_mcb()
  */
@@ -121,12 +121,12 @@ mem_size_t mem_arena_used(mem_arena_t* arena);
  * @param arena Valid arena handle
  * @param byte_request Size needed (will be aligned)
  * @return Pointer to memory or NULL if full
- * 
+ *
  * @details Allocation Characteristics:
  *          - O(1) time complexity
  *          - No per-allocation overhead
  *          - Naturally aligned (8/16/32-bit)
- * 
+ *
  * @warning Lifetime matches arena - no individual freeing
  */
 void* mem_arena_alloc(mem_arena_t* arena, mem_size_t byte_request);
@@ -136,7 +136,7 @@ void* mem_arena_alloc(mem_arena_t* arena, mem_size_t byte_request);
  * @param arena Valid arena handle
  * @param byte_request Size to theoretically free
  * @return Always returns NULL
- * 
+ *
  * @deprecated Arena uses linear allocation only
  * @note Included for future expansion
  */
@@ -148,7 +148,7 @@ void* mem_arena_dealloc(mem_arena_t* arena, mem_size_t byte_request);
  * @brief Dumps arena metadata to stream
  * @param output_stream File/console output
  * @param arena Valid arena handle
- * 
+ *
  * @output Example:
  * @code
  * [DOS Arena @0x1234]

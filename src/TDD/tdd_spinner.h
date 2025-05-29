@@ -9,11 +9,13 @@
 
 #include <stdlib.h>
 
-typedef private_tdd_spinner_t tdd_spinner_t;
-
+typedef struct {
+    size_t counter;
+    const char* frames;
+} tdd_spinner_t;
 /**
  * @brief Initializes a spinner
- * @param frames Optional: Custom animation frames 
+ * @param frames Optional: Custom animation frames
  * @return Initialized spinner
  *
  * @example
@@ -24,19 +26,19 @@ typedef private_tdd_spinner_t tdd_spinner_t;
  * }
  * tdd_spinner_end(&spin);
  */
-tdd_spinner_t tdd_spinner_start(const char* frames);
+tdd_spinner_t tdd_spinner_make(const char* frames);
 
 /**
  * @brief Updates spinner animation
- * @param s Spinner instance
+ * @param spinner Spinner instance
  */
-void tdd_spinner_step(tdd_spinner_t* s);
+void tdd_spinner_step(tdd_spinner_t* spinner);
 
 /**
  * @brief Cleans up spinner display
- * @param s Spinner instance
+ * @param spinner Spinner instance
  */
-void tdd_spinner_end(tdd_spinner_t* s);
+void tdd_spinner_clear(tdd_spinner_t* spinner);
 
 #endif
 

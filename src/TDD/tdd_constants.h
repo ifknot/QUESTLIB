@@ -1,5 +1,5 @@
-#ifndef CONSTANTS.H
-#define CONSTANTS.H
+#ifndef TDD_CONSTANTS_H
+#define TDD_CONSTANTS_H
 
 // classical ascii spinner highly portable
 #define TDD_SPINNER_DEFAULT_CHARS  "|/-\\"

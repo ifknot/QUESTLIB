@@ -12,11 +12,11 @@ const char* file_get_extension(const char* file_path) {
 		return NULL;
 	}
 	const char* last_dot = strrchr(file_path, FILE_EXTENSION_DELIM);
-	if (!last_dot || p == file_path) {
+	if (!last_dot || last_dot == file_path) {
 		return NULL;
 	}
 	else {
-		return ++p;
+		return ++last_dot;
 	}
 }
 

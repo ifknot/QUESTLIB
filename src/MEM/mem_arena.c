@@ -29,7 +29,7 @@
  * }
  * @enddot
  */
-typedef struct private_mem_arena {
+typedef struct private_mem_arena_t {
     uint8_t policy;         ///< MEM_ARENA_POLICY_DOS or MEM_ARENA_POLICY_C
     mem_address_t start;    ///< Base address of allocated memory
     char* free;             ///< Current allocation pointer
@@ -37,9 +37,9 @@ typedef struct private_mem_arena {
 } mem_arena_t;
 
 /// Default-initialized DOS arena template
-static const mem_arena_t default_dos_mem_arena_t = { 
-    MEM_ARENA_POLICY_DOS, 
-    {NULL}, NULL, NULL 
+static const mem_arena_t default_dos_mem_arena_t = {
+    MEM_ARENA_POLICY_DOS,
+    {NULL}, NULL, NULL
 };
 
 /* ----------------- DOS-Specific Implementation ----------------- */
@@ -48,7 +48,7 @@ static const mem_arena_t default_dos_mem_arena_t = {
  * @brief Creates a DOS memory arena via INT 21h
  * @param byte_count Requested size in bytes
  * @return Initialized arena or NULL on failure
- * 
+ *
  * @details Memory Allocation:
  * @code
  * Paragraphs = (bytes / 16) + (bytes % 16 ? 1 : 0)
@@ -58,7 +58,7 @@ static const mem_arena_t default_dos_mem_arena_t = {
  *     AX = Segment address (success)
  *     BX = Max available (failure)
  * @endcode
- * 
+ *
  * @warning Maximum allocatable:
  *          - 65535 paragraphs (1MB - 16 bytes)
  *          - Typically limited to 640KB in practice
@@ -86,7 +86,7 @@ mem_arena_t* private_mem_arena_dos_new(mem_size_t byte_count) {
  * @brief Releases DOS memory arena
  * @param arena Valid DOS arena
  * @return Bytes freed
- * 
+ *
  * @details Uses INT 21h, AH=49h:
  *          - ES = Segment to free
  *          - All allocations become invalid
@@ -113,7 +113,7 @@ mem_arena_t* mem_arena_new(mem_arena_policy_t policy, mem_size_t byte_request) {
 }
 
 mem_size_t mem_arena_delete(mem_arena_t* arena) {
-    assert(arena);   
+    assert(arena);
     switch(arena->policy) {
         case MEM_ARENA_POLICY_DOS:
             return private_mem_arena_dos_delete(arena);
@@ -166,7 +166,7 @@ void* mem_arena_dealloc(mem_arena_t* arena, mem_size_t byte_request) {
 	if (byte_request <= mem_arena_used(arena)) {
         arena->free -= byte_request;
         return arena->free;
-    }  
+    }
 #ifndef NDEBUG
     fprintf(stderr, "Deallocation failed: Requested %lu, Used %lu\n", byte_request, mem_arena_used(arena));
 #endif
@@ -177,7 +177,7 @@ void* mem_arena_dealloc(mem_arena_t* arena, mem_size_t byte_request) {
 
 void mem_arena_dump(FILE* output_stream, mem_arena_t* arena) {
     if (!output_stream || !arena) return;
-    
+
     fprintf(output_stream,
            "\nArena @%p\n"
            "Policy: %s\n"
@@ -192,11 +192,11 @@ void mem_arena_dump(FILE* output_stream, mem_arena_t* arena) {
            mem_arena_capacity(arena),
            mem_arena_used(arena),
            mem_arena_size(arena));
-    
+
     if (arena->policy == MEM_ARENA_POLICY_DOS) {
         fprintf(output_stream, "MCB: %p\n", mem_arena_dos_mcb(arena));
     }
-    
+
     fflush(output_stream);
 }
 
