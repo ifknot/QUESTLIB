@@ -12,25 +12,25 @@
 
 TEST(test_progress_bar) {
     const size_t ITERATIONS = 1000;
-    tdd_progress_t p = tdd_progress_start(ITERATIONS);
+    tdd_progress_t prg = tdd_progress_start(ITERATIONS, 0, 0, 30); // 30-character wide bar starting at zero and calculating steps
     for (size_t i = 0; i < ITERATIONS; i++) {
-        tdd_progress_bar(&p, 30);  // 30-character wide bar
+        tdd_progress_bar(&prg);  
 
         // Test logic here...
 
     }
-    tdd_progress_end(&p);
+    tdd_progress_end(&prg);
 }
 
 TEST(test_percentage) {
     const size_t ITERATIONS = 5000;
-    tdd_progress_t p = tdd_progress_start(ITERATIONS);
+    tdd_progress_t prg = tdd_progress_start(ITERATIONS, 0, 10, 0); // startin at 0, 10% increments width not relevant
     for (size_t i = 0; i < ITERATIONS; i++) {
-        tdd_progress_percent(&p, 10);  // 10% increments
+        tdd_progress_percent(&prg);  
 
         // Test logic here...
     }
-    tdd_progress_end(&p);
+    tdd_progress_end(&prg);
 }
 
 TEST(test_spinner) {
