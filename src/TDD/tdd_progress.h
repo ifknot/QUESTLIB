@@ -13,8 +13,8 @@
 /* ----------------- Progress Tracking ----------------- */
 
 typedef struct {
-    size_t total_iterations;
-    size_t current_iteration;
+    size_t total;
+    size_t current;
 } tdd_progress_t;
 
 /**
