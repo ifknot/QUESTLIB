@@ -7,16 +7,16 @@
 #ifndef TDD_PROGRESS_H
 #define TDD_PROGRESS_H
 
-#include <stdlib.h>
+#include <stdint.h>
 
 typedef struct {
-    size_t total;
-    size_t current;
-    size_t width;       // bar width - 0 if not a width widget
-    size_t step;        // step size for percent or rotation - if 0 step is calculated
+    uint32_t total;
+    uint32_t current;
+    uint32_t width;       // bar width - 0 if not a width widget
+    uint32_t step;        // step size for percent or rotation - if 0 step is calculated
 } tdd_progress_t;
 
-tdd_progress_t tdd_progress_make(size_t total, size_t current, size_t step, size_t width);
+tdd_progress_t tdd_progress_make(uint32_t total, uint32_t current, uint32_t step, uint32_t width);
 
 void tdd_progress_bar(tdd_progress_t* p);
 

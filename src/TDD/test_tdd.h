@@ -11,20 +11,19 @@
 #define TDD_TESTS &test_progress_bar, &test_percentage, &test_spinner
 
 TEST(test_progress_bar) {
-    const size_t ITERATIONS = 1000;
+    const uint32_t ITERATIONS = 5000;
     tdd_progress_t prg = tdd_progress_make(ITERATIONS, 0, 0, 30); // 30-character wide bar starting at zero and calculating steps
-    for (size_t i = 0; i < ITERATIONS; i++) {
+    for (uint32_t i = 0; i < ITERATIONS; i++) {
         tdd_progress_bar(&prg);
 
         // Test logic here...
-
     }
 }
 
 TEST(test_percentage) {
     const size_t ITERATIONS = 5000;
     tdd_progress_t prg = tdd_progress_make(ITERATIONS, 0, 10, 0); // starting at 0, 10% increments - width not relevant
-    for (size_t i = 0; i < ITERATIONS; i++) {
+    for (uint32_t i = 0; i < ITERATIONS; i++) {
         tdd_progress_percent(&prg);
 
         // Test logic here...
@@ -32,7 +31,7 @@ TEST(test_percentage) {
 }
 
 TEST(test_spinner) {
-    const size_t ITERATIONS = 5000;
+    const size_t ITERATIONS = 1000;
     tdd_spinner_t spin = tdd_spinner_make(NULL); // Default spinner
     for (size_t i = 0; i < ITERATIONS; i++) {
         tdd_spinner_step(&spin);
