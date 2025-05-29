@@ -3,10 +3,15 @@
 #include <stdio.h>
 #include <string.h>
 
+typedef struct {
+    size_t counter;
+    const char* spinner_frames;
+} private_tdd_spinner_t;
+
 tdd_spinner_t tdd_spinner_start(const char* frames) {
     tdd_spinner_t spin;
     spin.counter = 0;
-    spin.spinner_frames = frames ? frames : "|/-\\";
+    spin.spinner_frames = (frames) ? frames : "|/-\\";
     return spin;
 }
 
