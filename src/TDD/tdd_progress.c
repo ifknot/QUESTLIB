@@ -20,8 +20,8 @@ tdd_progress_t tdd_progress_start(size_t total, size_t current, size_t step, siz
 
 void tdd_progress_bar(tdd_progress_t* progress) {
     assert(progress->current < progress->total);
-    if () {
-        return;
+    if(++progress->current % progress->step) {
+        return;    // current mod step != 0
     }
     printf("\r[");
     int limit = (progress->current * progress->width) / progress->total;
@@ -35,8 +35,8 @@ void tdd_progress_bar(tdd_progress_t* progress) {
 
 void tdd_progress_percent(tdd_progress_t* progress) {
     assert(progress->current < progress->total);
-    if () {
-        return;
+    if(++progress->current % progress->step) {
+        return;    // current mod step != 0
     }
     printf("\r%3d%% complete", (int)((progress->current_iteration * 100) / progress->total_iterations));
     fflush(stdout);
