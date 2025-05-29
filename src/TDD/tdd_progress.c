@@ -41,7 +41,3 @@ void tdd_progress_percent(tdd_progress_t* progress) {
     printf("\r%3d%% complete", (int)((progress->current_iteration * 100) / progress->total_iterations));
     fflush(stdout);
 }
-
-void tdd_progress_end(tdd_progress_t* p) {
-    // future proofing and consistent interface
-}
