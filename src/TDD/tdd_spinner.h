@@ -9,10 +9,7 @@
 
 #include <stdlib.h>
 
-typedef struct {
-    size_t counter;
-    const char* spinner_frames;
-} tdd_spinner_t;
+typedef private_tdd_spinner_t tdd_spinner_t;
 
 /**
  * @brief Initializes a spinner
