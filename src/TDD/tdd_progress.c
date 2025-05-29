@@ -2,31 +2,34 @@
 
 /* ----------------- Percent Progress ----------------- */
 
-tdd_progress_t tdd_progress_start(size_t total) {
-    tdd_progress_t prog;
-    prog.total_iterations = total;
-    prog.current_iteration = 0;
-    return prog;
+tdd_progress_t tdd_progress_start(size_t total, size_t current, size_t step, size_t width) {
+    tdd_progress_t prg;
+    prg.total = total;
+    prg.current = current;
+    prg.step = step;
+    prg.width = width;
+    return prg;
 }
 
-void tdd_progress_bar(tdd_progress_t* p, size_t width) {
-    if (p->current_iteration++ % (p->total_iterations / width) != 0) {
+void tdd_progress_bar(tdd_progress_t* progress) {
+    if (current >= total) {
         return;
     }
     printf("\r[");
-    int progress = (p->current_iteration * width) / p->total_iterations;
+    int n = (progress->current * progress->width) / progress->total;
     for (int i = 0; i < width; i++) {
-        putchar(i < progress ? '=' : ' ');
+        putchar(i < n ? '=' : ' ');
     }
-    printf("] %3d%%", (int)((p->current_iteration * 100) / p->total_iterations));
+    printf("] %3d%%", (int)((progress->current * 100) / progress->total));
+    progress->current++;
     fflush(stdout);
 }
 
-void tdd_progress_percent(tdd_progress_t* p, size_t steps) {
-    if (p->current_iteration++ % (p->total_iterations / steps) != 0) {
+void tdd_progress_percent(tdd_progress_t* progress) {
+    if (progress->current_iteration++ % (progress->total_iterations / steps) != 0) {
         return;
     }
-    printf("\r%3d%% complete", (int)((p->current_iteration * 100) / p->total_iterations));
+    printf("\r%3d%% complete", (int)((progress->current_iteration * 100) / progress->total_iterations));
     fflush(stdout);
 }
 
