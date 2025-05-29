@@ -24,7 +24,7 @@ TEST(test_progress_bar) {
 
 TEST(test_percentage) {
     const size_t ITERATIONS = 5000;
-    tdd_progress_t prg = tdd_progress_start(ITERATIONS, 0, 10, 0); // startin at 0, 10% increments width not relevant
+    tdd_progress_t prg = tdd_progress_start(ITERATIONS, 0, 10, 0); // starting at 0, 10% increments - width not relevant
     for (size_t i = 0; i < ITERATIONS; i++) {
         tdd_progress_percent(&prg);  
 
