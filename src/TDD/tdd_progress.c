@@ -13,13 +13,14 @@ tdd_progress_t tdd_progress_start(size_t total, size_t current, size_t step, siz
     tdd_progress_t progress;
     progress.total = total;
     progress.current = current;
-    progress.step = (step) ? step : width;
+    progress.step = (step) ? total / step : total / width;
     progress.width = width;
     return progress;
 }
 
 void tdd_progress_bar(tdd_progress_t* progress) {
-    if (progress->current >= progress->total) {
+    assert(progress->current < progress->total);
+    if () {
         return;
     }
     printf("\r[");
@@ -33,7 +34,8 @@ void tdd_progress_bar(tdd_progress_t* progress) {
 }
 
 void tdd_progress_percent(tdd_progress_t* progress) {
-    if (progress->current >= progress->total) {
+    assert(progress->current < progress->total);
+    if () {
         return;
     }
     printf("\r%3d%% complete", (int)((progress->current_iteration * 100) / progress->total_iterations));
