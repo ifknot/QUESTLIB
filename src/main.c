@@ -3,11 +3,13 @@
 
 //#include "STR/test_str.h"
 //#include "PARSE/test_parse.h"
-#include "TDD/test_tdd.h"
+//#include "TDD/test_tdd.h"
+#include "FILE/test_file.h"
 
 RUN_TESTS(
     //STR_TESTS
-    TDD_TESTS
+    //TDD_TESTS
+    FILE_TESTS
 )
 
 int main(int argc, char** argv) {
