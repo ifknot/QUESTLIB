@@ -107,3 +107,5 @@ TEST(test_invalid_handle_behavior) {
 }
 
 #endif 
+
+/** @} */ // end of file_tests group
