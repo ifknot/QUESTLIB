@@ -32,8 +32,10 @@ const char* file_get_extension(const char* file_path);
  * @param fhandle Valid DOS file handle
  * @return File size in bytes or -1 on error
  *
- * @details Uses seek-to-end method
- * @warning Preserves original file position
+ * @details
+ * - Uses seek-to-end method
+ * - Restores original file position
+ * - Maximum 2GB file size in standard DOS
  */
 file_size_t file_get_size(const dos_file_handle_t fhandle);
 
@@ -82,6 +84,26 @@ inline dos_file_position_t file_position_indicator_move(const dos_file_handle_t 
     assert(forigin == FSEEK_SET || forigin == FSEEK_CUR || forigin == FSEEK_END);
     return dos_move_file_pointer(fhandle, foffset, forigin);
 }
+
+/* ----------------- Large File Support ----------------- */
+
+/**
+ * @brief Read data with 32-bit file support
+ * @param fhandle Valid DOS file handle
+ * @param buffer Destination buffer
+ * @param offset Starting position in file
+ * @param bytes_to_read Number of bytes to read
+ * @return Bytes actually read or -1 on error
+ *
+ * @details
+ * - Implements chunked reading for >64KB transfers
+ * - Handles partial reads gracefully
+ * - Maximum 2GB file size in standard DOS
+ * - For >2GB files requires DOS extender
+ */
+size_t read_large_file(const dos_file_handle_t fhandle, void* buffer, uint32_t offset, size_t bytes_to_read);
+
+// size_t write_large_file(const dos_file_handle_t fhandle, void* buffer, uint32_t offset, size_t bytes_to_write);
 
 #endif
 
