@@ -34,22 +34,6 @@ bool file_position_indicator_is_eof(const dos_file_handle_t fhandle) {
     return current_pos == end_pos;
 }
 
-/* ----------------- Large File Support ----------------- */
-
-/**
- * @brief Read data with 32-bit file support
- * @param fhandle Valid DOS file handle
- * @param buffer Destination buffer
- * @param offset Starting position in file
- * @param bytes_to_read Number of bytes to read
- * @return Bytes actually read or -1 on error
- *
- * @details
- * - Implements chunked reading for >64KB transfers
- * - Handles partial reads gracefully
- * - Maximum 2GB file size in standard DOS
- * - For >2GB files requires DOS extender
- */
 size_t read_large_file(const dos_file_handle_t fhandle, void* buffer, uint32_t offset, size_t bytes_to_read) {
     uint8_t* current_buffer = (uint8_t*)buffer;
     size_t remaining_bytes = bytes_to_read;
