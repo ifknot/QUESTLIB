@@ -33,3 +33,42 @@ bool file_position_indicator_is_eof(const dos_file_handle_t fhandle) {
     dos_move_file_pointer(fhandle, current_pos, FSEEK_SET);
     return current_pos == end_pos;
 }
+
+/* ----------------- Large File Support ----------------- */
+
+/**
+ * @brief Read data with 32-bit file support
+ * @param fhandle Valid DOS file handle
+ * @param buffer Destination buffer
+ * @param offset Starting position in file
+ * @param bytes_to_read Number of bytes to read
+ * @return Bytes actually read or -1 on error
+ *
+ * @details
+ * - Implements chunked reading for >64KB transfers
+ * - Handles partial reads gracefully
+ * - Maximum 2GB file size in standard DOS
+ * - For >2GB files requires DOS extender
+ */
+size_t read_large_file(const dos_file_handle_t fhandle, void* buffer, uint32_t offset, size_t bytes_to_read) {
+    uint8_t* current_buffer = (uint8_t*)buffer;
+    size_t remaining_bytes = bytes_to_read;
+    size_t total_read = 0;
+    if (dos_move_file_pointer(fhandle, offset, SEEK_SET) == -1) { // Set initial file position
+        return -1;
+    }
+    while (remaining_bytes > 0) {
+        const uint16_t chunk_size = (remaining_bytes > 0xFF00) ? 0xFF00 : (uint16_t)remaining_bytes; //DOS read limit per call: 0xFF00 bytes (65280)
+        const int16_t bytes_read = dos_read_file(fhandle, current_buffer, chunk_size);
+        if (bytes_read <= 0) { Handle read errors or EOF
+            break;
+        }
+        total_read += bytes_read;
+        current_buffer += bytes_read;
+        remaining_bytes -= bytes_read;
+        if (bytes_read < chunk_size) { //Check for partial read
+            break;
+        }
+    }
+    return total_read;
+}
