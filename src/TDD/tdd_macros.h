@@ -114,7 +114,6 @@ typedef struct {
 #else
 #define RUN_TESTS(...)                                                          \
     int run_tests(void) {                                                       \
-        printf("Testing\n");                                                    \
         const test_t* tests[] = {__VA_ARGS__};                                  \
         int iterations = sizeof(tests) / sizeof(tests[0]);                      \
         int failures = 0;                                                       \
@@ -126,7 +125,6 @@ typedef struct {
             if (!passed)                                                        \
                 failures++;                                                     \
         }                                                                       \
-        printf("\n%s",(failures) ? "Fail :(" : "Pass :)");                      \
         return failures;                                                        \
     }
 #endif

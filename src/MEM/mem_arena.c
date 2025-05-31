@@ -136,7 +136,7 @@ mem_size_t mem_arena_delete(mem_arena_t* arena) {
 
 char* mem_arena_dos_mcb(mem_arena_t* arena) {
 	assert(arena && arena->policy == MEM_ARENA_POLICY_DOS);
-	if(!arena) {
+	if(!arena || arena->policy != MEM_ARENA_POLICY_DOS) {
 	    return NULL;
 	}
 	mem_address_t m = arena->start;
