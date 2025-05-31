@@ -7,6 +7,7 @@
 #ifndef FILE_EXTENSION_H
 #define	FILE_EXTENSION_H
 
+#include <stdint.h>
 #include <stdbool.h>
 #include <assert.h>
 
@@ -101,7 +102,7 @@ inline dos_file_position_t file_position_indicator_move(const dos_file_handle_t 
  * - Maximum 2GB file size in standard DOS
  * - For >2GB files requires DOS extender
  */
-size_t read_large_file(const dos_file_handle_t fhandle, void* buffer, uint32_t offset, size_t bytes_to_read);
+file_size_t read_large_file(const dos_file_handle_t fhandle, char* buffer, file_size_t offset, file_size_t bytes_to_read);
 
 // size_t write_large_file(const dos_file_handle_t fhandle, void* buffer, uint32_t offset, size_t bytes_to_write);
 

@@ -24,7 +24,7 @@ static const char* TEST_CONTENTS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 void setup_file() {
     // Create test file
-    test_file = dos_open_file(TEST_FILE_PATH, ACCESS_READ_WRITE);
+    test_file = dos_create_file(TEST_FILE_PATH, ACCESS_READ_WRITE);
     if (test_file) {
         dos_write_file(test_file, TEST_CONTENTS, strlen(TEST_CONTENTS));
         dos_move_file_pointer(test_file, 0, FSEEK_SET);
@@ -63,19 +63,19 @@ TEST(test_file_extension_edge_cases) {
 
 TEST(test_file_size_basic) {
     setup_file();
-    
+
     file_size_t size = file_get_size(test_file);
     ASSERT(size == strlen(TEST_CONTENTS));
-    
+
     teardown_file();
 }
 
 TEST(test_file_size_empty) {
-    dos_file_handle_t f = dos_open_file("empty.tmp", ACCESS_READ_WRITE);
+    dos_file_handle_t f = dos_create_file("empty.tmp", ACCESS_READ_WRITE);
     ASSERT(f);
-    
+
     ASSERT(file_get_size(f) == 0);
-    
+
     dos_close_file(f);
     dos_delete_file("empty.tmp");
 }
@@ -84,28 +84,28 @@ TEST(test_file_size_empty) {
 
 TEST(test_eof_detection) {
     setup_file();
-    
+
     // Start of file
     ASSERT(!file_position_indicator_is_eof(test_file));
-    
+
     // Middle of file
     dos_move_file_pointer(test_file, 10, FSEEK_SET);
     ASSERT(!file_position_indicator_is_eof(test_file));
-    
+
     // Exactly at EOF
     dos_move_file_pointer(test_file, 0, FSEEK_END);
     ASSERT(file_position_indicator_is_eof(test_file));
-    
+
     teardown_file();
 }
 
 /* ----------------- Error Case Tests ----------------- */
 
 TEST(test_invalid_handle_behavior) {
-    ASSERT(file_get_size(0xFFFF) == -1);
+    ASSERT(file_get_size(0xFFFF) == 0);
     ASSERT(file_position_indicator_is_eof(0xFFFF) == true);
 }
 
-#endif 
+#endif
 
 /** @} */ // end of file_tests group

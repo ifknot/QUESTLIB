@@ -51,7 +51,7 @@ END:		popf
 	}
 #ifndef NDEBUG
 	if (info->sectors_per_cluster == 0xFFFF) {
-		fprintf(stderr, "%s drive_number=%i", dos_error_messages[DOS_INVALID_DRIVE_SPECIFIED], drive_number);
+		fprintf(stderr, "%s drive_number = %i", dos_error_messages[DOS_INVALID_DRIVE_SPECIFIED], drive_number);
 	}
 #endif
 }
@@ -92,7 +92,7 @@ END:	popf
 	}
 #ifndef NDEBUG
 	if (err_code) {
-		fprintf(stderr, "%s drive_number=%s\n", dos_error_messages[err_code], path_name);
+		fprintf(stderr, "%s drive_number = %s\n", dos_error_messages[err_code], path_name);
 	}
 #endif
 	return fhandle;
@@ -111,7 +111,7 @@ END:	popf
 * AX = file handle if CF not set
 *    = error code if CF set  (see DOS ERROR CODES)
 */
-dos_file_handle_t dos_open_file(const char* path_name, uint8_t access_attributes) {
+dos_file_handle_t dos_open_file(const char* path_name, dos_file_access_attributes_t access_attributes) {
 	dos_file_handle_t fhandle = 0;
 	dos_error_code_t err_code = 0;
 	__asm {
@@ -134,7 +134,7 @@ END:	popf
 
 #ifndef NDEBUG
 	if (err_code) {
-		fprintf(stderr, "%s path name=%s\n", dos_error_messages[err_code], path_name);
+		fprintf(stderr, "%s path name = %s\n", dos_error_messages[err_code], path_name);
 	}
 #endif
 	return fhandle;
@@ -151,7 +151,7 @@ END:	popf
 * - if file is opened for update, file time and date stamp as well as file size are updated in the directory
 * - handle is freed
 */
-dos_error_code_t dos_close_file(dos_file_handle_t fhandle) {
+dos_error_code_t dos_close_file(const dos_file_handle_t fhandle) {
 	dos_error_code_t err_code = 0;
 	__asm {
 		.8086
@@ -169,7 +169,7 @@ END:		popf
 	}
 #ifndef NDEBUG
 	if (err_code) {
-		fprintf(stderr, "%s file_handle=%i\n", dos_error_messages[err_code], fhandle);
+		fprintf(stderr, "%s file_handle = %i\n", dos_error_messages[err_code], fhandle);
 	}
 #endif
 	return err_code;
@@ -190,7 +190,7 @@ END:		popf
 * - when AX is not equal to CX then a partial read occurred due to end of file
 * - if AX is zero, no data was read, and EOF occurred before read
 */
-uint16_t dos_read_file(dos_file_handle_t fhandle, char* buffer, uint16_t nbytes) {
+uint16_t dos_read_file(const dos_file_handle_t fhandle, const char* buffer, uint16_t nbytes) {
 	uint16_t bytes_read = 0;
 	dos_error_code_t err_code = 0;
 	__asm {
@@ -214,7 +214,7 @@ END:		popf
 	}
 #ifndef NDEBUG
 	if (err_code) {
-		fprintf(stderr, "%s file_handle=%i\n", dos_error_messages[err_code], fhandle);
+		fprintf(stderr, "%s file_handle = %i\n", dos_error_messages[err_code], fhandle);
 	}
 #endif
 	return bytes_read;
@@ -234,7 +234,7 @@ END:		popf
 * - if AX is not equal to CX on return, a partial write occurred
 * - this function can be used to truncate a file to the current file position by writing zero bytes
 */
-uint16_t dos_write_file(dos_file_handle_t fhandle, char* buffer, uint16_t nbytes) {
+uint16_t dos_write_file(const dos_file_handle_t fhandle, const char* buffer, uint16_t nbytes) {
 	uint16_t bytes_written = 0;
 	dos_error_code_t err_code = 0;
 	__asm {
@@ -258,7 +258,7 @@ END:		popf
 	}
 #ifndef NDEBUG
 	if (err_code) {
-		fprintf(stderr, "%s file_handle=%i\n", dos_error_messages[err_code], fhandle);
+		fprintf(stderr, "%s file_handle = %i\n", dos_error_messages[err_code], fhandle);
 	}
 #endif
 	return bytes_written;
@@ -277,7 +277,7 @@ END:		popf
 * - FAT pointers are returned to DOS
 * @note - documented as not accepting wildcards in filename but actually does in several DOS versions
 */
-dos_error_code_t dos_delete_file(char* path_name) {
+dos_error_code_t dos_delete_file(const char* path_name) {
 	dos_error_code_t err_code = 0;
 	__asm {
 		.8086
@@ -295,7 +295,7 @@ END:		popf
 	}
 #ifndef NDEBUG
 	if (err_code) {
-		fprintf(stderr, "%s path name=%s\n", dos_error_messages[err_code], path_name);
+		fprintf(stderr, "%s path name = %s\n", dos_error_messages[err_code], path_name);
 	}
 #endif
 	return err_code;
@@ -332,7 +332,7 @@ END:		popf
 * can corrupt the FAT in some versions of DOS; the file should first
 * be grown from zero to one byte and then to the desired large size
 */
-dos_file_position_t dos_move_file_pointer(dos_file_handle_t fhandle, dos_file_position_t foffset, uint8_t forigin) {
+dos_file_position_t dos_move_file_pointer(const dos_file_handle_t fhandle, dos_file_position_t foffset, uint8_t forigin) {
 	dos_error_code_t err_code = 0;
 	dos_file_position_t fposition = foffset;
 	dos_file_position_t* fpos_ptr = &fposition;
@@ -358,7 +358,7 @@ END:
 	}
 #ifndef NDEBUG
 	if (err_code) {
-		fprintf(stderr, "%s file_handle=%i\n", dos_error_messages[err_code], fhandle);
+		fprintf(stderr, "%s file_handle = %i\n", dos_error_messages[err_code], fhandle);
 	}
 #endif
     return fposition;
@@ -383,7 +383,7 @@ END:
 * AX = error code if CF set  (see DOS ERROR CODES)
 * CX = the attribute if AL was 00
 */
-dos_file_attributes_t dos_get_file_attributes(char* path_name) {
+dos_file_attributes_t dos_get_file_attributes(const char* path_name) {
 	dos_file_attributes_t attributes = 0;
 	dos_error_code_t err_code = 0;
 	__asm {
@@ -406,7 +406,7 @@ END:		popf
 	}
 #ifndef NDEBUG
 	if (err_code) {
-		fprintf(stderr, "%s path name=%s\n", dos_error_messages[err_code], path_name);
+		fprintf(stderr, "%s path name = %s\n", dos_error_messages[err_code], path_name);
 	}
 #endif
 	return attributes;
@@ -416,7 +416,7 @@ END:		popf
 * @note DOSBOX does not allow
 * @see file::attributes_t get_file_attributes(char* path_name)
 */
-dos_error_code_t dos_set_file_attributes(char* path_name, dos_file_attributes_t attributes) {
+dos_error_code_t dos_set_file_attributes(const char* path_name, dos_file_attributes_t attributes) {
 	dos_error_code_t err_code = 0;
 	__asm {
 		.8086
@@ -436,7 +436,7 @@ END:	popf
 	}
 #ifndef NDEBUG
 	if (err_code) {
-		fprintf(stderr, "%s path name=%s\n", dos_error_messages[err_code], path_name);
+		fprintf(stderr, "%s path name = %s\n", dos_error_messages[err_code], path_name);
 	}
 #endif
 	return err_code;

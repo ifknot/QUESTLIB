@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include "tdd_variadic.h"
+
 /**
  * @brief Global verbosity control flag
  * @details When true, outputs detailed test information.
@@ -42,7 +44,7 @@ static bool tdd_verbose = true;
  * @param halt Whether to stop test execution on failure
  * @private
  */
-#define ASSERT_HALT(expr, halt)                                     \
+#define ASSERT_HALT(expr, halt)                                    \
     do {                                                                \
         if (!(expr)) {                                                  \
             printf("%s:%d - expected: %s\n", FILENAME, __LINE__, #expr);\
@@ -62,7 +64,7 @@ static bool tdd_verbose = true;
  * @brief Fatal test assertion
  * @param expr Expression to test (stops test if false)
  */
-#define ASSERT(expr) ASSERT_HALT(expr, true)
+#define ASSERT(expr, ...) ASSERT_HALT(expr, true)
 
 /**
  * @brief Test case structure

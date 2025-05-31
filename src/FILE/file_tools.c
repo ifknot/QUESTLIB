@@ -12,7 +12,7 @@ const char* file_get_extension(const char* file_path) {
 		return NULL;
 	}
 	const char* last_dot = strrchr(file_path, FILE_EXTENSION_DELIM);
-	if (!last_dot || last_dot == file_path) {
+	if (!last_dot || last_dot == file_path || !strcmp(last_dot, ".")) {
 		return NULL;
 	}
 	else {
@@ -34,17 +34,17 @@ bool file_position_indicator_is_eof(const dos_file_handle_t fhandle) {
     return current_pos == end_pos;
 }
 
-size_t read_large_file(const dos_file_handle_t fhandle, void* buffer, uint32_t offset, size_t bytes_to_read) {
-    uint8_t* current_buffer = (uint8_t*)buffer;
-    size_t remaining_bytes = bytes_to_read;
-    size_t total_read = 0;
-    if (dos_move_file_pointer(fhandle, offset, SEEK_SET) == -1) { // Set initial file position
+file_size_t read_large_file(const dos_file_handle_t fhandle, char* buffer, file_size_t offset, file_size_t bytes_to_read) {
+    char* current_buffer = buffer;
+    file_size_t remaining_bytes = bytes_to_read;
+    file_size_t total_read = 0;
+    if (dos_move_file_pointer(fhandle, offset, FSEEK_SET) == -1) { // Set initial file position
         return -1;
     }
     while (remaining_bytes > 0) {
         const uint16_t chunk_size = (remaining_bytes > 0xFF00) ? 0xFF00 : (uint16_t)remaining_bytes; //DOS read limit per call: 0xFF00 bytes (65280)
         const int16_t bytes_read = dos_read_file(fhandle, current_buffer, chunk_size);
-        if (bytes_read <= 0) { Handle read errors or EOF
+        if (bytes_read <= 0) { // Handle read errors or EOF
             break;
         }
         total_read += bytes_read;

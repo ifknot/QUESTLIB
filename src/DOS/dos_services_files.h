@@ -20,24 +20,24 @@ dos_file_handle_t dos_create_file(const char * path_name, dos_file_attributes_t 
 dos_file_handle_t dos_open_file(const char * path_name, dos_file_access_attributes_t access_attributes);
 
 // 3E  Close file using handle
-dos_error_code_t dos_close_file(dos_file_handle_t fhandle);
+dos_error_code_t dos_close_file(const dos_file_handle_t fhandle);
 
 // 3F  Read file or device using handle
-uint16_t dos_read_file(dos_file_handle_t fhandle, char* buffer, uint16_t nbytes);
+uint16_t dos_read_file(const dos_file_handle_t fhandle, const char* buffer, uint16_t nbytes);
 
 // 40  Write file or device using handle
-uint16_t dos_write_file(dos_file_handle_t fhandle, char* buffer, uint16_t nbytes);
+uint16_t dos_write_file(const dos_file_handle_t fhandle, const char* buffer, uint16_t nbytes);
 
 // 41  Delete file
-dos_error_code_t dos_delete_file(char* path_name);
+dos_error_code_t dos_delete_file(const char* path_name);
 
 // 42  Move file pointer using handle
-dos_file_position_t dos_move_file_pointer(dos_file_handle_t fhandle, dos_file_position_t foffset, uint8_t forigin);
+dos_file_position_t dos_move_file_pointer(const dos_file_handle_t fhandle, dos_file_position_t foffset, uint8_t forigin);
 
 // 43  Change file mode
-dos_file_attributes_t dos_get_file_attributes(char* path_name);
+dos_file_attributes_t dos_get_file_attributes(const char* path_name);
 
-dos_error_code_t dos_set_file_attributes(char* path_name, dos_file_attributes_t attributes);
+dos_error_code_t dos_set_file_attributes(const char* path_name, dos_file_attributes_t attributes);
 
 // 44  I/O control for devices (IOCTL)
 // 45  Duplicate file handle
