@@ -15,33 +15,33 @@
 /* ----------------- Memory Analysis ----------------- */
 
 /**
- * @brief Queries available DOS memory
+ * @brief Queries available DOS memory (ie "low memory")
  * @return Available memory in paragraphs (uint16_t)
- * 
+ *
  * @details Uses DOS INT 21h, Function 48h:
  *          - Sets BX=FFFFh to probe maximum available memory
  *          - Returns actual available paragraphs in BX
  *          - Error can be safely ignored (DOS 640K limit)
- * 
+ *
  * @note 1 paragraph = 16 bytes
  * @see mem_dump_mcb()
  */
-uint16_t mem_available_low_paragraphs();
+uint16_t mem_max_paragraphs();
 
 /**
  * @brief Dumps Memory Control Block (MCB) information to a specified stream
  * @param[in] mcb Pointer to the Memory Control Block
  * @param[in] stream Output stream (e.g., stdout, stderr, file)
- * 
+ *
  * @details Prints formatted MCB information including:
  *          - Chain marker ('M' or 'Z')
  *          - Owner PSP segment
  *          - Paragraph count
  *          - Program name (if available)
- * 
+ *
  * @pre mcb != NULL (asserted)
  * @pre stream != NULL (asserted)
- * 
+ *
 * @details DOS Version Compatibility:
  * @code
  * | Feature        | DOS 2.0 | DOS 3.0 | DOS 4.0 | DOS 5.0+ |
@@ -51,7 +51,7 @@ uint16_t mem_available_low_paragraphs();
  * | Program Name   |   No    |   No    |   Yes   |   Yes    |
  * | INT 21h/52h    |   No    |   Yes   |   Yes   |   Yes    |
  * @endcode
- * 
+ *
  * @warning MCB structure is DOS-specific and undocumented
  * @see mem_available_low_paragraphs()
  */
@@ -65,12 +65,12 @@ void mem_dump_mcb_to_stream(FILE* stream, const char* mcb);
  * @param[out] start Destination memory address
  * @param[in] nbytes Maximum bytes to load (≤64KB, must be >0)
  * @return Actual bytes loaded (dos_file_size_t)
- * 
+ *
  * @details Features:
  *          - Handles up to one 64K page
  *          - Preserves raw byte values
  *          - No format conversion
- * 
+ *
  * @pre path_name != NULL && strlen(path_name) > 0 (asserted)
  * @pre start != NULL (asserted)
  * @pre nbytes > 0 (asserted)
@@ -85,12 +85,12 @@ dos_file_size_t mem_load_from_file(const char* path_name, char* start, uint16_t 
  * @param[in] start Source memory address
  * @param[in] nbytes Bytes to save (≤64KB, must be >0)
  * @return Actual bytes saved (dos_file_size_t)
- * 
+ *
  * @details Features:
  *          - Handles up to one 64K page
  *          - Writes unmodified memory contents
  *          - Creates/overwrites files
- * 
+ *
  * @pre path_name != NULL && strlen(path_name) > 0 (asserted)
  * @pre start != NULL (asserted)
  * @pre nbytes > 0 (asserted)

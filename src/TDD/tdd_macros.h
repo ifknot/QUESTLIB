@@ -44,7 +44,7 @@ static bool tdd_verbose = true;
  * @param halt Whether to stop test execution on failure
  * @private
  */
-#define ASSERT_HALT(expr, halt)                                    \
+#define ASSERT_HALT(expr, halt)                                         \
     do {                                                                \
         if (!(expr)) {                                                  \
             printf("%s:%d - expected: %s\n", FILENAME, __LINE__, #expr);\

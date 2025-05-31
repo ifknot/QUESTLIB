@@ -1,3 +1,5 @@
+/Users/jeremythornton/dosbox/QUESTLIB/src/DOS/dos_services.c(131): Warning! W200: 'available' has been referenced but never assigned a value
+/Users/jeremythornton/dosbox/QUESTLIB/src/DOS/dos_services.c(131): Warning! W200: 'mem_seg' has been referenced but never assigned a value
 /Users/jeremythornton/dosbox/QUESTLIB/src/DOS/dos_error_messages.h(287): Warning! W202: Symbol 'dos_error_classes' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/DOS/dos_error_messages.h(307): Warning! W202: Symbol 'dos_error_actions' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/DOS/dos_error_messages.h(319): Warning! W202: Symbol 'dos_error_locus' has been defined, but not referenced

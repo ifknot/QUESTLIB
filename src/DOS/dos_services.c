@@ -17,10 +17,10 @@
  * @brief Provides a safe method for changing interrupt vectors
  * @details Uses INT 21h, AH=25h to set an interrupt vector.
  * @note This operation is critical and should be used carefully as it modifies system interrupt table.
- * 
+ *
  * @param vec_num The interrupt vector number to modify (0-255)
  * @param phandler Pointer to the new interrupt handler function
- * 
+ *
  * @asm
  *   INT 21,25 - Set Interrupt Vector
  *   AH = 25h
@@ -47,10 +47,10 @@ void dos_set_interrupt_vector(uint8_t vec_num, void* phandler) {
 /**
  * @brief Retrieves the current interrupt vector
  * @details Uses INT 21h, AH=35h to get an interrupt vector address.
- * 
+ *
  * @param vec_num The interrupt vector number to query (0-255)
  * @return void* Segment:offset pointer to current interrupt handler (little-endian format)
- * 
+ *
  * @asm
  *   INT 21,35 - Get Interrupt Vector
  *   AH = 35h
@@ -83,10 +83,10 @@ void* dos_get_interrupt_vector(uint8_t vec_num) {
  * @brief Allocates memory blocks in paragraphs
  * @details Uses INT 21h, AH=48h to allocate memory in 16-byte paragraphs.
  * @warning Each allocation requires a 16-byte overhead for the Memory Control Block (MCB).
- * 
+ *
  * @param paragraphs Number of 16-byte paragraphs requested
  * @return uint16_t Segment address of allocated block (AX:0000) or 0 if failed
- * 
+ *
  * @asm
  *   INT 21,48 - Allocate Memory
  *   AH = 48h
@@ -97,17 +97,19 @@ void* dos_get_interrupt_vector(uint8_t vec_num) {
  *   BX = size of largest available block if AX=8 (insufficient memory)
  *   CF = 0 if success, 1 if error
  * @endasm
- * 
+ *
  * @retval 0 Allocation failed
  * @retval >0 Segment address of allocated memory
- * 
+ *
  * @note To find available memory size, set BX=FFFFh before calling (will return error but BX contains available memory)
  * @see dos_free_allocated_memory_blocks()
  */
 uint16_t dos_allocate_memory_blocks(uint16_t paragraphs) {
+    if(!paragraphs) {
+        return paragraphs;
+    }
     uint16_t available, mem_seg;
-    dos_error_code_t err_code;
-    available = mem_seg = err_code = 0;
+    dos_error_code_t err_code = 0;
     __asm {
     .8086
     pushf
@@ -119,7 +121,7 @@ uint16_t dos_allocate_memory_blocks(uint16_t paragraphs) {
     jnc     OK                          ; success CF = 0
     mov     err_code, ax                ; CF set, and AX = 08 (Not Enough Mem)
     mov     available, bx               ; size in paras of the largest block of memory available
-    xor     ax, ax
+    mov     ax, 0
 OK: mov     mem_seg, ax
 
     pop     ds
@@ -127,9 +129,9 @@ OK: mov     mem_seg, ax
     }
 #ifndef NDEBUG
     if (err_code) {
-        fprintf(stderr, "%s\n", dos_error_messages[err_code]);
+        fprintf(stderr, "%s", dos_error_messages[err_code]);
         if (err_code == DOS_INSUFFICIENT_MEMORY) {
-            fprintf(stderr, " largest block of memory available = %u paragraphs\n", available);    // paragraph = 16 bytes
+            fprintf(stderr, " largest available block = %u paragraphs\n", available);    // paragraph = 16 bytes
         }
     }
 #endif
@@ -140,10 +142,10 @@ OK: mov     mem_seg, ax
  * @brief Frees previously allocated memory blocks
  * @details Uses INT 21h, AH=49h to release memory allocated by dos_allocate_memory_blocks().
  * @warning Unpredictable results if memory wasn't allocated by current process or wasn't allocated properly.
- * 
+ *
  * @param segment Segment address of memory to free (MCB + 1 paragraph)
  * @return uint16_t DOS error code (0 if success)
- * 
+ *
  * @asm
  *   INT 21,49 - Free Allocated Memory
  *   AH = 49h
@@ -152,16 +154,17 @@ OK: mov     mem_seg, ax
  *   AX = error code if CF set
  *   CF = 0 if success, 1 if error
  * @endasm
- * 
+ *
  * @retval 0 Success
  * @retval 7 Memory control blocks destroyed
  * @retval 8 Insufficient memory (shouldn't occur for free operation)
- * 
+ *
  * @note Unreliable in TSR programs once resident, as COMMAND.COM and others take all memory when loading.
  * @see dos_allocate_memory_blocks()
  */
 uint16_t dos_free_allocated_memory_blocks(uint16_t segment) {
     dos_error_code_t err_code = 0;
+    char* mcb = (char*)(((int32_t)segment - 1) << 16);
     __asm {
         .8086
         pushf
@@ -177,6 +180,7 @@ uint16_t dos_free_allocated_memory_blocks(uint16_t segment) {
         pop     ds
         popf
     }
+    mcb[0] = '\0';  // invalidate the MCB
 #ifndef NDEBUG
     if (err_code) {
         fprintf(stderr, "%s %X\n", dos_error_messages[err_code], segment);
