@@ -114,6 +114,27 @@ mem_size_t mem_arena_capacity(mem_arena_t* arena);
  */
 mem_size_t mem_arena_used(mem_arena_t* arena);
 
+/**
+ * @brief Gets memory allocation policy
+ * @param arena Valid arena handle
+ * @return policy eg MEM_ARENA_POLICY_DOS
+ */
+uint8_t mem_arena_policy(mem_arena_t* arena);
+
+/**
+ * @brief Gets pointer to the start of the arena
+ * @param arena Valid arena handle
+ * @return void* to arena->start
+ */
+void* mem_arena_base_address(mem_arena_t* arena);
+
+/**
+ * @brief Gets pointer to the start of the free section
+ * @param arena Valid arena handle
+ * @return void* to arena->start
+ */
+void* mem_arena_free_address(mem_arena_t* arena);
+
 /* ----------------- Allocation ----------------- */
 
 /**

@@ -44,7 +44,7 @@
 #define ASSERT_HALT(expr, halt)                                         \
     do {                                                                \
         if (!(expr)) {                                                  \
-            printf("%s:%d - expected: %s\n", FILENAME, __LINE__, #expr);\
+            printf("\n%s:%d - expected: %s\n", FILENAME, __LINE__, #expr);\
             *pass = false;                                              \
             if (halt)                                                   \
                 return;                                                 \
@@ -114,16 +114,19 @@ typedef struct {
 #else
 #define RUN_TESTS(...)                                                          \
     int run_tests(void) {                                                       \
+        printf("Testing\n");                                                    \
         const test_t* tests[] = {__VA_ARGS__};                                  \
         int iterations = sizeof(tests) / sizeof(tests[0]);                      \
-        tdd_progress_t prg = tdd_progress_make(iterations, 0, 0, 30);           \
         int failures = 0;                                                       \
         for (size_t i = 0; i < iterations; i++) {                               \
             bool passed = true;                                                 \
             tests[i]->fn(&passed);                                              \
+            printf("%c",'.');                                                   \
+            fflush(stdout);                                                     \
             if (!passed)                                                        \
                 failures++;                                                     \
         }                                                                       \
+        printf("\n%s",(failures) ? "Fail :(" : "Pass :)");                      \
         return failures;                                                        \
     }
 #endif

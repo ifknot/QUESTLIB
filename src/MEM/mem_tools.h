@@ -12,6 +12,8 @@
 
 #include "../DOS/dos_services_files_types.h"
 
+#include "mem_types.h"
+
 /* ----------------- Memory Analysis ----------------- */
 
 /**
@@ -27,6 +29,31 @@
  * @see mem_dump_mcb()
  */
 uint16_t mem_max_paragraphs();
+
+/**
+ * @brief Calculates the byte difference between two memory addresses
+ * @ingroup memory_management
+ *
+ * @param p1 First memory address (can be near/far/huge pointer)
+ * @param p2 Second memory address (can be near/far/huge pointer)
+ * @return ptrdiff_t Signed difference in bytes (p1 - p2)
+ *
+ * @note For 16-bit segmented architectures (DOS):
+ *       - Near pointers: Returns offset difference only
+ *       - Far pointers: Returns 32-bit linear address difference
+ *       - Huge pointers: Returns normalized difference
+ *
+ * @warning Pointer arithmetic limitations:
+ *          - Result may overflow if pointers are too far apart
+ *          - For far pointers, difference assumes same segment
+ *          - Not suitable for comparing unrelated memory regions
+ *
+ * @example
+ * int arr[10];
+ * ptrdiff_t diff = mem_difference_pointers(&arr[5], &arr[2]);
+ * // diff == 3 * sizeof(int)
+ */
+mem_diff_t mem_diff_pointers(const void* p1, const void* p2);
 
 /**
  * @brief Dumps Memory Control Block (MCB) information to a specified stream

@@ -12,6 +12,8 @@
 
 #include "../DOS/dos_services.h"
 #include "mem_constants.h"
+#include "mem_tools.h"
+#include "mem_types.h"
 
 /* ----------------- Arena Structure ----------------- */
 
@@ -65,6 +67,9 @@ static const mem_arena_t default_dos_mem_arena_t = {
  */
 mem_arena_t* private_mem_arena_dos_new(mem_size_t byte_count) {
 	assert(byte_count);
+	if(!byte_count) {
+	    return NULL;
+	}
 	mem_arena_t* arena = (mem_arena_t*)malloc(sizeof(mem_arena_t));
     assert(arena != NULL);
     *arena = default_dos_mem_arena_t;
@@ -114,6 +119,9 @@ mem_arena_t* mem_arena_new(mem_arena_policy_t policy, mem_size_t byte_request) {
 
 mem_size_t mem_arena_delete(mem_arena_t* arena) {
     assert(arena);
+    if(!arena) {
+        return 0;
+    }
     switch(arena->policy) {
         case MEM_ARENA_POLICY_DOS:
             return private_mem_arena_dos_delete(arena);
@@ -128,28 +136,42 @@ mem_size_t mem_arena_delete(mem_arena_t* arena) {
 
 char* mem_arena_dos_mcb(mem_arena_t* arena) {
 	assert(arena && arena->policy == MEM_ARENA_POLICY_DOS);
+	if(!arena) {
+	    return NULL;
+	}
 	mem_address_t m = arena->start;
-	m.segoff.segment --;
+	--m.segoff.segment;
 	return m.ptr;
 }
 
 mem_size_t mem_arena_size(mem_arena_t* arena) {
-	return arena->end - arena->free;
+	return mem_diff_pointers(arena->end, arena->free);
 }
 
 mem_size_t mem_arena_capacity(mem_arena_t* arena) {
-	return arena->end - arena->start.ptr;
+	return mem_diff_pointers(arena->end, arena->start.ptr);
 }
 
 mem_size_t mem_arena_used(mem_arena_t* arena) {
 	return mem_arena_capacity(arena) - mem_arena_size(arena);
 }
 
+uint8_t mem_arena_policy(mem_arena_t* arena) {
+    return arena->policy;
+}
+
+void* mem_arena_base_address(mem_arena_t* arena) {
+    return arena->start.ptr;
+}
+
+void* mem_arena_free_address(mem_arena_t* arena) {
+    return arena->free;
+}
+
 /* ----------------- Allocation ----------------- */
 
 void* mem_arena_alloc(mem_arena_t* arena, mem_size_t byte_request) {
-	assert(arena && byte_request);
-	if (byte_request <= mem_arena_size(arena)) {
+	if (arena && byte_request && byte_request <= mem_arena_size(arena)) {
         void* ptr = arena->free;
         arena->free += byte_request;
         return ptr;
@@ -162,8 +184,7 @@ void* mem_arena_alloc(mem_arena_t* arena, mem_size_t byte_request) {
 }
 
 void* mem_arena_dealloc(mem_arena_t* arena, mem_size_t byte_request) {
-	assert(arena && byte_request);
-	if (byte_request <= mem_arena_used(arena)) {
+	if (arena && byte_request && byte_request <= mem_arena_used(arena)) {
         arena->free -= byte_request;
         return arena->free;
     }

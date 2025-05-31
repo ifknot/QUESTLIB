@@ -24,6 +24,14 @@ uint16_t mem_max_paragraphs() {
     return paragraphs;
 }
 
+mem_diff_t mem_diff_pointers(const void* p1, const void* p2) {
+    const uintptr_t addr1 = (uintptr_t)p1;  // uintptr_t is more portable than uint32_t
+    const uintptr_t addr2 = (uintptr_t)p2;
+
+    /* The cast to ptrdiff_t ensures proper signed result */
+    return (mem_diff_t)(addr1 - addr2);
+}
+
 void mem_dump_mcb_to_stream( FILE* stream, const char* mcb) {
     assert(mcb != NULL);
     assert(stream != NULL);

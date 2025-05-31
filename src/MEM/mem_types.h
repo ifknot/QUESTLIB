@@ -8,6 +8,7 @@
 #ifndef MEM_TYPES_H
 #define MEM_TYPES_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 /* ----------------- Size Types ----------------- */
@@ -34,7 +35,7 @@ typedef int32_t mem_diff_t;
  *     segoff [label="<segment> Segment (16-bit)|<offset> Offset (16-bit)"];
  * }
  * @enddot
- * 
+ *
  * @note Little-endian layout matches Intel architecture
  * @warning Physical address = (segment << 4) + offset
  */
@@ -56,15 +57,15 @@ static const mem_segoff_t default_mem_segoff_t = {0, 0};
  *     union [label="<ptr> char* ptr|<memloc> uint32_t linear|<segoff> mem_segoff_t segmented|<words> uint16_t words[2]|<bytes> uint8_t bytes[4]"];
  * }
  * @enddot
- * 
+ *
  * @details Allows multiple views of the same 32-bit address:
  * @code
  * mem_address_t addr;
  * addr.memloc = 0x12345678;
- * printf("Segment: %04X, Offset: %04X\n", 
+ * printf("Segment: %04X, Offset: %04X\n",
  *        addr.segoff.segment, addr.segoff.offset);
  * @endcode
- * 
+ *
  * @note Useful for:
  *       - DOS real-mode/protected mode transitions
  *       - Pointer arithmetic
