@@ -18,20 +18,17 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "tdd_variadic.h"
-
-/**
- * @brief Global verbosity control flag
- * @details When true, outputs detailed test information.
- *          When false, only shows condensed pass/fail indicators.
- */
-static bool tdd_verbose = true;
+#include "tdd_progress.h"
 
 /**
  * @brief Conditional verbose output macro
- * @param expr Expression to execute only in verbose mode
+ * @param expr Expression to execute only in debug mode
  */
-#define V(expr) do { if(tdd_verbose) { expr } } while(0)
+#ifndef NDEBUG
+#define V(expr) do { { expr } } while(0)
+#else
+#define V(expr)
+#endif
 
 /**
  * @brief Extracts filename from full path
@@ -99,6 +96,7 @@ typedef struct {
  *          - Failure counting
  *          - Verbosity control
  */
+#ifndef NDEBUG
 #define RUN_TESTS(...)                                                          \
     int run_tests(void) {                                                       \
         const test_t* tests[] = {__VA_ARGS__};                                  \
@@ -106,19 +104,29 @@ typedef struct {
         for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {         \
             bool passed = true;                                                 \
             tests[i]->fn(&passed);                                              \
-            if (tdd_verbose) {                                                  \
-                printf("\n%s: %s\n", passed ? "PASS" : "FAIL", tests[i]->name); \
-            }                                                                   \
-            else {                                                              \
-                printf("%c", passed ? '+' : '-');                               \
-            }                                                                   \
+            printf("\n%s: %s\n", passed ? "PASS" : "FAIL", tests[i]->name); \
             if (!passed)                                                        \
                 failures++;                                                     \
         }                                                                       \
         V(printf("Failures = %i", failures););                                  \
         return failures;                                                        \
     }
-
+#else
+#define RUN_TESTS(...)                                                          \
+    int run_tests(void) {                                                       \
+        const test_t* tests[] = {__VA_ARGS__};                                  \
+        int iterations = sizeof(tests) / sizeof(tests[0]);                      \
+        tdd_progress_t prg = tdd_progress_make(iterations, 0, 0, 30);           \
+        int failures = 0;                                                       \
+        for (size_t i = 0; i < iterations; i++) {                               \
+            bool passed = true;                                                 \
+            tests[i]->fn(&passed);                                              \
+            if (!passed)                                                        \
+                failures++;                                                     \
+        }                                                                       \
+        return failures;                                                        \
+    }
+#endif
 #endif
 
 /** @} */ // end of tdd_framework group

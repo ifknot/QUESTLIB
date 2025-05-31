@@ -114,21 +114,15 @@ TEST(test_memory_exhaustion)
 {
     /* First find out how much memory is available */
     uint16_t largest_block = mem_max_paragraphs();
-    uint16_t dummy = dos_allocate_memory_blocks(0xFFFF);  /* Special case to get largest block */
+    V(printf("Largest available block: %u paragraphs\n", largest_block););
+    /* Try to allocate slightly more than available */
+    uint16_t too_big = dos_allocate_memory_blocks(largest_block + 1);
+    EXPECT(too_big == 0);
+    /* Try to allocate exactly the available amount */
+    uint16_t exact_fit = dos_allocate_memory_blocks(largest_block);
+    ASSERT(exact_fit != 0);
+    EXPECT(dos_free_allocated_memory_blocks(exact_fit) == 0);
 
-    if (dummy == 0) {
-        /* Get largest available block size */
-        V(printf("Largest available block: %u paragraphs\n", largest_block););
-
-        /* Try to allocate slightly more than available */
-        uint16_t too_big = dos_allocate_memory_blocks(largest_block + 1);
-        EXPECT(too_big == 0);
-
-        /* Try to allocate exactly the available amount */
-        uint16_t exact_fit = dos_allocate_memory_blocks(largest_block);
-        ASSERT(exact_fit != 0);
-        EXPECT(dos_free_allocated_memory_blocks(exact_fit) == 0);
-    }
 }
 
 #endif

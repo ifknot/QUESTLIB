@@ -24,7 +24,7 @@
  * @covers str_make_string(), str_make_copy(), str_make_string_array()
  */
 TEST(test_str_memory) {
-    tdd_verbose = false;
+
     mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_1K);
 
     // Verify arena
@@ -60,7 +60,7 @@ TEST(test_str_memory) {
  *        str_trim_characters(), str_trim_whitespace(), str_remove_punctuation()
  */
 TEST(test_str_scrubbing) {
-    tdd_verbose = false;
+
     char test_string[] = "  \n\tKill,  the\n   QC3PO!     with   \ta    axe ! ?       ";
     V(printf("->%s<-\n", test_string););
 
@@ -92,7 +92,7 @@ TEST(test_str_scrubbing) {
  *        str_read_word(), str_read_line(), str_enumerate_words()
  */
 TEST(test_str_processing) {
-    tdd_verbose = false;
+
     mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_1K);
     str_iterator_t i = 0;
     char test_string[] = "The Quick Brown fox jumps over the lazy dog.\nThis sentence uses all 26 letters of the alphabet, making it useful for testing typewriters, keyboards, and fonts.\nIt's also commonly used for touch-typing practice.";
@@ -142,7 +142,7 @@ TEST(test_str_processing) {
  *        str_file_read_line(), str_file_enumerate_words()
  */
 TEST(test_str_file_processing) {
-    tdd_verbose = false;
+
     mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_4K);
     char c = ' ';
     char s[15] = {0};

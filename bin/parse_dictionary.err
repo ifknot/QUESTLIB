@@ -1,4 +1,3 @@
 /Users/jeremythornton/dosbox/QUESTLIB/src/PARSE/parse_dictionary.c(69): Warning! W124: Comparison result always 0
-/Users/jeremythornton/dosbox/QUESTLIB/src/PARSE/parse_dictionary.c(124): Warning! W124: Comparison result always 1
 /Users/jeremythornton/dosbox/QUESTLIB/src/PARSE/../MEM/mem_types.h(47): Warning! W202: Symbol 'default_mem_segoff_t' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/PARSE/../MEM/mem_arena.h(33): Warning! W202: Symbol 'mem_policy_info' has been defined, but not referenced
