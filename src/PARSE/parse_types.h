@@ -10,6 +10,8 @@
 #include <stdint.h>
 #include "parse_constants.h"
 
+typedef uint16_t parse_size_t;
+
 /**
  * @brief Token type definition
  * @details Represents a unique identifier for lexemes in the parsing system.

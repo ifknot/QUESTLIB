@@ -55,14 +55,14 @@ parse_dictionary_t* parse_dictionary_create_from_file(mem_arena_t* arena,
  * @param dict Dictionary to query
  * @return Number of active entries
  */
-size_t parse_dictionary_size(const parse_dictionary_t* dict);
+parse_size_t parse_dictionary_size(const parse_dictionary_t* dict);
 
 /**
  * @brief Gets the maximum capacity
  * @param dict Dictionary to query
  * @return Maximum number of entries
  */
-size_t parse_dictionary_capacity(const parse_dictionary_t* dict);
+parse_size_t parse_dictionary_capacity(const parse_dictionary_t* dict);
 
 /**
  * @brief Checks if dictionary is empty

@@ -140,6 +140,7 @@ TEST(test_add_remove) {
     // Remove and verify
     ASSERT(parse_dictionary_remove(test_dict, 0) == 1);
     ASSERT(parse_dictionary_size(test_dict) == 1);
+    parse_dictionary_sort(test_dict);
     ASSERT(parse_dictionary_search(test_dict, "zebra") == 0);
 
     teardown();

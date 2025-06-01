@@ -23,8 +23,8 @@
  * @private
  */
 typedef struct private_parse_dictionary {
-    size_t size;                        /**< Current number of entries */
-    size_t capacity;                    /**< Maximum capacity */
+    parse_size_t size;                        /**< Current number of entries */
+    parse_size_t capacity;                    /**< Maximum capacity */
     bool is_sorted;                     /**< Sort status flag */
     parse_lexeme_token_pair_t* pairs;   /**< Array of pairs */
 } parse_dictionary_t;
@@ -76,12 +76,12 @@ parse_dictionary_t* parse_dictionary_create_from_file(mem_arena_t* arena,
 /* Dictionary State       */
 /* ====================== */
 
-size_t parse_dictionary_size(const parse_dictionary_t* dict) {
+parse_size_t parse_dictionary_size(const parse_dictionary_t* dict) {
     assert(dict);
     return dict->size;
 }
 
-size_t parse_dictionary_capacity(const parse_dictionary_t* dict) {
+parse_size_t parse_dictionary_capacity(const parse_dictionary_t* dict) {
     assert(dict);
     return dict->capacity;
 }
@@ -155,17 +155,25 @@ void parse_dictionary_clear(parse_dictionary_t* dict) {
 void parse_dictionary_sort(parse_dictionary_t* dict) {
     assert(dict);
 
-    if (dict->size > 1) {
-        qsort(dict->pairs, dict->size, sizeof(parse_lexeme_token_pair_t),
-              private_compare_pairs);
-        dict->is_sorted = true;
+    if(dict->is_sorted) {
+        return;
     }
+    if (dict->size > 1) {
+        qsort(dict->pairs, dict->size, sizeof(parse_lexeme_token_pair_t), private_compare_pairs);
+    }
+    dict->is_sorted = true;
 }
 
 /* ====================== */
 /* Dictionary Query       */
 /* ====================== */
 
+/**
+ * @brief Searches for a lexeme in the dictionary
+ * @param dict Dictionary to search
+ * @param target Lexeme to find
+ * @return Index of found lexeme or error code (<0)
+ */
 int parse_dictionary_search(const parse_dictionary_t* dict, const char* target) {
     assert(dict && target);
 
@@ -176,11 +184,11 @@ int parse_dictionary_search(const parse_dictionary_t* dict, const char* target) 
         return PARSE_DICTIONARY_NOT_SORTED;
     }
 
-    size_t low = 0;
-    size_t high = dict->size - 1;
+    int low = 0;
+    int high = dict->size - 1;
 
     while (low <= high) {
-        size_t mid = low + (high - low) / 2;
+        int mid = low + (high - low) / 2;
         int cmp = strcmp(dict->pairs[mid].lexeme, target);
 
         if (cmp == 0) {
