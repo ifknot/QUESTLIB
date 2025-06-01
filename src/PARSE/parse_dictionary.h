@@ -1,6 +1,8 @@
 /**
  * @file parse_dictionary.h
  * @brief Interface for lexeme-token dictionary operations
+ * @note The dictionary maintains an internal sorted flag that becomes false after
+*       any modification (add/remove/clear) and true only after explicit sort().
  * @defgroup parse_dictionary Lexeme-Token Dictionary
  * @{
  */
@@ -91,6 +93,8 @@ bool parse_dictionary_is_sorted(const parse_dictionary_t* dict);
 
 /**
  * @brief Adds a new lexeme-token pair
+ * @note The dictionary maintains an internal sorted flag that becomes false after
+  *       any modification (add/remove/clear) and true only after explicit sort().
  * @param dict Dictionary to modify
  * @param lexeme Lexeme string to add
  * @param token Associated token value
@@ -100,6 +104,8 @@ int parse_dictionary_add(parse_dictionary_t* dict, char* lexeme, parse_token_t t
 
 /**
  * @brief Removes an entry by index
+ * @note The dictionary maintains an internal sorted flag that becomes false after
+*       any modification (add/remove/clear) and true only after explicit sort().
  * @param dict Dictionary to modify
  * @param index Index to remove
  * @return New size or error code (<0)
@@ -108,6 +114,8 @@ int parse_dictionary_remove(parse_dictionary_t* dict, size_t index);
 
 /**
  * @brief Clears all entries
+ * @note The dictionary maintains an internal sorted flag that becomes false after
+ *       any modification (add/remove/clear) and true only after explicit sort().
  * @param dict Dictionary to clear
  */
 void parse_dictionary_clear(parse_dictionary_t* dict);

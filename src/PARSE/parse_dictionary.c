@@ -135,8 +135,7 @@ int parse_dictionary_remove(parse_dictionary_t* dict, size_t index) {
                (dict->size - index - 1) * sizeof(parse_lexeme_token_pair_t));
     }
 
-    private_reset_pair(dict, dict->size - 1);
-    dict->size--;
+    private_reset_pair(dict, --dict->size);
     dict->is_sorted = false;
 
     return dict->size;
