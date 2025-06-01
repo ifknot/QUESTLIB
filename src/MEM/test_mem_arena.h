@@ -14,7 +14,13 @@
 #include "mem_tools.h"
 
 /// @brief Array of all test cases for the arena library
-#define ARENA_TESTS &test_arena_creation, &test_basic_allocation, &test_allocation_limits, &test_deallocation, &test_zero_allocation, &test_null_arena_handling, &test_arena_dump
+#define ARENA_TESTS &test_arena_creation, \
+                    &test_basic_allocation, \
+                    &test_allocation_limits, \
+                    &test_deallocation, \
+                    &test_zero_allocation, \
+                    &test_null_arena_handling, \
+                    &test_arena_dump
 
 #define TEST_ARENA_SIZE (MEM_SIZE_1K)  // 1KB test arena
 

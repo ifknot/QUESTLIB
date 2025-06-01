@@ -14,7 +14,13 @@
 #include "../TDD/tdd_macros.h"
 #include "../DOS/dos_services_files.h"
 
-#define FILE_TESTS &test_file_extension_normal, &test_file_extension_no_ext, &test_file_extension_edge_cases, &test_file_size_basic, &test_file_size_empty, &test_eof_detection, &test_invalid_handle_behavior
+#define FILE_TESTS &test_file_extension_normal, \
+                   &test_file_extension_no_ext, \
+                   &test_file_extension_edge_cases, \
+                   &test_file_size_basic, \
+                   &test_file_size_empty, \
+                   &test_eof_detection, \
+                   &test_invalid_handle_behavior
 
 /* ----------------- Test Fixtures ----------------- */
 

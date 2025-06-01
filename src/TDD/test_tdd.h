@@ -9,7 +9,9 @@
 #include "../TDD/tdd_macros.h"
 
 /// @brief Array of all test cases for the tdd library
-#define TDD_TESTS &test_progress_bar, &test_percentage, &test_spinner
+#define TDD_TESTS &test_progress_bar, \
+                  &test_percentage, \
+                  &test_spinner
 
 TEST(test_spinner) {
     const size_t ITERATIONS = 1000;

@@ -15,7 +15,10 @@
 
 #include "mem_tools.h"
 
-#define TOOLS_TESTS &test_mem_max_paragraphs, &test_mem_diff_pointers, &test_mem_dump_mcb_to_stream, &test_mem_load_save_file
+#define TOOLS_TESTS &test_mem_max_paragraphs, \
+                    &test_mem_diff_pointers, \
+                    &test_mem_dump_mcb_to_stream, \
+                    &test_mem_load_save_file
 
 /**
  * @brief Test memory availability query

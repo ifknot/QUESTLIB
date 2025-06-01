@@ -15,7 +15,10 @@
 #include "str_headers.h"
 
 /// @brief Array of all test cases for the string library
-#define STR_TESTS &test_str_memory, &test_str_scrubbing, &test_str_processing, &test_str_file_processing
+#define STR_TESTS &test_str_memory, \
+                  &test_str_scrubbing, \
+                  &test_str_processing, \
+                  &test_str_file_processing
 
 /* ----------------- Memory Allocation Tests ----------------- */
 
