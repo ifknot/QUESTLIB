@@ -2,19 +2,30 @@
 
 ## Table of Contents
 1. [General Rules](#1-general-rules)
+    - [Brace Placement](#brace-placement)
+    - [Indentation](#indentation)
+    - [Alignment](#alignment)
 2. [Control Structures](#2-control-structures)
+    - [If-Else Statements](#if-else-statements)
+    - [Ternary Operator](#ternary-operator)
+    - [Loops](#loops)
+    - [Switch Statements](#switch-statements)
 3. [Naming Conventions](#3-naming-conventions)
 4. [Documentation](#4-documentation)
+    - [File Header](#file-header)
+    - [Function Docs](#function-docs)
 5. [Error Handling](#5-error-handling)
+    - [Defensive Checks](#defensive-checks)
+    - [Assertions](#assertions)
 6. [Memory Management](#6-memory-management)
 7. [Full Example](#7-full-example)
+8. [License](#license)
 
 ---
 
-## Section 1. General Rules
+## 1. General Rules {#1-general-rules}
 
-### Brace Placement
-
+### Brace Placement {#brace-placement}
 ```c
 void function(void) {
     if (condition) {
@@ -22,11 +33,13 @@ void function(void) {
     }
 }
 ```
-### Indentation
-Use 4 spaces (no tabs)
 
-### Align related elements:
+### Indentation {#indentation}
++ Use 4 spaces (no tabs).
++ Never mix tabs and spaces.
 
+### Alignment {#alignment}
+Align related elements:
 ```c
 typedef struct {
     uint8_t  type;   // 1 byte
@@ -37,9 +50,9 @@ typedef struct {
 
 ---
 
-## Section 2. Control Structures
+## 2. Control Structures {#2-control-structures}
 
-### If-Else Statements
+### If-Else Statements {#if-else-statements}
 ```c
 if (ptr != NULL) {
     safe_operation(ptr);
@@ -48,7 +61,17 @@ if (ptr != NULL) {
 }
 ```
 
-### Loops
+### Ternary Operator {#ternary-operator}
+__Only__ use for very simple assignments where it improves clarity.
+```c
+// Acceptable
+int x = (condition) ? 1 : 0;
+
+// Never do this
+int y = (condition1) ? ((condition2) ? a : b) : c;
+```
+
+### Loops {#loops}
 ```c
 for (size_t i = 0; i < MAX_ITER; i++) {
     if (should_break(i)) {
@@ -58,7 +81,7 @@ for (size_t i = 0; i < MAX_ITER; i++) {
 }
 ```
 
-### Switch Statements
+### Switch Statements {#switch-statements}
 ```c
 switch (cmd) {
     case CMD_READ: {
@@ -78,7 +101,7 @@ switch (cmd) {
 
 ---
 
-## Section 3. Naming Convention
+## 3. Naming Conventions {#3-naming-conventions}
 
 | Element       | Style          | Example          |
 |---------------|----------------|------------------|
@@ -87,7 +110,7 @@ switch (cmd) {
 | Types         | `_t` suffix    | `mem_arena_t`    |
 | Constants     | `UPPER_CASE`   | `MAX_BUFFER`     |
 
-### Example
+Example:
 ```c
 const size_t MAX_RETRIES = 3;
 typedef struct { ... } network_socket_t;
@@ -96,9 +119,9 @@ size_t calculate_bandwidth(void);
 
 ---
 
-## Section 4. Documentation
+## 4. Documentation {#4-documentation}
 
-### File Header
+### File Header {#file-header}
 ```c
 /**
  * @file memory.c
@@ -107,7 +130,7 @@ size_t calculate_bandwidth(void);
  */
  ```
 
- ### Function Docs
+ ### Function Docs {#function-docs}
  ```c
  /**
   * @brief Allocates aligned memory
@@ -121,9 +144,9 @@ size_t calculate_bandwidth(void);
 
 ---
 
-## Section 5. Error Handling
+## 5. Error Handling {#5-error-handling}
 
-### Defensive Checks
+### Defensive Checks {#defensive-checks}
 ```c
 int safe_divide(int a, int b, int* result) {
     if (result == NULL) return E_INVALID_PTR;
@@ -138,7 +161,7 @@ int safe_divide(int a, int b, int* result) {
 }
 ```
 
-### Assertions
+### Assertions {#assertions}
 ```c
 void critical_op(critical_t* ctx) {
     assert(ctx != NULL && "Context cannot be NULL");
@@ -149,9 +172,9 @@ void critical_op(critical_t* ctx) {
 
 ---
 
-## Section 6. Memory Management
+## 6. Memory Management {#6-memory-management}
 
-### Allocation Pattern
+### Allocation Pattern {allocation-pattern}
 ```c
 typedef struct {
     size_t capacity;
@@ -175,7 +198,7 @@ collection_t* new_collection(size_t size) {
 }
 ```
 
-## Section 7. Full Example
+## 7. Full Example {#7-full-example}
 
 ```c
 /**
