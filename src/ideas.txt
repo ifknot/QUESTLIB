@@ -1,4 +1,4 @@
-Text Adventure 
+Text Adventure
 
 [ ] Parser
 [ ] data tables
@@ -6,24 +6,24 @@ Text Adventure
 
 Items have attributes (rooms are items)
 
-Spatial arrangements 
+Spatial arrangements
 
 Containment arrangements
 
-Parent/Root/Off stage - root of item tree 
+Parent/Root/Off stage - root of item tree
 
-Tables to the rescue 
+Tables to the rescue
 
 	ID  	owner	description	N S E W U D	Properties
 root	0						00000000
 player	1	1					01011000
 rm1	2				2		10100010
 rm2 	3				  1	  	10011001
-lamp	4	0					00001110	
+lamp	4	0					00001110
 
-But... We need lots of tables 
+But... We need lots of tables
 
-Articles	Prepositions	Dictionary	Token-Verbs 	
+Articles	Prepositions	Dictionary	Token-Verbs
 a		in		old		0 get
 an		on		rusty		0 take
 the		under		iron		0 pick up
@@ -31,8 +31,8 @@ the		under		iron		0 pick up
 		at		box		2 examine
 		with		strange		3 inspect
 
-*Object-Word-Table* maps word table to items rusty-iron-lamp via rusty or iron or lamp to item id 5 
-id 5 looks up the data for item and describes or changes ownership etc 
+*Object-Word-Table* maps word table to items rusty-iron-lamp via rusty or iron or lamp to item id 5
+id 5 looks up the data for item and describes or changes ownership etc
 
 *Jump Table* maps user input to subroutines
 
@@ -43,54 +43,58 @@ eat 	254		255		255		eat_inedible
 
 255=nothing	254= anything
 
-*String Tables* (names, descriptions, messages, etc)   
-id 	length	stringz 
+*String Tables* (names, descriptions, messages, etc)
+id 	length	stringz
 
 
 Parsing
 
 1. clean input (conform case, remove articles, white space)
-2. identify parts of speech (?verb ?direct object ?indirect object) 
-3. verify words in dictionary 
-4. try map words to objects 
+2. identify parts of speech (?verb ?direct object ?indirect object)
+3. verify words in dictionary
+4. try map words to objects
 
-Pick   up the  Iron Sword 
+Pick   up the  Iron Sword
 1. pick up iron sword
-2. 
-a. first thing always verb, ?compound verb, ?dangling preposition (if the last word is a preposition its the second part of the verb) 
+2.
+a. first thing always verb, ?compound verb, ?dangling preposition (if the last word is a preposition its the second part of the verb)
 b. scan for verb in table ?
 
-sample sentence 1 
+sample sentence 1
 Pick up the iron sword 			uppercase
-PICK UP THE IRON SWORD 			remove articles (?tokenize first single token for article then remove)  
+PICK UP THE IRON SWORD 			remove articles (?tokenize first single token for article then remove)
 PICK UP IRON SWORD
 ^
-first thing always *part* the verb 
-compound verbs 
-dangling preposition eg TURN THE LIGHT ON, PICK THE SWORD UP 
+first thing always *part* the verb
+compound verbs
+dangling preposition eg TURN THE LIGHT ON, PICK THE SWORD UP
 - if last word is a preposition then is part of the verb
 PICK UP IRON SWORD
 ^----^
-- if second word is a preposition then compound verb 
+- if second word is a preposition then compound verb
 PICK UP IRON SWORD
 	^----^
 - one noun or two?
-- disambiguation 
+- disambiguation
 
 sample sentence 2
 remove the Fromitz board with the shiny pliers
 REMOVE THE FROMITZ BOARD WITH THE SHINY PLIERS
 REMOVE FROMITZ BOARD WITH SHINY PLIERS
-^        ^------^     ^	     ^-----^	
-verb#10	   obj#3    prep#4    obj#12 
+^        ^------^     ^	     ^-----^
+verb#10	   obj#3    prep#4    obj#12
 [10,3,4,12]hash_table->remove_frobitz(); function
-	
+
 disambiguation
 "do you mean the red key or the blue key"
 Infocomm gave a score to each word to see applied to the noun
-or go through objects that match and print a list to ask the user 
+or go through objects that match and print a list to ask the user
 
-development app 
-set up objects and actions etc 
+development app
+set up objects and actions etc
 
-object properties - eg location - key to locations table 
+object properties - eg location - key to locations table
+
+I am using C99 as my programming languange and I would like your help developing a style guide to maintain consistency in my code and to help you review my code going forward. My code style preferences are to minimise using the ternary operator, to prefer the opening brace at the end of functions if clauses etc and also to avoid single line if statements and always enclose in braces even if it is a simple operation as this minimises errors (such as the classic apple bug in their implementations of ssh) - bearing these things in mind and also looking at the code below can you please produce a style guide for documentation and programming that I can refer to and use with LLMs like deepseek.
+
+Code example:

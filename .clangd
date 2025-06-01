@@ -1,0 +1,9 @@
+Diagnostics:
+  Suppress:
+    - asm_qualifier_ignored  # Suppress ASM-related warnings
+CompileFlags:
+  Add:
+    - -Wno-asm-qualifier-ignored  # Disable the warning
+    - -Wno-invalid-asm  # Also suppress "invalid ASM" errors
+
+    - -Wno-format  # Disables format warnings entirely to stop clangd warnings about int size because OW int is 16bits
