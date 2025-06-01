@@ -1,4 +1,4 @@
-# Complete C99 Style Guide
+# My Complete C99 Style Guide
 
 ## Table of Contents
 1. [General Rules](#1-general-rules)
