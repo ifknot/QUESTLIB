@@ -111,7 +111,7 @@ int parse_dictionary_add(parse_dictionary_t* dict, char* lexeme, parse_token_t t
     if (parse_dictionary_is_full(dict)) {
         return PARSE_DICTIONARY_FULL;
     }
-    if (parse_dictionary_contains(dict, lexeme)) {
+    if (dict->size > 0 && parse_dictionary_contains(dict, lexeme)) {
         return PARSE_DICTIONARY_DUPLICATE;
     }
 
