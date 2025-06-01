@@ -23,9 +23,9 @@
 
 ---
 
-## 1. General Rules {#1-general-rules}
+## 1. General Rules
 
-### Brace Placement {#brace-placement}
+### Brace Placement
 ```c
 void function(void) {
     if (condition) {
@@ -34,11 +34,11 @@ void function(void) {
 }
 ```
 
-### Indentation {#indentation}
+### Indentation
 + Use 4 spaces (no tabs).
 + Never mix tabs and spaces.
 
-### Alignment {#alignment}
+### Alignment
 Align related elements:
 ```c
 typedef struct {
@@ -50,9 +50,9 @@ typedef struct {
 
 ---
 
-## 2. Control Structures {#2-control-structures}
+## 2. Control Structures
 
-### If-Else Statements {#if-else-statements}
+### If-Else Statements
 ```c
 if (ptr != NULL) {
     safe_operation(ptr);
@@ -61,7 +61,7 @@ if (ptr != NULL) {
 }
 ```
 
-### Ternary Operator {#ternary-operator}
+### Ternary Operator
 __Only__ use for very simple assignments where it improves clarity.
 ```c
 // Acceptable
@@ -71,7 +71,7 @@ int x = (condition) ? 1 : 0;
 int y = (condition1) ? ((condition2) ? a : b) : c;
 ```
 
-### Loops {#loops}
+### Loops
 ```c
 for (size_t i = 0; i < MAX_ITER; i++) {
     if (should_break(i)) {
@@ -81,7 +81,7 @@ for (size_t i = 0; i < MAX_ITER; i++) {
 }
 ```
 
-### Switch Statements {#switch-statements}
+### Switch Statements
 ```c
 switch (cmd) {
     case CMD_READ: {
@@ -101,7 +101,7 @@ switch (cmd) {
 
 ---
 
-## 3. Naming Conventions {#3-naming-conventions}
+## 3. Naming Conventions
 
 | Element       | Style          | Example          |
 |---------------|----------------|------------------|
@@ -119,9 +119,9 @@ size_t calculate_bandwidth(void);
 
 ---
 
-## 4. Documentation {#4-documentation}
+## 4. Documentation
 
-### File Header {#file-header}
+### File Header
 ```c
 /**
  * @file memory.c
@@ -130,7 +130,7 @@ size_t calculate_bandwidth(void);
  */
  ```
 
- ### Function Docs {#function-docs}
+ ### Function Docs
  ```c
  /**
   * @brief Allocates aligned memory
@@ -144,9 +144,9 @@ size_t calculate_bandwidth(void);
 
 ---
 
-## 5. Error Handling {#5-error-handling}
+## 5. Error Handling
 
-### Defensive Checks {#defensive-checks}
+### Defensive Checks
 ```c
 int safe_divide(int a, int b, int* result) {
     if (result == NULL) return E_INVALID_PTR;
@@ -161,7 +161,7 @@ int safe_divide(int a, int b, int* result) {
 }
 ```
 
-### Assertions {#assertions}
+### Assertions
 ```c
 void critical_op(critical_t* ctx) {
     assert(ctx != NULL && "Context cannot be NULL");
@@ -172,9 +172,9 @@ void critical_op(critical_t* ctx) {
 
 ---
 
-## 6. Memory Management {#6-memory-management}
+## 6. Memory Management
 
-### Allocation Pattern {allocation-pattern}
+### Allocation Pattern
 ```c
 typedef struct {
     size_t capacity;
@@ -198,7 +198,7 @@ collection_t* new_collection(size_t size) {
 }
 ```
 
-## 7. Full Example {#7-full-example}
+## 7. Full Example
 
 ```c
 /**
