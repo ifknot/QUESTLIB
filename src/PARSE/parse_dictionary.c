@@ -13,6 +13,7 @@
 
 #include "parse_constants.h"
 #include "parse_types.h"
+#include "parse_dictionary_constants.h"
 
 /* ====================== */
 /* Internal Structures    */
