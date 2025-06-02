@@ -1,6 +1,6 @@
 /**
  * @file parse_types.h
- * @brief Command parsing type system combining grammar and semantics
+ * @brief Command parsing type system with dual-purpose token encoding
  * @defgroup parse_types Parsing Type System
  * @{
  */
@@ -10,83 +10,87 @@
 #include <stdint.h>
 #include "parse_constants.h"
 
+/**
+ * @brief Standardized size type for parse library operations
+ * @details Ensures consistent memory management across:
+ * - Dictionary capacities (max 65,535 entries)
+ * - Lexeme lengths
+ * - Buffer sizes
+ */
 typedef uint16_t parse_size_t;
 
 /**
- * @brief Unified lexical token encoding grammar and semantics
- * @details Combines both grammatical role (4 bits) and semantic meaning (12 bits) in one value:
+ * @brief Dual-purpose token encoding
+ * @details The 4-bit grammar nybble serves two critical roles:
  * 
- * ┌───────────────────┬────────────────────┐
- * │ Grammar (4 bits)  │ Semantics (12 bits)│
- * │ (what the word is)│ (what it means)    │
- * └───────────────────┴────────────────────┘
+ * 1. During Lexing:
+ * ┌───────────────┐
+ * │ Classifies    │
+ * │ word types    │
+ * └───────────────┘
+ *   (verb/noun/preposition/etc)
  * 
- * @note Example encodings:
- * - "take"    = (VERB, TAKE_ID)
- * - "key"     = (OBJECT, KEY_ID) 
- * - "with"    = (PREPOSITION, WITH_ID)
- * - "quickly" = (PARTICLE, QUICKLY_ID)
+ * 2. During Parsing:  
+ * ┌───────────────┐
+ * │ Builds        │
+ * │ sentence      │
+ * │ patterns      │
+ * └───────────────┘
+ *   (command structures)
+ * 
+ * Memory layout:
+ * ┌────────────┬────────────────────┐
+ * │4-bit role  │ 12-bit semantics   │
+ * │(grammar)   │ (specific meaning) │
+ * └────────────┴────────────────────┘
  */
 typedef uint16_t parse_token_t;
 
 /**
- * @brief Sentence structure fingerprint
- * @details Compact representation of a sentence's grammatical structure formed by:
- * 1. Extracting the grammar nybbles from each token
- * 2. Packing up to 8 into a 32-bit values
+ * @brief Command pattern fingerprint
+ * @details Compact grammar structure formed by packing token nybbles:
  * 
- * Used to route commands to the correct handler based on structure.
- * 
- * @code
- * // "put key in box" becomes:
- * // VERB(put) OBJECT(key) PREPOSITION(in) OBJECT(box)
- * // Packed as: 0x1242
- * @endcode
+ * Example:
+ * "pick up sword and stab troll" → 
+ * [VERB][PARTICLE][OBJECT][CONJUNCTION][VERB][OBJECT] →
+ * 0x131621
  */
-typedef uint32_t command_pattern_t;
+typedef uint32_t parse_pattern_t;
 
 /* ----------------- Token Components ----------------- */
+#define TOKEN_TYPE_MASK  0xF000  /**< Mask for grammar role */
+#define TOKEN_VALUE_MASK 0x0FFF  /**< Mask for semantic ID */
 
 /**
- * @name Token Anatomy
- * @brief Masks for accessing token parts
- * @{
- */
-#define TOKEN_TYPE_MASK  0xF000  /**< Isolate grammar nybble */
-#define TOKEN_VALUE_MASK 0x0FFF  /**< Isolate semantic value */
-/** @} */
-
-/**
- * @brief Grammatical roles
- * @description Determines how words function in sentence structures
+ * @brief Grammar role classifications
+ * @note The 4-bit type serves dual purpose for both:
+ * - Token categorization during lexing
+ * - Pattern building during parsing
  */
 typedef enum {
-    TOKEN_VERB        = 0x1000, /**< Actions (go, take) */
-    TOKEN_OBJECT      = 0x2000, /**< Things (key, door) */
-    TOKEN_PARTICLE    = 0x3000, /**< Modifiers (quickly) */
-    TOKEN_PREPOSITION = 0x4000, /**< Relations (with, in) */
-    TOKEN_COMPOUND    = 0x5000  /**< Phrases (look at) */
-} TokenType;
+    TOKEN_VERB        = 0x1000, /**< Actions (take, go) */
+    TOKEN_OBJECT      = 0x2000, /**< Entities (sword, door) */
+    TOKEN_PARTICLE    = 0x3000, /**< Phrasal elements (up, down) */
+    TOKEN_PREPOSITION = 0x4000, /**< Relators (with, in) */
+    TOKEN_COMPOUND    = 0x5000, /**< Multi-word units (look at) */
+    TOKEN_CONJUNCTION = 0x6000  /**< Sentence combiners (and, or) */
+} parse_token_grammar_t;
 
 /**
- * @name Token Accessors  
- * @brief Safe component extraction
- * @{
+ * @brief Conjunction subtypes
+ * @details Modify command sequencing behavior:
  */
-#define GET_TOKEN_TYPE(t)  ((t) & TOKEN_TYPE_MASK)  /**< Get grammatical role */
-#define GET_TOKEN_VALUE(t) ((t) & TOKEN_VALUE_MASK) /**< Get semantic meaning */
-/** @} */
+typedef enum {
+    CONJ_AND  = 0x6001,  /**< Try all commands (A and B) */
+    CONJ_THEN = 0x6002,  /**< Sequential execution (A then B) */
+    CONJ_OR   = 0x6003   /**< First successful command (A or B) */
+} parse_conjunction_t;
 
 /* ----------------- Lexical Storage ----------------- */
-
-/**
- * @brief Word-to-token mapping
- * @details Associates surface words with their encoded meanings
- */
 typedef struct {
-    char lexeme[PARSE_MAX_LEXEME_LENGTH + 1]; /**< Text form (+null terminator) */
-    parse_token_t token;                      /**< Encoded grammar+semantics */
+    char lexeme[PARSE_MAX_LEXEME_LENGTH + 1]; /**< Surface form */
+    parse_token_t token;                      /**< Encoded role+meaning */
 } parse_lexeme_token_pair_t;
 
 #endif
-/** @} */ // End parse_types group
+/** @} */
