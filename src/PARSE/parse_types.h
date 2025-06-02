@@ -19,6 +19,8 @@ typedef uint16_t parse_size_t;
  */
 typedef uint16_t parse_token_t;
 
+typedef uint32_t command_pattern_t;
+
 /**
  * @brief Lexeme-token pair structure
  * @details Stores a mapping between a lexeme string and its corresponding token.
