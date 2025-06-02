@@ -44,9 +44,7 @@ parse_dictionary_t* parse_dictionary_create(mem_arena_t* arena, size_t capacity)
  * @return Pointer to created dictionary
  * @note File format should be lexeme-token pairs, one per line
  */
-parse_dictionary_t* parse_dictionary_create_from_file(mem_arena_t* arena,
-                                                    const char* path_name,
-                                                    parse_dictionary_t* dictionary);
+parse_dictionary_t* parse_dictionary_create_from_file(mem_arena_t* arena, const char* path_name, parse_dictionary_t* dictionary);
 
 /* ====================== */
 /* Dictionary State       */
