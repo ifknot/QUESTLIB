@@ -15,10 +15,17 @@ typedef uint16_t parse_size_t;
 /**
  * @brief Token type definition
  * @details Represents a unique identifier for lexemes in the parsing system.
- * @note Uses uint16_t to allow for 65,536 unique tokens while being memory efficient.
+ * @note the token is split into a 12 bit identifier and a 4 bit role such that:
+ * The high nybble is used to code the lexeme as verb, object, particle, preposition, compound (so far) and 
+ * 12 bits for verbs action eg go, take, examine, use, talk to, and inventory for objects their type eg room, 
+ * blue key, sword, etc
  */
 typedef uint16_t parse_token_t;
 
+/**
+ * Composed of upto 8 nybbles from the parse tokens from the input sentence that encode the input pattern, eg VERB OBJECT, VERB PREPOSITION OBJECT, VERB etc - in an extensible way.
+ * This input pattern can then be used to dispatch to the appropriate handler with the associated 12 bit information 
+ */
 typedef uint32_t command_pattern_t;
 
 /**
