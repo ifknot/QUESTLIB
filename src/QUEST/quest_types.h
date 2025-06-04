@@ -5,20 +5,6 @@
 
 typedef uint16_t quest_size_t;
 
-typedef enum {
-    STATE_NULL = 0,
-    STATE_EXTANT
-} quest_state_t;    // states are mutable and not limited to this list eg STATE_BROKEN - but beware reusing values
-
-typedef struct {
-    char* brief;
-    char* details;
-} quest_info_t; // brief and verbose descriptions for items
-
-
-
-
-
 #endif
 
 /*
