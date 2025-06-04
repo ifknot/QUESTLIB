@@ -9,8 +9,11 @@
 
 #include <stdio.h>
 #include <assert.h>
-#include "parse_dictionary.h"
+
 #include "../TDD/tdd_macros.h"
+
+#include "parse_dictionary_constants.h"
+#include "parse_dictionary.h"
 
 /// @brief Array of all test cases for the dictionary
 #define DICTIONARY_TESTS &test_empty_dict, &test_single_element, \
@@ -27,7 +30,7 @@ static parse_dictionary_t* test_dict = NULL;
 static mem_arena_t* test_arena = NULL;
 
 void setup() {
-    test_arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_1K);
+    test_arena = mem_arena_create(MEM_ARENA_POLICY_DOS, MEM_SIZE_1K);
     test_dict = parse_dictionary_create(test_arena, TEST_DICT_CAPACITY);
 }
 

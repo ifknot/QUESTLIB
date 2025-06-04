@@ -1,8 +1,31 @@
 #ifndef QUEST_LOCATION_H
 #define QUEST_LOCATION_H
 
-typedef struct { 
-    int    id;              
+#include <stdint.h>
+
+typedef uint16_t quest_size_t;
+
+typedef enum {
+    STATE_NULL = 0,
+    STATE_EXTANT
+} quest_state_t;    // states are mutable and not limited to this list eg STATE_BROKEN - but beware reusing values
+
+typedef struct {
+    char* brief;
+    char* details;
+} quest_info_t; // brief and verbose descriptions for items
+
+
+
+
+
+#endif
+
+/*
+typedef struct quest_item_s quest_item_t;
+
+typedef struct quest_item_s {
+    int    id;
     char*  brief;
     char*  details;
     quest_item_t* items[8];  // pointers to upto 8 items - within this item
@@ -10,30 +33,30 @@ typedef struct {
 
 typedef struct {    // a location is an item with location info
     quest_item_t* item;
-    char   exits;            // 8 bits of direction options |N|E|S|W|U|D|L|R| north, south, east, west, up, down, left, right 1 if exit valid 0 otherwise 
-    int    destination[8];   // 8 location IDs associated with each valid exit 
+    char   exits;            // 8 bits of direction options |N|E|S|W|U|D|L|R| north, south, east, west, up, down, left, right 1 if exit valid 0 otherwise
+    int    destination[8];   // 8 location IDs associated with each valid exit
     quest_dictionary_t* local_dict; // parse dictionary specific to this room additional to the global dictionary (to avoid users spamming the input with verbs and nouns to cheat on the story)
 } quest_location_t;
 
-typedef struct { // D&D 5e, the six ability scores (Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma) 
-    char strength; 
-    char dexterity; 
+typedef struct { // D&D 5e, the six ability scores (Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma)
+    char strength;
+    char dexterity;
     char constitution;
     char intelligence;
     char wisdom;
-    char charisma; 
+    char charisma;
 } quest_character_core_t;
 
-typedef struct {   //  a character is an item with character information 
+typedef struct {   //  a character is an item with character information
     quest_item_t* item;    // id class Abilities eg fighter ability to use a battle axe, while a wizard able to cast spells.
     char life;    // reduced by the cost of living increased by food fluid and manna spells
-    quest_character_skills_t* skills[8]; // upto eight skills can be added and enhanced or reduced 
+    quest_character_skills_t* skills[8]; // upto eight skills can be added and enhanced or reduced
     quest_character_core_t core;
-} quest_character_t;    // e.g. Troll, Gaurd, 
+} quest_character_t;    // e.g. Troll, Gaurd,
 
 typedef struct { // a player is a character with player information
     quest_character_t* character;
     int items_max;
 } quest_player_t;
 
-#endif
+*/

@@ -2,12 +2,12 @@
 #define TEST_MAIN_H
 
 
-#include "TDD/test_tdd.h"
-#include "DOS/test_dos_services.h"
-#include "STR/test_str.h"
-#include "FILE/test_file.h"
-#include "MEM/test_mem_tools.h"
-#include "MEM/test_mem_arena.h"
+//#include "TDD/test_tdd.h"
+//#include "DOS/test_dos_services.h"
+//#include "STR/test_str.h"
+//#include "FILE/test_file.h"
+//#include "MEM/test_mem_tools.h"
+//#include "MEM/test_mem_arena.h"
 #include "PARSE/test_parse_dictionary.h"
 
 RUN_TESTS( /*TDD_TESTS,
@@ -23,7 +23,7 @@ RUN_TESTS( /*TDD_TESTS,
 
 /**
  * Usage:
- * @code 
+ * @code
  *
  * int main(int argc, char** argv) {
  *

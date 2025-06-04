@@ -29,7 +29,7 @@
 static mem_arena_t* test_arena = NULL;
 
 void setup() {
-    test_arena = mem_arena_new(MEM_ARENA_POLICY_DOS, TEST_ARENA_SIZE);
+    test_arena = mem_arena_create(MEM_ARENA_POLICY_DOS, TEST_ARENA_SIZE);
 }
 
 void teardown() {

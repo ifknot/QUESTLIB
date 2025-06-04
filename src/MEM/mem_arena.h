@@ -70,7 +70,7 @@ typedef struct private_mem_arena_t mem_arena_t;
  * @note For DOS policy, maximum initial size is 65535 paragraphs (≈1MB)
  * @see mem_arena_delete()
  */
-mem_arena_t* mem_arena_new(mem_arena_policy_t policy, mem_size_t byte_request);
+mem_arena_t* mem_arena_create(mem_arena_policy_t policy, mem_size_t byte_request);
 
 /**
  * @brief Destroys an arena and all its allocations

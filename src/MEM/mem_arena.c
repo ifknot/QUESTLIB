@@ -105,7 +105,7 @@ mem_size_t private_mem_arena_dos_delete(mem_arena_t* arena) {
 }
 /* ----------------- Public Interface ----------------- */
 
-mem_arena_t* mem_arena_new(mem_arena_policy_t policy, mem_size_t byte_request) {
+mem_arena_t* mem_arena_create(mem_arena_policy_t policy, mem_size_t byte_request) {
 	assert(byte_request);
     switch(policy) {
         case MEM_ARENA_POLICY_DOS:

@@ -1,7 +1,7 @@
 Open Watcom Linker Version 2.0 beta May  3 2025 18:23:37
 Copyright (c) 2002-2025 The Open Watcom Contributors. All Rights Reserved.
 Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
-Created on:       25/06/01 22:17:05
+Created on:       25/06/04 20:08:07
 Executable Image: quest.exe
 creating a DOS executable
 
@@ -30,14 +30,14 @@ dos_services_files_TEXT CODE          AUTO           0000:029e       0000058c
 file_tools_TEXT        CODE           AUTO           0000:082a       00000309
 mem_arena_TEXT         CODE           AUTO           0000:0b33       00000958
 mem_tools_TEXT         CODE           AUTO           0000:148b       00000466
-parse_dictionary_TEXT  CODE           AUTO           0000:18f1       00000d48
-str_file_processing_TEXT CODE         AUTO           0000:2639       000006cf
-str_memory_TEXT        CODE           AUTO           0000:2d08       000001d4
-str_processing_TEXT    CODE           AUTO           0000:2edc       0000092e
-str_scrubbing_TEXT     CODE           AUTO           0000:380a       0000051a
-tdd_progress_TEXT      CODE           AUTO           0000:3d24       0000047c
-tdd_spinner_TEXT       CODE           AUTO           0000:41a0       00000146
-main_TEXT              CODE           AUTO           0000:42e6       000012ca
+parse_dictionary_TEXT  CODE           AUTO           0000:18f1       00000d46
+str_file_processing_TEXT CODE         AUTO           0000:2637       000006cf
+str_memory_TEXT        CODE           AUTO           0000:2d06       000001d4
+str_processing_TEXT    CODE           AUTO           0000:2eda       0000092e
+str_scrubbing_TEXT     CODE           AUTO           0000:3808       0000051a
+tdd_progress_TEXT      CODE           AUTO           0000:3d22       0000047c
+tdd_spinner_TEXT       CODE           AUTO           0000:419e       00000146
+main_TEXT              CODE           AUTO           0000:42e4       000012cc
 _TEXT                  CODE           AUTO           0000:55b0       000039cb
 FAR_DATA               FAR_DATA       AUTO           08f7:000b       00000000
 _NULL                  BEGDATA        DGROUP         08f8:0000       00000020
@@ -114,60 +114,60 @@ Module: CMakeFiles/quest.dir/MEM/mem_tools.c.obj(/Users/jeremythornton/dosbox/QU
 Module: CMakeFiles/quest.dir/PARSE/parse_dictionary.c.obj(/Users/jeremythornton/dosbox/QUESTLIB/src/PARSE/parse_dictionary.c)
 0000:19a9      parse_dictionary_create_
 0000:1afd+     parse_dictionary_create_from_file_
-0000:1b34      parse_dictionary_size_
-0000:1ba7+     parse_dictionary_capacity_
-0000:1c1b      parse_dictionary_is_empty_
-0000:1c9f      parse_dictionary_is_full_
-0000:1d28      parse_dictionary_is_sorted_
-0000:1d9c      parse_dictionary_add_
-0000:1efb      parse_dictionary_remove_
-0000:2028+     parse_dictionary_clear_
-0000:20c6      parse_dictionary_sort_
-0000:2175      parse_dictionary_search_
-0000:22b6+     parse_dictionary_contains_
-0000:236a      parse_dictionary_at_
-0000:242b+     parse_dictionary_tokenize_
-0000:2503+     parse_dictionary_dump_
+0000:1b32      parse_dictionary_size_
+0000:1ba5+     parse_dictionary_capacity_
+0000:1c19      parse_dictionary_is_empty_
+0000:1c9d      parse_dictionary_is_full_
+0000:1d26      parse_dictionary_is_sorted_
+0000:1d9a      parse_dictionary_add_
+0000:1ef9      parse_dictionary_remove_
+0000:2026+     parse_dictionary_clear_
+0000:20c4      parse_dictionary_sort_
+0000:2173      parse_dictionary_search_
+0000:22b4+     parse_dictionary_contains_
+0000:2368      parse_dictionary_at_
+0000:2429+     parse_dictionary_tokenize_
+0000:2501+     parse_dictionary_dump_
 Module: CMakeFiles/quest.dir/STR/str_file_processing.c.obj(/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_file_processing.c)
-0000:2639+     str_file_count_lines_
-0000:273f+     str_file_count_words_
-0000:28b1+     str_file_read_word_
-0000:2a76+     str_file_read_line_
-0000:2ba5+     str_file_enumerate_words_
+0000:2637+     str_file_count_lines_
+0000:273d+     str_file_count_words_
+0000:28af+     str_file_read_word_
+0000:2a74+     str_file_read_line_
+0000:2ba3+     str_file_enumerate_words_
 Module: CMakeFiles/quest.dir/STR/str_memory.c.obj(/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_memory.c)
-0000:2d08+     str_make_string_
-0000:2da9+     str_make_copy_
-0000:2e1f+     str_make_string_array_
+0000:2d06+     str_make_string_
+0000:2da7+     str_make_copy_
+0000:2e1d+     str_make_string_array_
 Module: CMakeFiles/quest.dir/STR/str_processing.c.obj(/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_processing.c)
-0000:2edc+     str_to_upper_case_
-0000:2f8c+     str_to_lower_case_
-0000:303c+     str_count_lines_
-0000:3121+     str_count_words_
-0000:3238+     str_read_word_
-0000:33f3+     str_read_line_
-0000:3530+     str_enumerate_words_
-0000:3652+     str_compare_strings_
-0000:369c+     str_sort_words_
-0000:372e+     str_compare_strings_case_insensitive_
-0000:3778+     str_sort_words_case_insensitive_
+0000:2eda+     str_to_upper_case_
+0000:2f8a+     str_to_lower_case_
+0000:303a+     str_count_lines_
+0000:311f+     str_count_words_
+0000:3236+     str_read_word_
+0000:33f1+     str_read_line_
+0000:352e+     str_enumerate_words_
+0000:3650+     str_compare_strings_
+0000:369a+     str_sort_words_
+0000:372c+     str_compare_strings_case_insensitive_
+0000:3776+     str_sort_words_case_insensitive_
 Module: CMakeFiles/quest.dir/STR/str_scrubbing.c.obj(/Users/jeremythornton/dosbox/QUESTLIB/src/STR/str_scrubbing.c)
-0000:380a+     str_remove_character_
-0000:390b+     str_trim_character_
-0000:3af9+     str_trim_characters_
-0000:3c1f+     str_remove_punctuation_
+0000:3808+     str_remove_character_
+0000:3909+     str_trim_character_
+0000:3af7+     str_trim_characters_
+0000:3c1d+     str_remove_punctuation_
 Module: CMakeFiles/quest.dir/TDD/tdd_progress.c.obj(/Users/jeremythornton/dosbox/QUESTLIB/src/TDD/tdd_progress.c)
-0000:3d24+     tdd_progress_make_
-0000:3dee+     tdd_progress_bar_
-0000:406b+     tdd_progress_percent_
+0000:3d22+     tdd_progress_make_
+0000:3dec+     tdd_progress_bar_
+0000:4069+     tdd_progress_percent_
 Module: CMakeFiles/quest.dir/TDD/tdd_spinner.c.obj(/Users/jeremythornton/dosbox/QUESTLIB/src/TDD/tdd_spinner.c)
-0000:41a0+     tdd_spinner_make_
-0000:4228+     tdd_spinner_step_
-0000:42a6+     tdd_spinner_clear_
+0000:419e+     tdd_spinner_make_
+0000:4226+     tdd_spinner_step_
+0000:42a4+     tdd_spinner_clear_
 Module: CMakeFiles/quest.dir/main.c.obj(/Users/jeremythornton/dosbox/QUESTLIB/src/main.c)
-0000:42e6+     setup_
-0000:4341+     teardown_
-0000:54ac+     run_tests_
-0000:5582      main_
+0000:42e4+     setup_
+0000:433f+     teardown_
+0000:54aa+     run_tests_
+0000:5580      main_
 Module: /opt/watcom/lib286/dos/clibl.lib(stk)
 0000:55b5      __STK
 0000:55d5*     __STKOVERFLOW_
@@ -453,4 +453,4 @@ Module: /opt/watcom/lib286/dos/clibl.lib(getcpdos)
 Stack size:  0800 (2048.)
 Memory size:  00010690 (67216.)
 Entry point address: 0000:6376
-Link time: 00:00.39
+Link time: 00:00.17

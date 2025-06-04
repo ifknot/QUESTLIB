@@ -25,6 +25,7 @@ file(GLOB SOURCES
     STR/*.c
     TDD/*.c
     PARSE/*.c
+    QUEST/*.c
 )
 
 message(Source list="${SOURCES}")
