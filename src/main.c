@@ -3,11 +3,11 @@
 
 mem_arena_t* quest_arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_1K);
 
-parse_dictionary_t* global_dictionary parse_dictionary_create_from_file(quest_arena , "TOWER.DIC");
+parse_dictionary_t* global_dictionary parse_dictionary_create_from_file(quest_arena , "TOWER.DIC"); // JSON token word pairs 
 
-location_dicts[] load_location_dicts("LOCALS.DIC");
+location_dicts[] load_location_dicts("LOCALS.DIC");       // JSON file location number token word pairs 
 
-location_info[] load_location_strings("LOCALS.INF");
+location_info[] load_location_info("LOCALS.INF");         // JSON file descriptions, 
 
 quest_create(&quest, "Tower Quest", &global_dictionary);
 
