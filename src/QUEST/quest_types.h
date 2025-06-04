@@ -1,7 +1,7 @@
 #ifndef QUEST_LOCATION_H
 #define QUEST_LOCATION_H
 
-typedef struct {
+typedef struct { 
     int    id;              
     char*  brief;
     char*  details;
@@ -28,7 +28,6 @@ typedef struct {   //  a character is an item with character information
     quest_item_t* item;    // id class Abilities eg fighter ability to use a battle axe, while a wizard able to cast spells.
     char life;    // reduced by the cost of living increased by food fluid and manna spells
     quest_character_skills_t* skills[8]; // upto eight skills can be added and enhanced or reduced 
-    quest_item_t* items[8];    // upto 8 items, such as sword, chest, spell, bread etc etc
     quest_character_core_t core;
 } quest_character_t;    // e.g. Troll, Gaurd, 
 
