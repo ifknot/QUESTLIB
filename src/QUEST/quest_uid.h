@@ -8,7 +8,9 @@
 #ifndef QUEST_UID_H
 #define QUEST_UID_H
 
-#include "quest_types.h"
+#include <stdint.h>
+
+typedef uint32_t quest_uid_size_t;  // upto 4,294,967,295 unique IDs
 
 /**
  * @brief Opaque handle for the UID generator state
@@ -22,6 +24,6 @@ typedef struct quest_uid_t quest_uid_t;
  * @brief Generates the next unique identifier in sequence
  * @return The next available unique identifier (quest_size_t)
  */
-quest_size_t quest_next_uid(void);
+quest_uid_size_t quest_next_uid();
 
 #endif

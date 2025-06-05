@@ -28,7 +28,7 @@
  */
 TEST(test_str_memory) {
 
-    mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_1K);
+    mem_arena_t* arena = mem_arena_create(MEM_ARENA_POLICY_DOS, MEM_SIZE_1K);
 
     // Verify arena
     ASSERT(mem_arena_capacity(arena) == MEM_SIZE_1K);
@@ -96,7 +96,7 @@ TEST(test_str_scrubbing) {
  */
 TEST(test_str_processing) {
 
-    mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_1K);
+    mem_arena_t* arena = mem_arena_create(MEM_ARENA_POLICY_DOS, MEM_SIZE_1K);
     str_iterator_t i = 0;
     char test_string[] = "The Quick Brown fox jumps over the lazy dog.\nThis sentence uses all 26 letters of the alphabet, making it useful for testing typewriters, keyboards, and fonts.\nIt's also commonly used for touch-typing practice.";
     char* test_word = str_make_string(arena, STR_MAX_WORD_LENGTH);
@@ -146,7 +146,7 @@ TEST(test_str_processing) {
  */
 TEST(test_str_file_processing) {
 
-    mem_arena_t* arena = mem_arena_new(MEM_ARENA_POLICY_DOS, MEM_SIZE_4K);
+    mem_arena_t* arena = mem_arena_create(MEM_ARENA_POLICY_DOS, MEM_SIZE_4K);
     char c = ' ';
     char s[15] = {0};
     char l[40] = {0};

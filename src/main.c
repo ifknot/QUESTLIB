@@ -4,9 +4,7 @@
 
 int main(int argc, char** argv) {
 
-    run_tests();
-
-    return EXIT_SUCCESS;
+    return (run_tests()) ? EXIT_FAILURE : EXIT_SUCCESS;
 
 }
 
