@@ -1,9 +1,41 @@
-#ifndef QUEST_LOCATION_H
-#define QUEST_LOCATION_H
+/**
+ * @file quest_types.h
+ * @brief Location data structures for Quest game engine
+ *
+ * Defines core types for storing location descriptions and metadata.
+ */
+#ifndef QUEST_TYPES_H
+#define QUEST_TYPES_H
 
 #include <stdint.h>
 
+/**
+ * @brief Type for size/length values throughout the Quest engine
+ *
+ * Uses 16-bit unsigned integers for memory efficiency in large world maps.
+ * Maximum value: 65,535 (UINT16_MAX)
+ */
 typedef uint16_t quest_size_t;
+
+/**
+ * @brief Dual-description container for game locations
+ *
+ * Contains both short and long form descriptions for:
+ * - Room/area titles (brief)
+ * - Detailed environmental descriptions (details)
+ *
+ * @note Both strings should be null-terminated UTF-8.
+ * @warning Memory management policy:
+ * - Allocated by location loader
+ * - Freed by location unloader
+ * - Never modified after creation
+ */
+typedef struct {
+    char* brief;    /**< Short identifier (e.g., "Dark Forest Entrance")
+                        - Max 255 chars recommended */
+    char* details;  /**< Full description (e.g., "The twisted oaks creak...")
+                        - Supports multi-paragraph text */
+} quest_info_t;
 
 #endif
 
