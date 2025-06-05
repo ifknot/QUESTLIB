@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-typedef uint32_t quest_uid_size_t;  // upto 4,294,967,295 unique IDs
+typedef uint16_t quest_uid_size_t;  // upto 65535 unique IDs places a ceiling on number of objects in a quest game
 
 /**
  * @brief Opaque handle for the UID generator state

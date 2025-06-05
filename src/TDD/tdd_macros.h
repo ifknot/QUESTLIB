@@ -30,10 +30,38 @@
 #define V(expr)
 #endif
 
+// =============================================
+// Internal Implementations
+// =============================================
+
 /**
  * @brief Extracts filename from full path
  */
-#define FILENAME (strrchr("/" __FILE__, '/') + 1)
+#define _FILENAME (strrchr("/" __FILE__, '/') + 1)
+
+#define _EXPECT_COMPARE(a, b, op, tag)                                  \
+    do {                                                                \
+        if (!((a) op (b))) {                                            \
+            printf("\n%s:%d - FAILED: %s %s %s\n"                       \
+                   "  Actual:   %d\n"                                   \
+                   "  Expected: %d\n",                                  \
+                   _FILENAME, __LINE__, #a, #op, #b, (int)(a), (int)(b));\
+            *pass = false;                                              \
+        }                                                               \
+    } while (0)
+
+#define _EXPECT_STRCOMPARE(a, b, op, tag)                              \
+    do {                                                                \
+        int cmp = strcmp((a), (b));                                     \
+        if (!(cmp op 0)) {                                              \
+            printf("\n%s:%d - FAILED: %s %s %s\n"                       \
+                   "  Actual:   \"%s\"\n"                               \
+                   "  Expected: \"%s\"\n"                               \
+                   "  strcmp() = %d\n",                                \
+                   _FILENAME, __LINE__, #a, #op, #b, (a), (b), cmp);    \
+            *pass = false;                                              \
+        }                                                               \
+    } while (0)
 
 /**
  * @brief Internal assertion handler
@@ -41,10 +69,10 @@
  * @param halt Whether to stop test execution on failure
  * @private
  */
-#define ASSERT_HALT(expr, halt)                                         \
+#define _ASSERT(expr, halt)                                         \
     do {                                                                \
         if (!(expr)) {                                                  \
-            printf("\n%s:%d - expected: %s\n", FILENAME, __LINE__, #expr);\
+            printf("\n%s:%d - expected: %s\n", _FILENAME, __LINE__, #expr);\
             *pass = false;                                              \
             if (halt)                                                   \
                 return;                                                 \
@@ -55,13 +83,65 @@
  * @brief Non-fatal test expectation
  * @param expr Expression to test (continues execution if false)
  */
-#define EXPECT(expr) ASSERT_HALT(expr, false)
+#define EXPECT(expr) _ASSERT(expr, false)
 
 /**
  * @brief Fatal test assertion
  * @param expr Expression to test (stops test if false)
  */
-#define ASSERT(expr, ...) ASSERT_HALT(expr, true)
+#define ASSERT(expr, ...) _ASSERT(expr, true)
+
+// =============================================
+// Numeric Comparisons
+// =============================================
+
+/**
+ * @brief Expects two values to be equal (non-fatal)
+ * @param a Actual value
+ * @param b Expected value
+ */
+#define EXPECT_EQ(a, b) _EXPECT_COMPARE(a, b, ==, "EQ")
+
+/**
+ * @brief Expects two values to be unequal (non-fatal)
+ * @param a First value
+ * @param b Second value
+ */
+#define EXPECT_NEQ(a, b) _EXPECT_COMPARE(a, b, !=, "NEQ")
+
+/**
+ * @brief Expects a > b (non-fatal)
+ * @param a Tested value
+ * @param b Comparison threshold
+ */
+#define EXPECT_GT(a, b) _EXPECT_COMPARE(a, b, >, "GT")
+
+/**
+ * @brief Expects a < b (non-fatal)
+ * @param a Tested value
+ * @param b Comparison threshold
+ */
+#define EXPECT_LT(a, b) _EXPECT_COMPARE(a, b, <, "LT")
+
+// =============================================
+// String Comparisons
+// =============================================
+
+/**
+ * @brief Expects two strings to be equal (strcmp == 0)
+ * @param a Actual string
+ * @param b Expected string
+ */
+#define EXPECT_STREQ(a, b) _EXPECT_STRCOMPARE(a, b, == 0, "STREQ")
+
+/**
+ * @brief Expects two strings to be unequal (strcmp != 0)
+ * @param a First string
+ * @param b Second string
+ */
+#define EXPECT_STRNEQ(a, b) _EXPECT_STRCOMPARE(a, b, != 0, "STRNEQ")
+
+
 
 /**
  * @brief Test case structure
