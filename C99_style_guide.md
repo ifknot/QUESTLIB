@@ -18,8 +18,13 @@
     - [Defensive Checks](#defensive-checks)
     - [Assertions](#assertions)
 6. [Memory Management](#6-memory-management)
-7. [Full Example](#7-full-example)
-8. [License](#license)
+7. [Generics and Boilerplate](#7-generics-and-boilerplate)
+    - [Explicit Boilerplate](#explicit-boilerplate)
+    - [Macro Guidelines](#macro-guidelines)
+    - [Void* Restrictions](#void-restrictions)
+    - [X-Macros](#x-macros)
+8. [Full Example](#8-full-example)
+9. [License](#9-license)
 
 ---
 
@@ -198,7 +203,99 @@ collection_t* new_collection(size_t size) {
 }
 ```
 
-## 7. Full Example
+---
+
+## 7. Generics and Boilerplate
+
+C99 lacks generics, but ‘clever’ solutions often cost more in maintenance than they save in typing. When in doubt, prefer verbose boilerplate—it’s easier to debug and optimize.
+
+### Explicit Boilerplate
++ Prefer explicit boilerplate over "clever" macros.
++ Prefer type-specific functions for clarity and debuggability:
+```c
+// ✅ Preferred
+void vec_int_push(vec_int_t *vec, int value);
+void vec_float_push(vec_float_t *vec, float value);
+
+// ❌ Avoid: Opaque macro magic
+#define VEC_PUSH(vec, val) /* ... */
+```
+
+### Macro Guidelines
++ Only use macros for repetitive boilerplate (e.g., X-Macros for enum-string maps).
++ Document expansions and prefix with module name:
+```c
+/* Expands to stack_int type and methods */
+#define DEFINE_STACK_INT STACK_IMPL(int)
+```
+
+### Void* Restrictions
++ Never use void* for generic containers (exception: polymorphic callbacks).
++ If required, pair with runtime size checks:
+```c
+// Allowed only with size parameters
+void buffer_op(void *data, size_t elem_size);
+```
+
+### X-Macros
+Use only for:
++ Enum-to-string conversions
++ Flag set definitions
++ Repetitive struct declarations
+
+Example:
+
+```c
+/**
+ * @file vector.c
+ * @brief 3D vector with X-Macro component
+ */
+
+// vec3_components.def
+X(x)
+X(y)
+X(z)
+
+typedef struct {
+    #define X(comp) float comp;
+    #include "vec3_components.def"
+    #undef X
+} vec3_t;
+
+float vec3_length(vec3_t v) {
+    return sqrtf(
+        #define X(comp) + (v.comp * v.comp)
+        #include "vec3_components.def"
+        #undef X
+    );
+}
+```
+Rules:
++ Keep the X-Macro file (<100 lines)
++ Document the expansion pattern at the top
++ Always #undef X after use
++ Never nest X-Macros
+---
+
+## 8. Full Example
+```c
+// ✅ Good: Explicit type-specific API
+typedef struct {
+    float *data;
+    size_t len;
+} vec_float_t;
+
+void vec_float_push(vec_float_t *vec, float val) {
+    vec->data = realloc(vec->data, (vec->len + 1) * sizeof(float));
+    vec->data[vec->len++] = val;
+}
+
+// ❌ Bad: Hidden complexity
+#define DEFINE_VEC(T) \
+    typedef struct { T *data; size_t len; } vec_##T##_t; \
+    void vec_##T##_push(vec_##T##_t*, T); \
+    /* ... 50 more lines ... */
+```
 
 ```c
 /**
