@@ -1,10 +1,13 @@
 # My Complete C99 Style Guide
 
 ## Table of Contents
+0. [API Design](#0-api-design)
+    - [Namespacing](#namespacing)
+    - [Opaque Structs](#opaque-structs)
 1. [General Rules](#1-general-rules)
     - [Brace Placement](#brace-placement)
     - [Indentation](#indentation)
-    - [Alignment](#alignment)
+    - [Initialization](#initialization)
 2. [Control Structures](#2-control-structures)
     - [If-Else Statements](#if-else-statements)
     - [Ternary Operator](#ternary-operator)
@@ -26,6 +29,25 @@
 8. [Full Example](#8-full-example)
 9. [License](#9-license)
 
+---
+## 0. API Design
+
+### Namespacing
++ use library name, module name, action/verb naming
+Example:
+```c
+// libname_module_action()
+void crypto_hash_sha256(uint8_t out[32], const uint8_t* data);
+```
+
+### Opaque Structs
++ Instead of exposing struct internals:
+```c
+// header.h
+typedef struct buffer buffer_t;  // Incomplete type
+buffer_t* buffer_create(size_t size);
+void buffer_append(buffer_t*, const void* data);
+```
 ---
 
 ## 1. General Rules
@@ -52,7 +74,22 @@ typedef struct {
     char*    data;   // 8 bytes
 } buffer_t;
 ```
+### Initialization
++ Always use designated initializers for structs
++ Prefer compound literals over separate assignments
++ Safer (avoids uninitialized values) and more readable at point of use 
+```c
+// Compound literals (C99)
+thing_t t = {
+    .field = value,  // Designated initializers
+    .count = 0
+};
 
+// Instead of:
+thing_t t;
+t.field = value;
+t.count = 0;
+```
 ---
 
 ## 2. Control Structures
