@@ -21,7 +21,7 @@ typedef struct {
 
 typedef struct {
     quest_component_t base;
-    quest_component_t* children[QUEST_MAX_LEAF];    // a bounded null terminated list of children
+    quest_component_t* children;    // a linked list of children
     quest_size_t size; // number of children
 } quest_composite_t;
 
