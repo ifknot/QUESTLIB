@@ -10,13 +10,13 @@
 #include "quest_rtti.h"
 #include "quest_composite.h"
 
-/*#define QUEST_TESTS &test_uid,                      \
+#define QUEST_TESTS &test_uid,                      \
                     &test_rtti_creation,            \
                     &test_type_checks,              \
                     &test_uid_uniqueness,           \
                     &test_fingerprint_components,   \
-                    &test_null_type_handling,       \ */
-#define QUEST_TESTS &test_add_remove_single,        \
+                    &test_null_type_handling,       \
+                    &test_add_remove_single,        \
                     &test_add_capacity,             \
                     &test_transfer_all,             \
                     &test_transfer_type,            \
