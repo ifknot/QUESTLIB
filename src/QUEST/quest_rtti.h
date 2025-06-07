@@ -8,9 +8,11 @@
 #ifndef QUEST_RTTI_H
 #define QUEST_RTTI_H
 
-#include "quest_types.h"
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
+
+#include "quest_types.h"
 
 /**
  * @brief RTTI container union
@@ -67,5 +69,12 @@ bool quest_is_typeof(
     quest_rtti_t rtti,
     quest_type_t type
 );
+
+/**
+ * @brief Dump human readable RTTI data to a stream
+ * @param rtti RTTI instance to dump
+ * @param stream Output stream (must be writable)
+ */
+void quest_rtti_dump(quest_rtti_t rtti, FILE* stream);
 
 #endif
