@@ -10,13 +10,20 @@
 #ifndef QUEST_COMPOSITE_H
 #define QUEST_COMPOSITE_H
 
+#include "../MEM/mem_arena.h"
+
 #include "quest_rtti.h"
 #include "quest_errors.h"
 #include "quest_constants.h"
+#include "quest_types.h"
+#include "quest_info.h"
+
+typedef struct quest_component_t quest_component_t;
 
 typedef struct quest_component_t {
     quest_rtti_t rtti;      ///< Unique type+ID combination
-    struct quest_component_t* parent; ///< Parent container (NULL if root)
+    quest_component_t* parent; ///< Parent container (NULL if root)
+    quest_info_t* info;     //< mutable string information
 } quest_component_t;
 
 typedef struct {
@@ -25,6 +32,66 @@ typedef struct {
     quest_size_t child_count;     ///< Current number of children
 } quest_composite_t;
 
+/**
+ * @brief Creates a new game component
+ * @param arena Memory arena for allocation (must not be NULL)
+ * @param parent Parent component or NULL for root objects
+ * @param type Component type from quest_object_types.h
+ * @param info Pre-allocated info structure (ownership transferred)
+ * @return New component or NULL on failure
+ *
+ * @warning The info structure becomes owned by the component and will be
+ *          freed when the arena is destroyed
+ *
+ * @code
+ * // Example 1: Creating a root object
+ * quest_info_t* rock_info = quest_info_copy(arena, "Rock", "A mossy boulder");
+ * quest_component_t* rock = quest_component_create(arena, NULL, QUEST_OBJECT, rock_info);
+ *
+ * // Example 2: Creating a child object
+ * quest_info_t* gem_info = quest_info_create(arena, 32, 128);
+ * str_copy(gem_info->brief, "Sapphire");
+ * str_copy(gem_info->details, "Glows with inner light");
+ * quest_component_t* gem = quest_component_create(arena, parent, QUEST_TREASURE, gem_info);
+ * @endcode
+ */
+quest_component_t* quest_component_create(
+    mem_arena_t* arena,
+    quest_component_t* parent,
+    quest_type_t type,
+    quest_info_t* info
+);
+
+/**
+ * @brief Creates a new container composite
+ * @param arena Memory arena for allocation (must not be NULL)
+ * @param parent Parent component or NULL for root containers
+ * @param type Composite type from quest_object_types.h
+ * @param info Pre-allocated info structure (ownership transferred)
+ * @return New composite or NULL on failure
+ *
+ * @note Child slots are pre-initialized to NULL
+ *
+ * @code
+ * // Example 1: Creating a room
+ * quest_info_t* tavern_info = quest_info_copy(arena, "Tavern", "Smoky and loud...");
+ * quest_composite_t* tavern = quest_composite_create(arena, NULL, QUEST_LOCATION, tavern_info);
+ *
+ * // Example 2: Creating player inventory
+ * quest_info_t* inv_info = quest_info_link(arena, "Inventory", "Carried items");
+ * quest_composite_t* inventory = quest_composite_create(arena, player, QUEST_INVENTORY, inv_info);
+ *
+ * // Adding items
+ * quest_component_t* sword = quest_component_create(arena, NULL, QUEST_WEAPON, ...);
+ * quest_composite_add(inventory, sword);
+ * @endcode
+ */
+quest_composite_t* quest_composite_create(
+    mem_arena_t* arena,
+    quest_component_t* parent,
+    quest_type_t type,
+    quest_info_t* info
+);
 /**
  * @brief Adds a child to a composite
  * @param parent Container to receive child
@@ -47,7 +114,7 @@ quest_error_t quest_composite_add(
 /**
  * @brief Removes a child by fingerprint
  * @param parent Container to modify
- * @param fingerprint Unique identifier to remove
+ * @param child to remove
  * @return QUEST_SUCCESS, QUEST_ITEM_NOT_FOUND, or QUEST_ITEM_LIST_EMPTY
  *
  * @example Removing item by ID:
@@ -60,7 +127,7 @@ quest_error_t quest_composite_add(
  */
 quest_error_t quest_composite_remove(
     quest_composite_t* parent,
-    quest_fingerprint_t fingerprint
+    quest_component_t* child
 );
 
 /**
@@ -98,8 +165,8 @@ quest_component_t* quest_composite_find(
  * @endcode
  */
 quest_error_t quest_composite_transfer_all(
-    quest_composite_t* src,
-    quest_composite_t* dst
+    quest_composite_t* dst,
+    quest_composite_t* src
 );
 
 /**
@@ -120,9 +187,23 @@ quest_error_t quest_composite_transfer_all(
  * @endcode
  */
 quest_error_t quest_composite_transfer_type(
-    quest_composite_t* src,
     quest_composite_t* dst,
+    quest_composite_t* src,
     quest_type_t target_type
 );
+
+/**
+ * @brief Dump human readable a component to a stream
+ * @param comp Component to dump
+ * @param stream Output stream
+ */
+void quest_component_dump(const quest_component_t* comp, FILE* stream);
+
+/**
+ * @brief Serializes composite with all children
+ * @param comp Composite to dump
+ * @param stream Output stream
+ */
+void quest_composite_dump(const quest_composite_t* comp, FILE* stream);
 
 #endif

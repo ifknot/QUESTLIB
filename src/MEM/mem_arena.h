@@ -153,6 +153,16 @@ void* mem_arena_free_address(mem_arena_t* arena);
 void* mem_arena_alloc(mem_arena_t* arena, mem_size_t byte_request);
 
 /**
+ * @brief Allocates and zero-initializes memory from arena
+ * @param arena Valid arena handle
+ * @param byte_request Size needed (will be aligned)
+ * @return Pointer to zeroed memory or NULL if full
+ *
+ * @note More efficient than separate alloc+memset for large blocks
+ */
+void* mem_arena_calloc(mem_arena_t* arena, mem_size_t byte_request);
+
+/**
  * @brief Deallocates memory (no-op in current impl)
  * @param arena Valid arena handle
  * @param byte_request Size to theoretically free

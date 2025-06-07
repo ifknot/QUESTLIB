@@ -5,6 +5,8 @@
  * Uses a union to overlay a 32-bit fingerprint with its 16-bit components.
  */
 
+#include <assert.h>
+
 #include "quest_rtti.h"
 #include "quest_types.h"
 #include "quest_uid.h"
@@ -30,4 +32,11 @@ quest_size_t quest_rtti_uid(quest_rtti_t rtti) {
 
 bool quest_is_typeof(quest_rtti_t rtti, quest_type_t type) {
     return  type == rtti.parts.type;
+}
+
+void quest_rtti_dump(quest_rtti_t rtti, FILE* stream) {
+    assert(stream != NULL);
+    fprintf(stream, "|type:%-4u|uid:%-6u", // For human-readable debugging
+           rtti.parts.type,
+           rtti.parts.uid);
 }

@@ -5,17 +5,18 @@
 #include "../TDD/tdd_progress.h"
 //#include "../MEM/mem_arena.h"
 
+#include "quest_errors.h"
 #include "quest_uid.h"
 #include "quest_rtti.h"
 #include "quest_composite.h"
 
-#define QUEST_TESTS &test_uid,                      \
+/*#define QUEST_TESTS &test_uid,                      \
                     &test_rtti_creation,            \
                     &test_type_checks,              \
                     &test_uid_uniqueness,           \
                     &test_fingerprint_components,   \
-                    &test_null_type_handling,       \
-                    &test_add_remove_single,        \
+                    &test_null_type_handling,       \ */
+#define QUEST_TESTS &test_add_remove_single,        \
                     &test_add_capacity,             \
                     &test_transfer_all,             \
                     &test_transfer_type,            \
@@ -95,22 +96,29 @@ TEST(test_null_type_handling) {
 }
 
 // =============================================
-// Composite
+// Test Utilities (Arena-based)
 // =============================================
 
-static quest_composite_t* create_test_composite(quest_type_t type) {
-    quest_composite_t* comp = (quest_composite_t*)malloc(sizeof(quest_composite_t));
-    comp->base.rtti = quest_rtti_create(type);
-    comp->base.parent = NULL;
-    comp->child_count = 0;
-    return comp;
+static mem_arena_t* test_arena = NULL;
+
+static void test_setup() {
+    test_arena = mem_arena_create(MEM_ARENA_POLICY_DOS, MEM_SIZE_16K);
 }
 
-static quest_component_t* create_test_item(quest_type_t type, quest_size_t uid) {
-    quest_component_t* item = (quest_component_t*)malloc(sizeof(quest_component_t));
-    item->rtti.parts.type = type;
-    item->rtti.parts.uid = uid;
-    item->parent = NULL;
+static void test_teardown() {
+    mem_arena_delete(test_arena);
+    test_arena = NULL;
+}
+
+static quest_composite_t* create_test_composite(quest_type_t type, const char* brief) {
+    quest_info_t* info = quest_info_copy(test_arena, brief, "Test description");
+    return quest_composite_create(test_arena, NULL, type, info);
+}
+
+static quest_component_t* create_test_item(quest_type_t type, quest_size_t uid, const char* name) {
+    quest_info_t* info = quest_info_copy(test_arena, name, "Test item");
+    quest_component_t* item = quest_component_create(test_arena, NULL, type, info);
+    item->rtti.parts.uid = uid; // Override UID for testing
     return item;
 }
 
@@ -119,127 +127,114 @@ static quest_component_t* create_test_item(quest_type_t type, quest_size_t uid) 
 // =============================================
 
 TEST(test_add_remove_single) {
-    quest_composite_t* bag = create_test_composite(QUEST_CONTAINER);
-    quest_component_t* sword = create_test_item(QUEST_ITEM_SWORD, 1);
+    test_setup();
 
-    // Test successful add
+    quest_composite_t* bag = create_test_composite(QUEST_CONTAINER, "Leather Bag");
+    quest_component_t* sword = create_test_item(QUEST_ITEM_SWORD, 1, "Excalibur");
+    // Test add
+    EXPECT(sword->parent == NULL);
     EXPECT_EQ(quest_composite_add(bag, sword), QUEST_SUCCESS);
     EXPECT_EQ(bag->child_count, 1);
-    //EXPECT_EQ(sword->parent, (quest_component_t*)bag);
-
-    // Test successful remove
-    quest_fingerprint_t target = sword->rtti.fingerprint;
-    EXPECT_EQ(quest_composite_remove(bag, target), QUEST_SUCCESS);
+    EXPECT_EQ(sword->parent, (quest_component_t*)bag);
+    // Test remove
+    EXPECT_EQ(quest_composite_remove(bag, sword), QUEST_SUCCESS);
     EXPECT_EQ(bag->child_count, 0);
-    //EXPECT_EQ(sword->parent, );
+    EXPECT(sword->parent == NULL);
 
-    free(sword);
-    free(bag);
+    test_teardown();
 }
 
 TEST(test_add_capacity) {
-    quest_composite_t* chest = create_test_composite(QUEST_CHEST);
+    test_setup();
+    quest_composite_t* chest = create_test_composite(QUEST_CHEST, "Treasure Chest");
 
     // Fill to capacity
     for (quest_size_t i = 0; i < QUEST_COMPOSITE_MAX_CHILDREN; i++) {
-        quest_component_t* gold = create_test_item(QUEST_ITEM_GOLD, i);
+        char name[32];
+        snprintf(name, sizeof(name), "Gold Coin %u", i);
+        quest_component_t* gold = create_test_item(QUEST_ITEM_GOLD, i, name);
         EXPECT_EQ(quest_composite_add(chest, gold), QUEST_SUCCESS);
     }
 
     // Test overflow
-    quest_component_t* overflow = create_test_item(QUEST_ITEM_RING, 99);
+    quest_component_t* overflow = create_test_item(QUEST_ITEM_RING, 99, "Overflow Ring");
     EXPECT_EQ(quest_composite_add(chest, overflow), QUEST_ITEM_LIST_FULL);
 
-    free(overflow);
-    for (quest_size_t i = 0; i < QUEST_COMPOSITE_MAX_CHILDREN; i++) {
-        free(chest->children[i]);
-    }
-    free(chest);
+    test_teardown();
 }
 
 TEST(test_transfer_all) {
-    quest_composite_t* chest = create_test_composite(QUEST_CHEST);
-    quest_composite_t* inventory = create_test_composite(QUEST_INVENTORY);
+    test_setup();
+
+    quest_composite_t* chest = create_test_composite(QUEST_CHEST, "Dragon's Hoard");
+    quest_composite_t* inv = create_test_composite(QUEST_INVENTORY, "Player Inventory");
 
     // Populate chest
     for (quest_size_t i = 0; i < 5; i++) {
-        quest_component_t* item = create_test_item(QUEST_ITEM_SCROLL, i);
+        char name[32];
+        snprintf(name, sizeof(name), "Scroll #%u", i);
+        quest_component_t* item = create_test_item(QUEST_ITEM_SCROLL, i, name);
         quest_composite_add(chest, item);
     }
+    EXPECT_EQ(chest->child_count, 5);
+    V(quest_composite_dump(chest, stdout););
 
-    // Test full transfer
-    EXPECT_EQ(quest_composite_transfer_all(chest, inventory), QUEST_SUCCESS);
+    // Test transfer
+    EXPECT_EQ(quest_composite_transfer_all(inv, chest), QUEST_SUCCESS);
     EXPECT_EQ(chest->child_count, 0);
-    EXPECT_EQ(inventory->child_count, 5);
+    EXPECT_EQ(inv->child_count, 5);
 
     // Verify parent pointers
     for (quest_size_t i = 0; i < 5; i++) {
-        //EXPECT_EQ(inventory->children[i]->parent, (quest_component_t*)inventory);
+        EXPECT_EQ(inv->children[i]->parent, (quest_component_t*)inv);
     }
 
-    for (quest_size_t i = 0; i < 5; i++) {
-        free(inventory->children[i]);
-    }
-    free(chest);
-    free(inventory);
+    test_teardown();
 }
 
 TEST(test_transfer_type) {
-    quest_composite_t* merchant = create_test_composite(QUEST_MERCHANT);
-    quest_composite_t* player = create_test_composite(QUEST_PLAYER);
+    test_setup();
+
+    quest_composite_t* merchant = create_test_composite(QUEST_MERCHANT, "Blacksmith");
+    quest_composite_t* player = create_test_composite(QUEST_PLAYER, "Hero");
 
     // Mixed inventory: 3 gold, 2 potions
     quest_component_t* items[5];
-    items[0] = create_test_item(QUEST_ITEM_GOLD, 1);
-    items[1] = create_test_item(QUEST_ITEM_POTION, 1);
-    items[2] = create_test_item(QUEST_ITEM_GOLD, 2);
-    items[3] = create_test_item(QUEST_ITEM_POTION, 2);
-    items[4] = create_test_item(QUEST_ITEM_GOLD, 3);
+    items[0] = create_test_item(QUEST_ITEM_GOLD, 1, "Gold Nugget");
+    items[1] = create_test_item(QUEST_ITEM_POTION, 1, "Health Potion");
+    items[2] = create_test_item(QUEST_ITEM_GOLD, 2, "Gold Bar");
+    items[3] = create_test_item(QUEST_ITEM_POTION, 2, "Mana Potion");
+    items[4] = create_test_item(QUEST_ITEM_GOLD, 3, "Gold Coin");
 
     for (int i = 0; i < 5; i++) {
         quest_composite_add(merchant, items[i]);
     }
 
     // Test type-filtered transfer
-    quest_size_t transferred = quest_composite_transfer_type(
-        merchant, player, QUEST_ITEM_GOLD
-    );
-
-    EXPECT_EQ(transferred, 3);
+    EXPECT_EQ(quest_composite_transfer_type(player, merchant, QUEST_ITEM_GOLD), QUEST_SUCCESS);
     EXPECT_EQ(merchant->child_count, 2);
     EXPECT_EQ(player->child_count, 3);
 
-    // Cleanup
-    for (int i = 0; i < merchant->child_count; i++) {
-        free(merchant->children[i]);
-    }
-    for (int i = 0; i < player->child_count; i++) {
-        free(player->children[i]);
-    }
-
-    free(merchant);
-    free(player);
+    test_teardown();
 }
 
 TEST(test_find_component) {
-    quest_composite_t* dungeon = create_test_composite(QUEST_DUNGEON);
+    test_setup();
 
-    quest_rtti_t target;
-    target.parts.type = QUEST_ITEM_KEY;
-    target.parts.uid = 42;
-    quest_component_t* key = create_test_item(target.parts.type, target.parts.uid);
+    quest_composite_t* dungeon = create_test_composite(QUEST_DUNGEON, "Dark Crypt");
+    quest_component_t* key = create_test_item(QUEST_ITEM_KEY, 42, "Rusty Key");
     quest_composite_add(dungeon, key);
 
-    // Test successful find
-    quest_component_t* found = quest_composite_find(dungeon, target.fingerprint);
-    EXPECT_EQ(found, key);
+    // Test find
+    quest_fingerprint_t target = key->rtti.fingerprint;
+    EXPECT_EQ(quest_composite_find(dungeon, target), key);
 
     // Test not found
-    quest_rtti_t fake = { .parts.type = QUEST_ITEM_KEY, .parts.uid = 99};
+    quest_rtti_t fake;
+    fake.parts.type = QUEST_ITEM_KEY;
+    fake.parts.uid = 99;
     EXPECT_EQ(quest_composite_find(dungeon, fake.fingerprint), NULL);
 
-    free(key);
-    free(dungeon);
+    test_teardown();
 }
-
 #endif

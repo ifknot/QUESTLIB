@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <memory.h>
 
 #include "mem_arena.h"
 
@@ -181,6 +182,18 @@ void* mem_arena_alloc(mem_arena_t* arena, mem_size_t byte_request) {
            byte_request, mem_arena_size(arena));
 #endif
     return NULL;
+}
+
+void* mem_arena_calloc(mem_arena_t* arena, mem_size_t byte_request) {
+    void* ptr = mem_arena_alloc(arena, byte_request);
+    if (ptr) {
+        #if defined(__WATCOMC__) && defined(__386__) // Use optimized platform-specific zeroing
+        _fmemset(ptr, 0, byte_request);  // Watcom fast memset
+        #else
+        memset(ptr, 0, byte_request);
+        #endif
+    }
+    return ptr;
 }
 
 void* mem_arena_dealloc(mem_arena_t* arena, mem_size_t byte_request) {
