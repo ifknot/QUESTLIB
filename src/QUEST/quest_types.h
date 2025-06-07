@@ -18,6 +18,18 @@
 typedef uint16_t quest_size_t;
 
 /**
+ * @brief 32-bit RTTI fingerprint (type + unique instance ID).
+ *
+ * Layout:
+ * - Bits 0-15: Unique instance ID (auto-incremented).
+ * - Bits 16-31: Object type ID (user-defined).
+ */
+typedef uint32_t quest_fingerprint_t;
+
+/** @brief 16-bit object type identifier (e.g., "Player", "Enemy"). */
+typedef uint16_t quest_type_t;
+
+/**
  * @brief Dual-description container for game locations
  *
  * Contains both short and long form descriptions for:

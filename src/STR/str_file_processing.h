@@ -69,7 +69,10 @@ str_size_t str_file_count_lines(const dos_file_handle_t fhandle);
  * @note Equivalent to fgetc() but for DOS file handles
  * @note Return value matches DOS convention (1=success, 0=failure)
  */
-inline str_size_t str_file_read_char(const dos_file_handle_t fhandle, char* chr) {
+inline str_size_t str_file_read_char(
+    const dos_file_handle_t fhandle,
+    char* chr
+) {
     return dos_read_file(fhandle, chr, 1);
 }
 
@@ -93,7 +96,11 @@ inline str_size_t str_file_read_char(const dos_file_handle_t fhandle, char* chr)
  * @note Advances file position
  * @see str_file_count_words()
  */
-str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* word, const str_size_t word_size);
+str_size_t str_file_read_word(
+    const dos_file_handle_t fhandle,
+    char* word,
+    const str_size_t word_size
+);
 
 /**
  * @brief Reads next line from file
@@ -114,7 +121,11 @@ str_size_t str_file_read_word(const dos_file_handle_t fhandle, char* word, const
  * @warning No buffer overflow protection
  * @note Advances file position
  */
-str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* line, const str_size_t line_size);
+str_size_t str_file_read_line(
+    const dos_file_handle_t fhandle,
+    char* line,
+    const str_size_t line_size
+);
 
 /**
  * @brief Reads all words from a file into an array
@@ -135,7 +146,12 @@ str_size_t str_file_read_line(const dos_file_handle_t fhandle, char* line, const
  *
  * @warning Requires pre-allocated buffers
  */
-str_size_t str_file_enumerate_words(const char * path_name, char** string_array, const str_size_t array_size, const str_size_t word_size);
+str_size_t str_file_enumerate_words(
+    const char * path_name,
+    char** string_array,
+    const str_size_t array_size,
+    const str_size_t word_size
+);
 
 #endif
 

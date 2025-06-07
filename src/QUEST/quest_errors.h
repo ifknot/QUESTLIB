@@ -16,6 +16,12 @@
  *
  * All error codes are negative except QUEST_SUCCESS (0).
  * New error codes should follow the <SYSTEM>_<CONDITION> pattern.
+ *
+ * // Usage example:
+ * quest_error_t result = quest_composite_transfer_all(chest, player_inventory);
+ * if (result != QUEST_SUCCESS) {
+ *    printf("Transfer failed: %s\n", quest_strerror(result));
+ * }
  */
 typedef enum {
     /* Core system errors (0-99) */
@@ -26,6 +32,7 @@ typedef enum {
     QUEST_ITEM_LIST_FULL = -100,  ///< Cannot add item - inventory at capacity
     QUEST_ITEM_LIST_EMPTY = -101, ///< Cannot remove item - inventory empty
     QUEST_ITEM_NOT_FOUND = -102,  ///< Specified item does not exist in inventory
+    QUEST_ITEM_LIST_PARTIAL = -103, ///< Cannot move all items
 
     /* Location system errors (200-299) */
     QUEST_LOCATION_INVALID = -200, ///< Target location does not exist

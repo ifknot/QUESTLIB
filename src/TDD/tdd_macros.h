@@ -45,7 +45,7 @@
             printf("\n%s:%d - FAILED: %s %s %s\n"                       \
                    "  Actual:   %d\n"                                   \
                    "  Expected: %d\n",                                  \
-                   _FILENAME, __LINE__, #a, #op, #b, (int)(a), (int)(b));\
+                   _FILENAME, __LINE__, #a, #op, #b, (int32_t)(a), (int32_t)(b));\
             *pass = false;                                              \
         }                                                               \
     } while (0)

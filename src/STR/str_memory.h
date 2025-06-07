@@ -29,7 +29,10 @@
  *
  * @warning The entire capacity is allocated but not initialized (except null-terminator)
  */
-char* str_make_string(mem_arena_t* arena, str_size_t string_size);
+char* str_make_string(
+    mem_arena_t* arena,
+    str_size_t string_size
+);
 
 /**
  * @brief Creates an arena-allocated copy of a string
@@ -49,7 +52,10 @@ char* str_make_string(mem_arena_t* arena, str_size_t string_size);
  * @see str_make_string()
  * @see strcpy()
  */
-char* str_make_copy(mem_arena_t* arena, const char* string);
+char* str_make_copy(
+    mem_arena_t* arena,
+    const char* string
+);
 
 /**
  * @brief Creates an array of empty strings in an arena
@@ -70,7 +76,11 @@ char* str_make_copy(mem_arena_t* arena, const char* string);
  * @warning All strings share the same fixed capacity
  * @note Useful for creating word lists or string tables
  */
-char** str_make_string_array(mem_arena_t* mem_arena, str_size_t array_size, str_size_t string_size);
+char** str_make_string_array(
+    mem_arena_t* mem_arena,
+    str_size_t array_size,
+    str_size_t string_size
+);
 
 #endif
 

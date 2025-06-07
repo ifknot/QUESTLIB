@@ -13,18 +13,6 @@
 #include <stdbool.h>
 
 /**
- * @brief 32-bit RTTI fingerprint (type + unique instance ID).
- *
- * Layout:
- * - Bits 0-15: Unique instance ID (auto-incremented).
- * - Bits 16-31: Object type ID (user-defined).
- */
-typedef uint32_t quest_fingerprint_t;
-
-/** @brief 16-bit object type identifier (e.g., "Player", "Enemy"). */
-typedef uint16_t quest_type_t;
-
-/**
  * @brief RTTI container union
  *
  * Allows access to fingerprint as either:
@@ -32,10 +20,10 @@ typedef uint16_t quest_type_t;
  * - Separate 16-bit components (type + UID)
  */
 typedef union quest_rtti_t {
-    uint32_t fingerprint;  /**< Combined 32-bit value */
+    quest_fingerprint_t fingerprint;  /**< Combined 32-bit value */
     struct {
-        uint16_t uid;     /**< Unique instance ID (LSB) */
-        uint16_t type;    /**< Object type (MSB) */
+        quest_size_t uid;     /**< Unique instance ID (LSB) */
+        quest_type_t type;    /**< Object type (MSB) */
     } parts;
 } quest_rtti_t;
 
@@ -52,14 +40,14 @@ quest_rtti_t quest_rtti_create(quest_type_t type);
  * @param rtti RTTI instance to inspect
  * @return Combined type+UID fingerprint
  */
-quest_fingerprint_t quest_get_fingerprint(quest_rtti_t rtti);
+quest_fingerprint_t quest_rtti_fingerprint(quest_rtti_t rtti);
 
 /**
  * @brief Gets the object type component
  * @param rtti RTTI instance to inspect
  * @return 16-bit type identifier
  */
-quest_type_t quest_get_type(quest_rtti_t rtti);
+quest_type_t quest_rtti_type(quest_rtti_t rtti);
 
 /**
  * @brief Gets the unique instance ID
@@ -67,7 +55,7 @@ quest_type_t quest_get_type(quest_rtti_t rtti);
  * @return 16-bit unique identifier
  * @warning UIDs may wrap around after 65,535 creations
  */
-quest_size_t quest_get_uid(quest_rtti_t rtti);
+quest_size_t quest_rtti_uid(quest_rtti_t rtti);
 
 /**
  * @brief Type checking predicate
@@ -75,6 +63,9 @@ quest_size_t quest_get_uid(quest_rtti_t rtti);
  * @param type Type to compare against
  * @return true if types match, false otherwise
  */
-bool quest_is_typeof(quest_rtti_t rtti, quest_type_t type);
+bool quest_is_typeof(
+    quest_rtti_t rtti,
+    quest_type_t type
+);
 
 #endif

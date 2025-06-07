@@ -3,4 +3,6 @@
 
 #define QUEST_MAX_LEAF     7
 
+#define QUEST_COMPOSITE_MAX_CHILDREN    16
+
 #endif

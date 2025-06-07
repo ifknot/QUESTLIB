@@ -156,7 +156,12 @@ str_size_t str_count_lines(const char* string);
  * @note Iterator *i is advanced past the word and any following non-word chars
  * @note Hyphenated words and contractions are treated as single words
  */
-str_size_t str_read_word(const char* string, str_iterator_t* i, char* word, const str_size_t word_size);
+str_size_t str_read_word(
+    const char* string,
+    str_iterator_t* i,
+    char* word,
+    const str_size_t word_size
+);
 
 /**
  * @brief Reads a line from a string at the current iterator position.
@@ -187,7 +192,12 @@ str_size_t str_read_word(const char* string, str_iterator_t* i, char* word, cons
  * @note Iterator *i is advanced to position after the newline or end of string
  * @note Safe for empty lines (returns 0 but advances past newline)
  */
-str_size_t str_read_line(const char* string, str_iterator_t* i, char* line, const str_size_t line_size);
+str_size_t str_read_line(
+    const char* string,
+    str_iterator_t* i,
+    char* line,
+    const str_size_t line_size
+);
 
 /**
  * @brief Enumerates all words in a string into an array of strings.
