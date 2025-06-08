@@ -55,4 +55,25 @@ quest_connector_t* quest_connector_create(
     quest_info_t* info
 );
 
+/**
+ * @brief Connects two locations with a specified direction
+ * @param loc1 First location to connect
+ * @param loc2 Second location to connect
+ * @param direction Bitmask direction (CONN_N, CONN_NE, etc.)
+ * @param connector The connector to use (door, passage, etc.)
+ * @return QUEST_SUCCESS or error code
+ *
+ * @code
+ * // Example: Connecting two rooms with a door
+ * quest_door_t* door = quest_door_create(arena, room1, room2, ...);
+ * quest_connector_join(room1, room2, CONN_E, (quest_connector_t*)door);
+ * @endcode
+ */
+quest_error_t quest_connector_join(
+    quest_location_t* loc1,
+    quest_location_t* loc2,
+    quest_connection_bitmask_t direction,
+    quest_connector_t* connector
+);
+
 #endif

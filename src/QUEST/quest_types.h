@@ -29,4 +29,6 @@ typedef uint32_t quest_fingerprint_t;
 /** @brief 16-bit object type identifier (e.g., "Player", "Enemy"). */
 typedef uint16_t quest_type_t;
 
+typedef uint16_t quest_connection_bitmask_t;
+
 #endif
