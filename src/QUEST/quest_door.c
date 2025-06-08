@@ -52,7 +52,7 @@ quest_error_t quest_door_unlock(quest_door_t* door, const quest_rtti_t* key) {
         return QUEST_ALREADY_UNLOCKED;
     }
 
-    if (&door->key.fingerprint, key->fingerprint)){
+    if (door->key.fingerprint, key->fingerprint){
         return QUEST_WRONG_KEY;
     }
 

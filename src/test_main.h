@@ -10,7 +10,8 @@
 //#include "MEM/test_mem_arena.h"
 //#include "PARSE/test_parse_dictionary.h"
 //#include "QUEST/test_quest_rtti_uid.h"
-#include "QUEST/test_quest_composite.h"
+//#include "QUEST/test_quest_composite.h"
+#include "QUEST/test_quest_location.h"
 
 RUN_TESTS( /*TDD_TESTS,
     DOS_SERVICES_TESTS,
@@ -20,7 +21,8 @@ RUN_TESTS( /*TDD_TESTS,
     ARENA_TESTS*/
     //DICTIONARY_TESTS
     //QUEST_RTTI_TESTS,
-    QUEST_COMPOSITE_TESTS
+    //QUEST_COMPOSITE_TESTS
+    QUEST_LOCATION_TESTS
 )
 
 #endif
