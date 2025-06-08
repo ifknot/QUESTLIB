@@ -32,6 +32,38 @@ typedef struct {
     quest_size_t child_count;     ///< Current number of children
 } quest_composite_t;
 
+quest_error_t quest_component_init(
+    quest_composite_t* comp,
+    quest_component_t* parent,
+    quest_type_t type,
+    quest_info_t* info
+);
+
+/**
+ * @brief Initializes a component structure with provided values
+ * @param comp Pointer to pre-allocated component structure
+ * @param parent Parent component or NULL for root objects
+ * @param type Component type from quest_object_types.h
+ * @param info Pre-allocated info structure (ownership transferred)
+ * @return QUEST_SUCCESS on success, QUEST_INVALID_ARGS if comp is NULL
+ *
+ * @note This is a lower-level alternative to quest_component_create()
+ *       for when you need to initialize pre-allocated memory
+ *
+ * @code
+ * // Example: Initializing a component in custom memory
+ * quest_component_t custom_comp;
+ * quest_info_t* info = quest_info_create(...);
+ * quest_component_init(&custom_comp, NULL, QUEST_OBJECT, info);
+ * @endcode
+ */
+quest_error_t quest_component_init(
+    quest_composite_t* comp,
+    quest_component_t* parent,
+    quest_type_t type,
+    quest_info_t* info
+);
+
 /**
  * @brief Creates a new game component
  * @param arena Memory arena for allocation (must not be NULL)
@@ -57,6 +89,32 @@ typedef struct {
  */
 quest_component_t* quest_component_create(
     mem_arena_t* arena,
+    quest_component_t* parent,
+    quest_type_t type,
+    quest_info_t* info
+);
+
+/**
+ * @brief Initializes a composite structure with provided values
+ * @param comp Pointer to pre-allocated composite structure
+ * @param parent Parent component or NULL for root containers
+ * @param type Composite type from quest_object_types.h
+ * @param info Pre-allocated info structure (ownership transferred)
+ * @return QUEST_SUCCESS on success, QUEST_INVALID_ARGS if comp is NULL
+ *
+ * @note This is a lower-level alternative to quest_composite_create()
+ *       for when you need to initialize pre-allocated memory
+ * @note Child slots are automatically initialized to NULL
+ *
+ * @code
+ * // Example: Initializing a composite in custom memory
+ * quest_composite_t custom_comp;
+ * quest_info_t* info = quest_info_create(...);
+ * quest_composite_init(&custom_comp, NULL, QUEST_LOCATION, info);
+ * @endcode
+ */
+quest_error_t quest_composite_init(
+    quest_composite_t* comp,
     quest_component_t* parent,
     quest_type_t type,
     quest_info_t* info
@@ -92,6 +150,7 @@ quest_composite_t* quest_composite_create(
     quest_type_t type,
     quest_info_t* info
 );
+
 /**
  * @brief Adds a child to a composite
  * @param parent Container to receive child

@@ -10,6 +10,14 @@
 
 #include <stdio.h>
 
+quest_error_t quest_component_init(quest_composite_t* comp, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
+    assert(comp);
+    comp->base.rtti = quest_rtti_create(type);
+    comp->base.parent = parent;
+    comp->base.info = info;
+    return QUEST_SUCCESS;
+}
+
 quest_component_t* quest_component_create(mem_arena_t* arena, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
     assert(arena);
     quest_component_t* comp = (quest_component_t*)mem_arena_calloc(arena, sizeof(quest_component_t));
@@ -20,11 +28,8 @@ quest_component_t* quest_component_create(mem_arena_t* arena, quest_component_t*
     return comp;
 }
 
-quest_composite_t* quest_composite_create(mem_arena_t* arena, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
-    assert(arena);
-    quest_composite_t* comp = (quest_composite_t*)mem_arena_calloc(arena, sizeof(quest_composite_t));
+quest_error_t quest_composite_init(quest_composite_t* comp, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
     assert(comp);
-
     comp->base.rtti = quest_rtti_create(type);
     comp->base.parent = parent;
     comp->base.info = info;
@@ -33,6 +38,14 @@ quest_composite_t* quest_composite_create(mem_arena_t* arena, quest_component_t*
     for (int i = 0; i < QUEST_COMPOSITE_MAX_CHILDREN; i++) {
         comp->children[i] = NULL;
     }
+    return QUEST_SUCCESS;
+}
+
+quest_composite_t* quest_composite_create(mem_arena_t* arena, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
+    assert(arena);
+    quest_composite_t* comp = (quest_composite_t*)mem_arena_calloc(arena, sizeof(quest_composite_t));
+    assert(comp);
+    quest_composite_init(comp, parent, type, info);
     return comp;
 }
 
