@@ -32,6 +32,7 @@ void teardown_test_arena() {
         arena = NULL;
     }
 }
+
 typedef enum  {     // minimum set of quest game objects
     QUEST_NULL = 0,
     QUEST_LOCATION,
