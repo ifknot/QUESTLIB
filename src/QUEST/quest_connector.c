@@ -2,8 +2,18 @@
 
 #include <assert.h>
 
-#include "quest_constants.h"
+#include "quest_errors.h"
 #include "quest_location.h"
+
+// Lookup table for opposite directions (using quest_connection_direction_t)
+static const quest_connection_direction_t opposite_directions[] = {
+    CONN_S, CONN_SW, CONN_W, CONN_NW, CONN_N, CONN_NE, CONN_E, CONN_SE, CONN_DOWN, CONN_UP, CONN_STAIR
+};
+
+// Lookup table to convert direction enum -> bitflag
+static const quest_connection_bitmask_t direction_to_flag[] = {
+    FLAG_N, FLAG_NE, FLAG_E, FLAG_SE, FLAG_S, FLAG_SW, FLAG_W, FLAG_NW, FLAG_UP, FLAG_DOWN, FLAG_STAIR
+};
 
 quest_error_t quest_connector_init(
     quest_connector_t* conn,
@@ -12,7 +22,9 @@ quest_error_t quest_connector_init(
     quest_type_t type,
     quest_info_t* info
 ) {
-    assert(conn && loc1 && loc2 && loc1 != loc2);
+    if(!(conn && loc1 && loc2 && loc1 != loc2)) {
+        return QUEST_INVALID_ARGS;
+    }
     conn->rtti = quest_rtti_create(type);
     conn->locations[0] = loc1;
     conn->locations[1] = loc2;
@@ -40,47 +52,14 @@ quest_error_t quest_connector_join(
     quest_connection_bitmask_t direction,
     quest_connector_t* connector
 ) {
-    assert(loc1 != NULL && loc2 != NULL);
-    assert(connector != NULL);
-    assert(direction != 0 && "Invalid direction bitmask");
-
-    // Verify direction is single flag
-    if ((direction & (direction - 1)) != 0) {
-        return QUEST_INVALID_ARGS; // Multiple bits set
+    if(!(loc1 && loc2 && connector && direction)) {
+        return QUEST_INVALID_ARGS;
     }
-
     // Set up bidirectional connection
-    switch (direction) {
-        case CONN_N:  loc1->connections[0] = connector; break;
-        case CONN_NE: loc1->connections[1] = connector; break;
-        case CONN_E:  loc1->connections[2] = connector; break;
-        case CONN_SE: loc1->connections[3] = connector; break;
-        case CONN_S:  loc1->connections[4] = connector; break;
-        case CONN_SW: loc1->connections[5] = connector; break;
-        case CONN_W:  loc1->connections[6] = connector; break;
-        case CONN_NW: loc1->connections[7] = connector; break;
-        case CONN_UP: loc1->connections[8] = connector; break;
-        case CONN_DOWN: loc1->connections[9] = connector; break;
-        default: return QUEST_INVALID_ARGS;
-    }
-
-    // Set opposite direction for loc2
-    quest_connection_bitmask_t opposite_dir = 0;
-    switch (direction) {
-        case CONN_N:  opposite_dir = CONN_S; break;
-        case CONN_NE: opposite_dir = CONN_SW; break;
-        case CONN_E:  opposite_dir = CONN_W; break;
-        case CONN_SE: opposite_dir = CONN_NW; break;
-        case CONN_S:  opposite_dir = CONN_N; break;
-        case CONN_SW: opposite_dir = CONN_NE; break;
-        case CONN_W:  opposite_dir = CONN_E; break;
-        case CONN_NW: opposite_dir = CONN_SE; break;
-        case CONN_UP: opposite_dir = CONN_DOWN; break;
-        case CONN_DOWN: opposite_dir = CONN_UP; break;
-    }
-
-    loc1->connection_directions |= direction;
-    loc2->connection_directions |= opposite_dir;
-
+    loc1->connections[direction] = connector;
+    loc2->connections[opposite_directions[direction]] = connector;
+    // Set bit mask
+    loc1->connection_directions |= direction_to_flag[direction];
+    loc2->connection_directions |= direction_to_flag[opposite_directions[direction]];
     return QUEST_SUCCESS;
 }

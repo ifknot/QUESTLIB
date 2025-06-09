@@ -31,4 +31,33 @@ typedef uint16_t quest_type_t;
 
 typedef uint16_t quest_connection_bitmask_t;
 
+typedef enum {
+    CONN_N = 0,
+    CONN_NE,
+    CONN_E,
+    CONN_SE,
+    CONN_S,
+    CONN_SW,
+    CONN_W,
+    CONN_NW,
+    CONN_UP,
+    CONN_DOWN,
+    CONN_STAIR
+} quest_connection_direction_t;
+
+// Connection direction bitflags
+typedef enum {
+    FLAG_N      = 0x0001,
+    FLAG_NE     = 0x0002,
+    FLAG_E      = 0x0004,
+    FLAG_SE     = 0x0008,
+    FLAG_S      = 0x0010,
+    FLAG_SW     = 0x0020,
+    FLAG_W      = 0x0040,
+    FLAG_NW     = 0x0080,
+    FLAG_UP     = 0x0100,
+    FLAG_DOWN   = 0x0200,
+    FLAG_STAIR  = 0x0400
+} quest_connection_flags_t;
+
 #endif
