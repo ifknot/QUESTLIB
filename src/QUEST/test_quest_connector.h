@@ -1,3 +1,9 @@
+/**
+* Important Notes
+* Make sure Graphviz/dot is installed on your system and Doxygen is configured to use it:
+* In Doxyfile, set HAVE_DOT = YES
+* Set DOT_PATH if Graphviz isn't in system PATH
+*/
 #ifndef TEST_QUEST_CONNECTOR_H
 #define TEST_QUEST_CONNECTOR_H
 
@@ -40,6 +46,25 @@ void teardown_test_arena() {
     }
 }
 
+/**
+ * @brief Test Scenario: Circular Building Layout
+ * @dot
+ * digraph room_navigation {
+ *   rankdir=LR;  // Left to right layout like your Mermaid example
+ *   node [shape=box, style=rounded];
+ *   
+ *   A [label="N Room"];
+ *   B [label="E Room"];
+ *   C [label="S Room"];
+ *   D [label="W Room"];
+ *   
+ *   A -> B [label="North"];
+ *   B -> C [label="East"];
+ *   C -> D [label="South"];
+ *   D -> A [label="West"];
+ * }
+ * @enddot
+*/
 TEST(test_circular_building) {
     setup_test_arena();
     /* Creates a circular building with 4 rooms connected N->E->S->W->N */
@@ -67,6 +92,29 @@ TEST(test_circular_building) {
     teardown_test_arena();
 }
 
+/**
+ * @brief Test Scenario: Multi-Floor Tower
+ * @dot
+ * digraph G {
+ *   graph [rankdir=TD];
+ *   
+ *   G1 [label="Ground 1"];
+ *   G2 [label="G2"];
+ *   G3 [label="G3"];
+ *   G4 [label="G4"];
+ *   G5 [label="G5"];
+ *   F1 [label="Floor 1"];
+ *   T1 [label="Top Floor"];
+ *   
+ *   G1 -> G2 [label="North"];
+ *   G1 -> G3 [label="East"];
+ *   G1 -> G4 [label="South"];
+ *   G1 -> G5 [label="West"];
+ *   G1 -> F1 [label="Up"];
+ *   F1 -> T1 [label="Up"];
+ * }
+ * @enddot
+ */
 TEST(test_multi_floor_tower) {
     setup_test_arena();
     /* Creates a 3-floor tower with:
@@ -106,6 +154,23 @@ TEST(test_multi_floor_tower) {
     teardown_test_arena();
 }
 
+/**
+ * @brief Test Scenario: Mixed Connection Types
+ * @dot
+ * digraph G {
+ *   graph [rankdir=TD];
+ *   
+ *   M [label="Main"];
+ *   N [label="North"];
+ *   E [label="East"]; 
+ *   U [label="Up"];
+ *   
+ *   M -> N [label="Locked Door"];
+ *   M -> E [label="Open Passage"];
+ *   M -> U [label="Stairs Up"];
+ * }
+ * @enddot
+ */
 TEST(test_mixed_connection_types) {
     setup_test_arena();
     /* Creates a location with:
