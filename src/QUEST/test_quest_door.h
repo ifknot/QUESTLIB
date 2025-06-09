@@ -10,8 +10,6 @@
 #include "quest_door.h"
 #include "quest_location.h"
 
-
-
 #define QUEST_DOOR_TESTS &test_door_creation,     \
                          &test_door_unlocking,    \
                          &test_door_locking
