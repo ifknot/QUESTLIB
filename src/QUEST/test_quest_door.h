@@ -16,7 +16,11 @@
                          &test_door_unlocking,    \
                          &test_door_locking
 
-
+typedef enum  {     // minimum set of quest game objects
+    QUEST_NULL = 0,
+    QUEST_LOCATION,
+    QUEST_DOOR_WOODEN
+} quest_object_t;
 
 static mem_arena_t* arena = NULL;
 
