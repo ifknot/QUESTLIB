@@ -1,5 +1,9 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_location.h(73): Warning! W202: Symbol 'loc' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_location.h(71): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_composite.h(65): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_composite.h(100): Warning! W202: Symbol 'overflow' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_composite.h(86): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_composite.h(108): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_composite.h(136): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_composite.h(166): Warning! W303: Parameter 'pass' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/main.c(5): Warning! W303: Parameter 'argv' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/main.c(5): Warning! W303: Parameter 'argc' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/../MEM/mem_types.h(48): Warning! W202: Symbol 'default_mem_segoff_t' has been defined, but not referenced
