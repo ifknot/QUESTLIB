@@ -18,9 +18,33 @@
 
 
 
-static mem_arena_t arena;
-static quest_rtti_t test_key = { .parts = {.type = QUEST_ITEM_KEY, .id = 42} };
-static quest_rtti_t wrong_key = { .parts = {.type = QUEST_ITEM_KEY, .id = 99} };
+static mem_arena_t* arena = NULL;
+
+/**
+ * @brief Test fixture setup - runs before each test
+ * @param initial_size Arena size in bytes (default 1MB if 0)
+ */
+void setup_test_arena() {
+    arena = mem_arena_create(MEM_ARENA_POLICY_DOS, MEM_SIZE_2K);
+    assert(arena);
+}
+
+/**
+ * @brief Test fixture teardown - runs after each test
+ */
+void teardown_test_arena() {
+    if (arena) {
+        mem_arena_delete(arena);
+        arena = NULL;
+    }
+}
+
+static quest_rtti_t test_key; 
+static quest_rtti_t wrong_key;
+test_key.parts.type = QUEST_ITEM_KEY;
+test_key.parts.id = 42;
+wrong_key.parts.type = QUEST_ITEM_KEY;
+wrong_key.parts.id = 99;
 
 TEST(test_door_creation) {
     quest_location_t* loc1 = quest_location_create(&arena, NULL, QUEST_LOCATION, NULL, 'A');
