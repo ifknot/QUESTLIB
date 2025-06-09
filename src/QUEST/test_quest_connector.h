@@ -7,14 +7,18 @@
 #ifndef TEST_QUEST_CONNECTOR_H
 #define TEST_QUEST_CONNECTOR_H
 
+#include "../MEM/mem_arena.h"
+
 #include "tdd_macros.h"
 
-#include "quest_constants
+#include "quest_constants.h"
+#include "quest_errors.h"
+#include "quest_types.h"
 #include "quest_location.h"
 #include "quest_connector.h"
 #include "quest_door.h"
-#include "quest_errors.h"
-#include "../MEM/mem_arena.h"
+
+
 
 #define QUEST_CONNECTOR_TESTS  &test_circular_building,      \
                                &test_multi_floor_tower,      \
