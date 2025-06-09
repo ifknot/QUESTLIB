@@ -2,10 +2,14 @@
 #define TEST_QUEST_LOCATION_H
 
 #include "../TDD/tdd_macros.h"
+#include "../MEM/mem_arena.h"
+
+#include "quest_constants.h"
+#include "quest_errors.h"
+#include "quest_types.h"
 #include "quest_location.h"
 #include "quest_connector.h"
 #include "quest_door.h"
-#include "../MEM/mem_arena.h"
 
 #define QUEST_LOCATION_TESTS &test_location_creation,  \
     &test_location_connections, \
