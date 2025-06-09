@@ -52,7 +52,8 @@ void teardown_test_arena() {
  * digraph room_navigation {
  *   rankdir=LR;  // Left to right layout like your Mermaid example
  *   node [shape=box, style=rounded];
- *   
+ *   layout=circo;
+ *
  *   A [label="N Room"];
  *   B [label="E Room"];
  *   C [label="S Room"];
@@ -97,7 +98,8 @@ TEST(test_circular_building) {
  * @dot
  * digraph G {
  *   graph [rankdir=TD];
- *   
+ *   layout=dot;
+ *
  *   G1 [label="Ground 1"];
  *   G2 [label="G2"];
  *   G3 [label="G3"];
@@ -159,6 +161,7 @@ TEST(test_multi_floor_tower) {
  * @dot
  * digraph G {
  *   graph [rankdir=TD];
+ *   layout=dot;
  *   
  *   M [label="Main"];
  *   N [label="North"];
