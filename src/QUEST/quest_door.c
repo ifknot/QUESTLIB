@@ -1,7 +1,7 @@
 #include "quest_door.h"
 #include <assert.h>
 
-quest_error_t quest_door_init(
+void quest_door_init(
     quest_door_t* door,
     quest_location_t* loc1,
     quest_location_t* loc2,
@@ -9,9 +9,8 @@ quest_error_t quest_door_init(
     quest_info_t* info,
     bool locked,
     quest_rtti_t key
-) {
-    assert(door);
-    assert(quest_connector_init(&door->base, loc1, loc2, type, info) == QUEST_SUCCESS);
+) { 
+    quest_connector_init(&door->base, loc1, loc2, type, info);
     door->is_locked = locked;
     door->key = key;
     return QUEST_SUCCESS;
@@ -29,7 +28,7 @@ quest_door_t* quest_door_create(
     assert(arena);
     quest_door_t* door = mem_arena_alloc(arena, sizeof(quest_door_t));
     assert(door);
-    assert(quest_door_init(door, loc1, loc2, type, info, locked, key) == QUEST_SUCCESS);
+    quest_door_init(door, loc1, loc2, type, info, locked, key);
     return door;
 }
 
@@ -44,9 +43,8 @@ quest_error_t quest_door_lock(quest_door_t* door) {
     return QUEST_SUCCESS;
 }
 
-quest_error_t quest_door_unlock(quest_door_t* door, const quest_rtti_t* key) {
+quest_error_t quest_door_unlock(quest_door_t* door, const quest_rtti_t key) {
     assert(door != NULL);
-    assert(key != NULL);
 
     if (!door->is_locked) {
         return QUEST_ALREADY_UNLOCKED;
