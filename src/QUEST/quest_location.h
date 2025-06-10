@@ -34,7 +34,6 @@ typedef struct quest_location_t {
  * @param parent Parent component (or NULL)
  * @param info Descriptive information
  * @param symbol Map display character
- * @return Error code
  */
 void quest_location_init(
     quest_location_t* loc,
