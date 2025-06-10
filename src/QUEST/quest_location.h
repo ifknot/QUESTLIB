@@ -32,12 +32,12 @@ typedef struct quest_location_t {
  * @brief Initializes a location structure
  * @param arena Memory arena for allocations
  * @param parent Parent component (or NULL)
- * @param type Location type (QUEST_LOCATION, etc.)
+
  * @param info Descriptive information
  * @param symbol Map display character
  * @return Error code
  */
-quest_error_t quest_location_init(
+void quest_location_init(
     quest_location_t* loc,
     quest_component_t* parent,
     quest_type_t type,
