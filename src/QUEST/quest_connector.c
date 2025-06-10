@@ -15,21 +15,22 @@ static const quest_connection_bitmask_t direction_to_flag[] = {
     FLAG_N, FLAG_NE, FLAG_E, FLAG_SE, FLAG_S, FLAG_SW, FLAG_W, FLAG_NW, FLAG_UP, FLAG_DOWN, FLAG_STAIR
 };
 
-quest_error_t quest_connector_init(
+void quest_connector_init(
     quest_connector_t* conn,
     quest_location_t* loc1,
     quest_location_t* loc2,
     quest_type_t type,
     quest_info_t* info
 ) {
-    if(!(conn && loc1 && loc2 && loc1 != loc2)) {
-        return QUEST_INVALID_ARGS;
-    }
+    assert(conn && "NULL connector!");
+    assert(loc1 && "NULL 1st location!");
+    assert(loc2 && "NULL 2nd location!");
+    assert(info && "NULL string information!");
+    
     conn->rtti = quest_rtti_create(type);
     conn->locations[0] = loc1;
     conn->locations[1] = loc2;
     conn->info = info;
-    return QUEST_SUCCESS;
 }
 
 quest_connector_t* quest_connector_create(
@@ -40,26 +41,28 @@ quest_connector_t* quest_connector_create(
     quest_info_t* info
 ) {
     assert(arena);
+    
     quest_connector_t* conn = mem_arena_alloc(arena, sizeof(quest_connector_t));
     assert(conn);
-    assert(quest_connector_init(conn, loc1, loc2, type, info) == QUEST_SUCCESS);
-    return conn;
+    
+    quest_connector_init(conn, loc1, loc2, type, info);
 }
 
-quest_error_t quest_connector_join(
+void quest_connector_join(
+    quest_connector_t* connector,
     quest_location_t* loc1,
     quest_location_t* loc2,
     quest_connection_bitmask_t direction,
-    quest_connector_t* connector
 ) {
-    if(!(loc1 && loc2 && connector && direction)) {
-        return QUEST_INVALID_ARGS;
-    }
+    assert(conn && "NULL connector!");
+    assert(loc1 && "NULL 1st location!");
+    assert(loc2 && "NULL 2nd location!");
+    assert(direction && "ZERO direction!");
+    assert((direction & (direction - 1)) == 0 && "MORE than 1 flag bit set!");
     // Set up bidirectional connection
     loc1->connections[direction] = connector;
     loc2->connections[opposite_directions[direction]] = connector;
     // Set bit mask
     loc1->connection_directions |= direction_to_flag[direction];
     loc2->connection_directions |= direction_to_flag[opposite_directions[direction]];
-    return QUEST_SUCCESS;
 }
