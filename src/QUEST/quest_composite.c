@@ -10,8 +10,8 @@
 #include <stdio.h>
 
 void quest_component_init(quest_component_t* comp, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
-    assert(comp && "NULL pointer to composite!");
-    assert(info && "NULL pointer to string information!");
+    assert(comp && "NULL composite!");
+    assert(info && "NULL string information!");
 
     comp->rtti = quest_rtti_create(type);
     comp->parent = parent;
