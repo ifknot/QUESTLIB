@@ -28,9 +28,8 @@ typedef struct quest_connector_t {
  * @param loc2 Second connected location
  * @param type Connector type
  * @param info Descriptive information
- * @return Error code
  */
-quest_error_t quest_connector_init(
+void quest_connector_init(
     quest_connector_t* conn,
     quest_location_t* loc1,
     quest_location_t* loc2,
@@ -61,7 +60,6 @@ quest_connector_t* quest_connector_create(
  * @param loc2 Second location to connect
  * @param direction Bitmask direction (CONN_N, CONN_NE, etc.)
  * @param connector The connector to use (door, passage, etc.)
- * @return QUEST_SUCCESS or error code
  *
  * @code
  * // Example: Connecting two rooms with a door
@@ -69,7 +67,7 @@ quest_connector_t* quest_connector_create(
  * quest_connector_join(room1, room2, CONN_E, (quest_connector_t*)door);
  * @endcode
  */
-quest_error_t quest_connector_join(
+void quest_connector_join(
     quest_location_t* loc1,
     quest_location_t* loc2,
     quest_connection_bitmask_t direction,
