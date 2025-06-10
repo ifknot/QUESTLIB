@@ -27,9 +27,8 @@ typedef struct quest_door_t {
  * @param info Descriptive information
  * @param locked Initial lock state
  * @param key Required key RTTI
- * @return Error code
  */
-quest_error_t quest_door_init(
+void quest_door_init(
     quest_door_t* door,
     quest_location_t* loc1,
     quest_location_t* loc2,
