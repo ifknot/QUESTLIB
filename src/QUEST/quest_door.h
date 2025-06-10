@@ -74,7 +74,7 @@ quest_error_t quest_door_lock(quest_door_t* door);
  *         QUEST_WRONG_KEY if key doesn't match,
  *         QUEST_ALREADY_UNLOCKED if door wasn't locked
  */
-quest_error_t quest_door_unlock(quest_door_t* door, const quest_rtti_t* key);
+quest_error_t quest_door_unlock(quest_door_t* door, quest_rtti_t key);
 
 #endif
 
