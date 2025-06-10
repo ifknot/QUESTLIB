@@ -66,8 +66,8 @@ void quest_composite_add(quest_composite_t* parent, quest_component_t* child) {
 quest_component_t* quest_composite_remove(quest_composite_t* parent, quest_component_t* child) {
     assert(parent && "NULL parent!");
     assert(child && "NULL child!");
-
     assert(parent->child_count > 0 && "EMPTY children array!");
+    
     for (quest_size_t i = 0; i < parent->child_count; ++i) {    // linear seach
         if (parent->children[i] == child) {
             parent->children[i] = parent->children[--parent->child_count];  // over-write with last element
@@ -100,10 +100,9 @@ quest_size_t quest_composite_transfer_all(quest_composite_t* dst, quest_composit
 
     quest_size_t transfer_count = 0;
     while(src->child_count > 0 && dst->child_count < QUEST_COMPOSITE_MAX_CHILDREN) { // Process from the end of src to beginning for safer removal
-        quest_component_t* child = src->children[src->child_count - 1]; // Take last child from source
-        quest_composite_add(dst, child); // Add to destination - handles parent pointer and count
-        src->children[src->child_count - 1] = NULL; // Clear source slot (now that child has new parent)
-        src->child_count--;
+        
+        quest_composite_add(dst, quest_component_remove(src, src->children[src->child_count - 1])); // Add to destination - handles parent pointer and count
+        
         transfer_count++;
     }
 
