@@ -1,15 +1,16 @@
 #include "quest_location.h"
 #include <assert.h>
 
-quest_error_t quest_location_init(
+void quest_location_init(
     quest_location_t* loc,
     quest_component_t* parent,
     quest_type_t type,
     quest_info_t* info,
     char symbol
 ) {
-    assert(loc != NULL);
-    quest_composite_init(&loc->base, parent, type, info);
+    assert(loc != NULL && "NULL location!");
+    assert(parent && "NULL parent!");
+    assert(info && "NULL string information!");
 
     loc->grid_x = 0;
     loc->grid_y = 0;
@@ -34,6 +35,6 @@ quest_location_t* quest_location_create(
     assert(arena != NULL);
     quest_location_t* loc = mem_arena_alloc(arena, sizeof(quest_location_t));
     assert(loc);
-    assert(quest_location_init(loc, parent, type, info, symbol) == QUEST_SUCCESS);
+    quest_location_init(loc, parent, type, info, symbol);
     return loc;
 }
