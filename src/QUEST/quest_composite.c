@@ -21,7 +21,7 @@ void quest_component_init(quest_component_t* comp, quest_component_t* parent, qu
 quest_component_t* quest_component_create(mem_arena_t* arena, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
     assert(arena && "NULL memory arena!");
 
-    quest_component_t* comp = (quest_component_t*)mem_arena_calloc(arena, sizeof(quest_component_t));
+    quest_component_t* comp = (quest_component_t*)mem_arena_alloc(arena, sizeof(quest_component_t));
     assert(comp && "NULL component - arena allocation failed!");
 
     quest_component_init(comp, parent, type, info);
