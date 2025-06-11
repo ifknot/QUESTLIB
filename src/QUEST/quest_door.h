@@ -3,6 +3,30 @@
  * @brief Door connector between locations
  *
  * Specialized connector with locking mechanism
+ * @usage
+ * @code
+ * Create adjacent locations
+ * quest_location_t* kitchen = quest_location_create(arena, NULL, QUEST_LOCATION, kitchen_info, 'K');
+ *  quest_location_t* pantry = quest_location_create(arena, NULL, QUEST_LOCATION, pantry_info, 'P');
+ * 
+ * Create a locked door between them
+ * quest_door_t* door = quest_door_create(arena, kitchen, pantry, QUEST_DOOR_WOODEN, door_info, true, key_rtti);
+ * 
+ * Connect east of kitchen to west of pantry
+ * quest_connector_join(kitchen, pantry, CONN_E, (quest_connector_t*)door);
+ * 
+ * Attempt to unlock with wrong key
+ * quest_rtti_t wrong_key = {...};
+ * if (quest_door_unlock(door, &wrong_key) == QUEST_WRONG_KEY) {
+ *     printf("The key doesn't fit!\n");
+ * }
+ * 
+ * Unlock with correct key
+ * quest_door_unlock(door, &correct_key);
+ * 
+ * Verify unlocked state
+ * assert(door->is_locked == false);
+ * @endcode
  */
 #ifndef QUEST_DOOR_H
 #define QUEST_DOOR_H
