@@ -27,7 +27,6 @@ typedef enum {
     /* Core system errors (0-99) */
     QUEST_SUCCESS = 0,            ///< Operation completed successfully
     QUEST_FAILURE = -1,           ///< Generic failure condition
-    QUEST_INVALID_ARGS = -2,
 
     /* Inventory system errors (100-199) */
     QUEST_ITEM_LIST_FULL = -100,  ///< Cannot add item - inventory at capacity
@@ -39,19 +38,18 @@ typedef enum {
     QUEST_LOCATION_INVALID = -200, ///< Target location does not exist
     QUEST_LOCATION_LOCKED = -201,  ///< Target location is access-restricted
 
-    /* Combat system errors (300-399) */
-    QUEST_COMBAT_IMMUNE = -300,    ///< Target is immune to this damage type
+    /* Connector system errors */
+    QUEST_WRONG_KEY = - 300,
+    QUEST_ALREADY_UNLOCKED  = - 301,
+    QUEST_ALREADY_LOCKED  = - 302,
+    QUEST_DOOR_LOCKED = -303,
+    QUEST_DOOR_UNLOCKED = -304
 
     /* Resource errors (400-499) */
     QUEST_MEMORY_ERROR = -400,     ///< Memory allocation failure
     QUEST_FILE_ERROR = -401,        ///< File I/O operation failed
 
-    /* Connector system errors */
-    QUEST_WRONG_KEY = - 500,
-    QUEST_ALREADY_UNLOCKED  = - 501,
-    QUEST_ALREADY_LOCKED  = - 502,
-    QUEST_DOOR_LOCKED = -503,
-    QUEST_DOOR_UNLOCKED = -504
+    
 
 } quest_error_t;
 
