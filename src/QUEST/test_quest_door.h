@@ -3,81 +3,136 @@
 
 #include "../TDD/tdd_macros.h"
 #include "../MEM/mem_arena.h"
-
-#include "quest_constants.h"
-#include "quest_errors.h"
-#include "quest_types.h"
 #include "quest_door.h"
 #include "quest_location.h"
 
+// =============================================
+// Test Configuration
+// =============================================
 #define QUEST_DOOR_TESTS &test_door_creation,     \
                          &test_door_unlocking,    \
-                         &test_door_locking
+                         &test_door_locking,      \
+                         &test_door_edge_cases
 
-typedef enum  {     // minimum set of quest game objects
-    QUEST_NULL = 0,
-    QUEST_LOCATION,
-    QUEST_DOOR_WOODEN
-} quest_object_t;
+static mem_arena_t* test_arena = NULL;
+static quest_rtti_t test_key = { .parts = {QUEST_ITEM_KEY, 42} };
+static quest_rtti_t wrong_key = { .parts = {QUEST_ITEM_KEY, 99} };
 
-static mem_arena_t* arena = NULL;
-
-/**
- * @brief Test fixture setup - runs before each test
- * @param initial_size Arena size in bytes (default 1MB if 0)
- */
-void setup_test_arena() {
-    arena = mem_arena_create(MEM_ARENA_POLICY_DOS, MEM_SIZE_2K);
-    assert(arena);
+// =============================================
+// Test Utilities
+// =============================================
+static void setup() {
+    test_arena = mem_arena_create(MEM_ARENA_POLICY_DOS, MEM_SIZE_2K);
+    ASSERT(test_arena != NULL, "Arena creation failed");
+    V(printf("Test setup: Arena initialized\n"));
 }
 
-/**
- * @brief Test fixture teardown - runs after each test
- */
-void teardown_test_arena() {
-    if (arena) {
-        mem_arena_delete(arena);
-        arena = NULL;
+static void teardown() {
+    if (test_arena) {
+        mem_arena_delete(test_arena);
+        test_arena = NULL;
     }
+    V(printf("Test teardown: Arena cleaned\n\n"));
 }
 
-static quest_rtti_t test_key; 
-static quest_rtti_t wrong_key;
-test_key.parts.type = QUEST_ITEM_KEY;
-test_key.parts.id = 42;
-wrong_key.parts.type = QUEST_ITEM_KEY;
-wrong_key.parts.id = 99;
+static quest_location_t* create_test_location(char symbol) {
+    quest_info_t* info = quest_info_create(test_arena, "Test Loc", "Test location");
+    quest_location_t* loc = quest_location_create(test_arena, NULL, QUEST_LOCATION, info, symbol);
+    ASSERT(loc != NULL, "Location creation failed");
+    return loc;
+}
 
+// =============================================
+// Test Cases
+// =============================================
 TEST(test_door_creation) {
-    quest_location_t* loc1 = quest_location_create(&arena, NULL, QUEST_LOCATION, NULL, 'A');
-    quest_location_t* loc2 = quest_location_create(&arena, NULL, QUEST_LOCATION, NULL, 'B');
-    quest_door_t* door = quest_door_create(&arena, loc1, loc2, QUEST_DOOR_WOODEN, NULL, true, test_key);
+    setup();
+
+    // Create test locations
+    quest_location_t* loc1 = create_test_location('A');
+    quest_location_t* loc2 = create_test_location('B');
     
+    // Create door with key requirement
+    quest_info_t* door_info = quest_info_create(test_arena, "Oak Door", "Sturdy wooden door");
+    quest_door_t* door = quest_door_create(test_arena, loc1, loc2, 
+                                         QUEST_DOOR_WOODEN, door_info, true, test_key);
+    
+    // Verify creation
     EXPECT(door != NULL);
-    EXPECT_EQ(door->base.rtti.parts.type, QUEST_DOOR_WOODEN);
+    EXPECT_EQ(door->base.base.rtti.parts.type, QUEST_DOOR_WOODEN);
     EXPECT(door->is_locked);
-    EXPECT(quest_rtti_equals(&door->key, &test_key));
+    EXPECT_EQ(door->key.fingerprint, test_key.fingerprint);
+    EXPECT_EQ(door->base.locations[0], loc1);
+    EXPECT_EQ(door->base.locations[1], loc2);
+    
+    V(printf("Created door between locations A and B\n"));
+
+    teardown();
 }
 
 TEST(test_door_unlocking) {
-    quest_door_t* door = quest_door_create(&arena, NULL, NULL, QUEST_DOOR_WOODEN, NULL, true, test_key);
+    setup();
+
+    // Create locked door
+    quest_door_t* door = quest_door_create(test_arena, NULL, NULL, 
+                                         QUEST_DOOR_WOODEN, NULL, true, test_key);
+    ASSERT(door != NULL, "Door creation failed");
     
-    EXPECT_EQ(quest_door_unlock(door, &wrong_key), QUEST_WRONG_KEY);
+    // Test wrong key
+    EXPECT_EQ(quest_door_unlock(door, wrong_key), QUEST_WRONG_KEY);
     EXPECT(door->is_locked);
+    V(printf("Rejected wrong key (ID:99)\n"));
     
-    EXPECT_EQ(quest_door_unlock(door, &test_key), QUEST_SUCCESS);
+    // Test correct key
+    EXPECT_EQ(quest_door_unlock(door, test_key), QUEST_SUCCESS);
     EXPECT(!door->is_locked);
+    V(printf("Unlocked with correct key (ID:42)\n"));
     
-    EXPECT_EQ(quest_door_unlock(door, &test_key), QUEST_ALREADY_UNLOCKED);
+    // Test already unlocked
+    EXPECT_EQ(quest_door_unlock(door, test_key), QUEST_ALREADY_UNLOCKED);
+    V(printf("Properly handled already-unlocked state\n"));
+
+    teardown();
 }
 
 TEST(test_door_locking) {
-    quest_door_t* door = quest_door_create(&arena, NULL, NULL, QUEST_DOOR_WOODEN, NULL, false, test_key);
+    setup();
+
+    // Create unlocked door
+    quest_door_t* door = quest_door_create(test_arena, NULL, NULL, 
+                                         QUEST_DOOR_WOODEN, NULL, false, test_key);
+    ASSERT(door != NULL, "Door creation failed");
     
+    // Test initial lock
     EXPECT_EQ(quest_door_lock(door), QUEST_SUCCESS);
     EXPECT(door->is_locked);
+    V(printf("Successfully locked door\n"));
     
+    // Test already locked
     EXPECT_EQ(quest_door_lock(door), QUEST_ALREADY_LOCKED);
+    V(printf("Properly handled already-locked state\n"));
+
+    teardown();
 }
 
-#endif
+TEST(test_door_edge_cases) {
+    setup();
+
+    // Test NULL door handling
+    EXPECT_EQ(quest_door_lock(NULL), QUEST_INVALID_ARGS);
+    EXPECT_EQ(quest_door_unlock(NULL, test_key), QUEST_INVALID_ARGS);
+    V(printf("Handled NULL door cases\n"));
+    
+    // Test keyless door
+    quest_door_t* keyless = quest_door_create(test_arena, NULL, NULL, 
+                                            QUEST_DOOR_WOODEN, NULL, true, 
+                                            quest_rtti_null());
+    ASSERT(keyless != NULL, "Door creation failed");
+    EXPECT_EQ(quest_door_unlock(keyless, test_key), QUEST_SUCCESS);
+    EXPECT(!keyless->is_locked);
+    V(printf("Verified keyless door behavior\n"));
+
+    teardown();
+}
+
+#endif 
