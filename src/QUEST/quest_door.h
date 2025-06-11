@@ -40,6 +40,7 @@ typedef struct quest_door_t {
     quest_connector_t base;    ///< Base connector properties
     bool is_locked;           ///< Lock state
     quest_rtti_t key;         ///< Key required to unlock
+    ///// PICKABLE DOOR ?///////
 } quest_door_t;
 
 /**
