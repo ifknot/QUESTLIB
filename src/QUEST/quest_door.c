@@ -13,7 +13,6 @@ void quest_door_init(
     quest_connector_init(&door->base, loc1, loc2, type, info);
     door->is_locked = locked;
     door->key = key;
-    return QUEST_SUCCESS;
 }
 
 quest_door_t* quest_door_create(
@@ -25,15 +24,20 @@ quest_door_t* quest_door_create(
     bool locked,
     quest_rtti_t key
 ) {
-    assert(arena);
+    assert(arena && "NULL arena");
+    assert(loc1 && loc2 && "NULL locations");
+    assert(info && "NULL info");
+    
     quest_door_t* door = mem_arena_alloc(arena, sizeof(quest_door_t));
-    assert(door);
+    assert(door && "NULL door!");
+    
     quest_door_init(door, loc1, loc2, type, info, locked, key);
+    
     return door;
 }
 
 quest_error_t quest_door_lock(quest_door_t* door) {
-    assert(door != NULL);
+    assert(door && "NULL door");
 
     if (door->is_locked) {
         return QUEST_ALREADY_LOCKED;
@@ -44,16 +48,12 @@ quest_error_t quest_door_lock(quest_door_t* door) {
 }
 
 quest_error_t quest_door_unlock(quest_door_t* door, const quest_rtti_t key) {
-    assert(door != NULL);
+    assert(door && "NULL door");
 
-    if (!door->is_locked) {
-        return QUEST_ALREADY_UNLOCKED;
+    if (door->is_locked) {
+        return QUEST_ALREADY_LOCKED;
     }
 
-    if (door->key.fingerprint, key->fingerprint){
-        return QUEST_WRONG_KEY;
-    }
-
-    door->is_locked = false;
+    door->is_locked = true;
     return QUEST_SUCCESS;
 }
