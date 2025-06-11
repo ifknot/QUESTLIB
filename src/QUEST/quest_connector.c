@@ -26,6 +26,7 @@ void quest_connector_init(
     assert(loc1 && "NULL 1st location!");
     assert(loc2 && "NULL 2nd location!");
     assert(info && "NULL string information!");
+    assert(loc1 != loc2 && "SELF connection!");
     
     conn->rtti = quest_rtti_create(type);
     conn->locations[0] = loc1;
@@ -40,10 +41,10 @@ quest_connector_t* quest_connector_create(
     quest_type_t type,
     quest_info_t* info
 ) {
-    assert(arena);
+    assert(arena && "NULL arena");
     
     quest_connector_t* conn = mem_arena_alloc(arena, sizeof(quest_connector_t));
-    assert(conn);
+    assert(conn && "Null connection");
     
     quest_connector_init(conn, loc1, loc2, type, info);
 }
@@ -57,8 +58,8 @@ void quest_connector_join(
     assert(conn && "NULL connector!");
     assert(loc1 && "NULL 1st location!");
     assert(loc2 && "NULL 2nd location!");
-    assert(direction && "ZERO direction!");
-    assert((direction & (direction - 1)) == 0 && "MORE than 1 flag bit set!");
+    assert(direction && "INVALIDdirection (0)!");
+    assert((direction & (direction - 1)) == 0 && "MULTIPLE direction flags set!");
     // Set up bidirectional connection
     loc1->connections[direction] = connector;
     loc2->connections[opposite_directions[direction]] = connector;
