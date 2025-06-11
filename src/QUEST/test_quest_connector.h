@@ -12,7 +12,7 @@
  * digraph overview {
  *   rankdir=LR;
  *   node [shape=box, style=rounded];
- *   
+ *
  *   A -> B [label="Passage"];
  *   B -> C [label="Door"];
  *   C -> D [label="Stairs", dir=both];
@@ -27,6 +27,7 @@
 #include "quest_connector.h"
 #include "quest_location.h"
 #include "quest_door.h"
+#include "quest_object_types.h"
 
 #define QUEST_CONNECTOR_TESTS &test_circular_building,      \
                              &test_multi_floor_tower,      \
@@ -57,9 +58,8 @@ static void teardown() {
 }
 
 static quest_location_t* create_test_location(char symbol) {
-    quest_info_t* info = quest_info_create(test_arena, "Test Loc", "Test location");
+    quest_info_t* info = quest_info_copy(test_arena, "Test Loc", "Test location");
     quest_location_t* loc = quest_location_create(test_arena, NULL, QUEST_LOCATION, info, symbol);
-    ASSERT(loc != NULL, "Location creation failed");
     return loc;
 }
 
@@ -78,7 +78,7 @@ static quest_location_t* create_test_location(char symbol) {
  */
 TEST(test_circular_building) {
     setup();
-    
+
     /* Creates 4 rooms connected N->E->S->W->N */
     quest_location_t* rooms[4];
     for (int i = 0; i < 4; i++) {
@@ -88,10 +88,10 @@ TEST(test_circular_building) {
     // Create and connect passages
     quest_connector_t* connections[4];
     const quest_connection_direction_t dirs[4] = {CONN_N, CONN_E, CONN_S, CONN_W};
-    
+
     for (int i = 0; i < 4; i++) {
         int next = (i + 1) % 4;
-        connections[i] = quest_connector_create(test_arena, rooms[i], rooms[next], 
+        connections[i] = quest_connector_create(test_arena, rooms[i], rooms[next],
                                               QUEST_CONNECTOR_PASSAGE, NULL);
         quest_connector_join(connections[i], rooms[i], rooms[next], dirs[i]);
     }
@@ -102,8 +102,8 @@ TEST(test_circular_building) {
         EXPECT_EQ(rooms[i]->connections[dirs[i]], connections[i]);
         EXPECT_EQ(rooms[next]->connections[opposite_directions[dirs[i]]], connections[i]);
     }
-    
-    V(printf("Created circular building layout\n"));
+
+    V(printf("Created circular building layout\n"););
     teardown();
 }
 
@@ -119,13 +119,13 @@ TEST(test_circular_building) {
  */
 TEST(test_multi_floor_tower) {
     setup();
-    
+
     /* 3-floor tower with:
      * - Ground: 4 rooms
-     * - First: 2 rooms  
+     * - First: 2 rooms
      * - Top: 1 room */
     quest_location_t* floors[3][4] = {0};
-    
+
     // Create floors
     for (int floor = 0; floor < 3; floor++) {
         int rooms = (floor == 0) ? 4 : (floor == 1) ? 2 : 1;
@@ -136,11 +136,11 @@ TEST(test_multi_floor_tower) {
 
     // Connect stairwell
     quest_connector_t* stairs[2];
-    stairs[0] = quest_connector_create(test_arena, floors[0][0], floors[1][0], 
+    stairs[0] = quest_connector_create(test_arena, floors[0][0], floors[1][0],
                                      QUEST_CONNECTOR_STAIRS, NULL);
     stairs[1] = quest_connector_create(test_arena, floors[1][0], floors[2][0],
                                      QUEST_CONNECTOR_STAIRS, NULL);
-    
+
     quest_connector_join(stairs[0], floors[0][0], floors[1][0], CONN_UP);
     quest_connector_join(stairs[1], floors[1][0], floors[2][0], CONN_UP);
 
@@ -149,7 +149,7 @@ TEST(test_multi_floor_tower) {
     EXPECT_EQ(floors[1][0]->connections[CONN_DOWN], stairs[0]);
     EXPECT_EQ(floors[1][0]->connections[CONN_UP], stairs[1]);
     EXPECT_EQ(floors[2][0]->connections[CONN_DOWN], stairs[1]);
-    
+
     V(printf("Created multi-floor tower\n"));
     teardown();
 }
@@ -159,21 +159,21 @@ TEST(test_multi_floor_tower) {
  * @dot
  * digraph {
  *   M -> N [label="Door"];
- *   M -> E [label="Passage"]; 
+ *   M -> E [label="Passage"];
  *   M -> U [label="Stairs"];
  * }
  * @enddot
  */
 TEST(test_mixed_connection_types) {
     setup();
-    
+
     quest_location_t* main = create_test_location('M');
     quest_location_t* north = create_test_location('N');
     quest_location_t* east = create_test_location('E');
     quest_location_t* upper = create_test_location('U');
 
     // Create different connectors
-    quest_door_t* door = quest_door_create(test_arena, main, north, 
+    quest_door_t* door = quest_door_create(test_arena, main, north,
                                          QUEST_DOOR_WOODEN, NULL, true, test_key);
     quest_connector_t* passage = quest_connector_create(test_arena, main, east,
                                                       QUEST_CONNECTOR_PASSAGE, NULL);
@@ -190,7 +190,7 @@ TEST(test_mixed_connection_types) {
     EXPECT_EQ(main->connections[CONN_E], passage);
     EXPECT_EQ(main->connections[CONN_UP], stairs);
     EXPECT(((quest_door_t*)main->connections[CONN_N])->is_locked);
-    
+
     V(printf("Created mixed connection types\n"));
     teardown();
 }
@@ -200,9 +200,9 @@ TEST(test_mixed_connection_types) {
  */
 TEST(test_connector_edge_cases) {
     setup();
-    
+
     quest_location_t* loc = create_test_location('X');
-    
+
     // Should trigger assertions in debug mode
     #ifndef NDEBUG
     printf("Expecting assertion failures for edge cases:\n");
@@ -212,7 +212,7 @@ TEST(test_connector_edge_cases) {
     EXPECT_EQ(quest_connector_join(&dummy, loc, NULL, CONN_E), QUEST_INVALID_ARGS);
     EXPECT_EQ(quest_connector_join(&dummy, loc, loc, 0), QUEST_INVALID_ARGS);
     #endif
-    
+
     teardown();
 }
 
@@ -221,4 +221,4 @@ TEST(test_connector_edge_cases) {
 // =============================================
 RUN_TESTS(QUEST_CONNECTOR_TESTS)
 
-#endif 
+#endif

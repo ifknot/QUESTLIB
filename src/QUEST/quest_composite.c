@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 void quest_component_init(quest_component_t* comp, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
-    assert(comp && "NULL composite!");
+    assert(comp && "NULL component!");
     assert(info && "NULL string information!");
 
     comp->rtti = quest_rtti_create(type);
@@ -21,7 +21,7 @@ void quest_component_init(quest_component_t* comp, quest_component_t* parent, qu
 quest_component_t* quest_component_create(mem_arena_t* arena, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
     assert(arena && "NULL memory arena!");
 
-    quest_component_t* comp = (quest_component_t*)mem_arena_alloc(arena, sizeof(quest_component_t));
+    quest_component_t* comp = (quest_component_t*)mem_arena_calloc(arena, sizeof(quest_component_t));
     assert(comp && "NULL component - arena allocation failed!");
 
     quest_component_init(comp, parent, type, info);
@@ -33,9 +33,7 @@ void quest_composite_init(quest_composite_t* comp, quest_component_t* parent, qu
     assert(comp && "NULL composite!");
     assert(info && "NULL string information!");
 
-    comp->base.rtti = quest_rtti_create(type);
-    comp->base.parent = parent;
-    comp->base.info = info;
+    quest_component_init(&comp->base, parent, type, info);
 
     comp->child_count = 0;
     for (int i = 0; i < QUEST_COMPOSITE_MAX_CHILDREN; i++) {
@@ -67,7 +65,7 @@ quest_component_t* quest_composite_remove(quest_composite_t* parent, quest_compo
     assert(parent && "NULL parent!");
     assert(child && "NULL child!");
     assert(parent->child_count > 0 && "EMPTY children array!");
-    
+
     for (quest_size_t i = 0; i < parent->child_count; ++i) {    // linear seach
         if (parent->children[i] == child) {
             parent->children[i] = parent->children[--parent->child_count];  // over-write with last element
@@ -100,9 +98,9 @@ quest_size_t quest_composite_transfer_all(quest_composite_t* dst, quest_composit
 
     quest_size_t transfer_count = 0;
     while(src->child_count > 0 && dst->child_count < QUEST_COMPOSITE_MAX_CHILDREN) { // Process from the end of src to beginning for safer removal
-        
-        quest_composite_add(dst, quest_component_remove(src, src->children[src->child_count - 1])); // Add to destination - handles parent pointer and count
-        
+
+        quest_composite_add(dst, quest_composite_remove(src, src->children[src->child_count - 1])); // Add to destination - handles parent pointer and count
+
         transfer_count++;
     }
 
@@ -138,11 +136,11 @@ void quest_component_dump(const quest_component_t* comp, FILE* stream) {
     assert(stream && "NULL file stream!");
 
     quest_rtti_dump(comp->rtti, stream);
-    fprintf(stream, "|parent:"); // Dump parent reference (as fingerprint or NULL)
     if (comp->parent) {
+        fprintf(stream, "|parent:%p", comp->parent);
         quest_rtti_dump(comp->parent->rtti, stream);
     } else {
-        fprintf(stream, "NULL");
+        fprintf(stream, "|parent:NULL");
     }
 }
 

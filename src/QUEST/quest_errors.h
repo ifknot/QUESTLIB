@@ -43,13 +43,13 @@ typedef enum {
     QUEST_ALREADY_UNLOCKED  = - 301,
     QUEST_ALREADY_LOCKED  = - 302,
     QUEST_DOOR_LOCKED = -303,
-    QUEST_DOOR_UNLOCKED = -304
+    QUEST_DOOR_UNLOCKED = -304,
 
     /* Resource errors (400-499) */
     QUEST_MEMORY_ERROR = -400,     ///< Memory allocation failure
     QUEST_FILE_ERROR = -401,        ///< File I/O operation failed
 
-    
+
 
 } quest_error_t;
 

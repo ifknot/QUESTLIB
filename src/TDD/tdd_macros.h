@@ -132,14 +132,14 @@
  * @param a Actual string
  * @param b Expected string
  */
-#define EXPECT_STREQ(a, b) _EXPECT_STRCOMPARE(a, b, == 0, "STREQ")
+#define EXPECT_STREQ(a, b) _EXPECT_STRCOMPARE(a, b, ==, "STREQ")
 
 /**
  * @brief Expects two strings to be unequal (strcmp != 0)
  * @param a First string
  * @param b Second string
  */
-#define EXPECT_STRNEQ(a, b) _EXPECT_STRCOMPARE(a, b, != 0, "STRNEQ")
+#define EXPECT_STRNEQ(a, b) _EXPECT_STRCOMPARE(a, b, !=, "STRNEQ")
 
 
 

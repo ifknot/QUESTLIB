@@ -1,4 +1,5 @@
 #include "quest_location.h"
+#include "quest_composite.h"
 #include <assert.h>
 
 void quest_location_init(
@@ -12,6 +13,8 @@ void quest_location_init(
     assert(parent && "NULL parent!");
     assert(info && "NULL string information!");
 
+    quest_composite_init(&loc->base, parent, type, info);
+
     loc->grid_x = 0;
     loc->grid_y = 0;
     loc->floor_number = 0;
@@ -21,8 +24,6 @@ void quest_location_init(
     for (int i = 0; i < 10; i++) {
         loc->connections[i] = NULL;
     }
-
-    return QUEST_SUCCESS;
 }
 
 quest_location_t* quest_location_create(
