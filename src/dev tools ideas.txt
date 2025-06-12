@@ -1,0 +1,142 @@
+Here's a design for a command-line quest writing tool that leverages your existing systems while keeping DOS compatibility:
+
+Core Functionality
+1. World Navigation
+bash
+> look
+[Tavern] "The Rusty Tankard" 
+Exits: East(door), Down(stairs)
+Items: [Rusty Key] [Wooden Chair]
+
+> go east
+You open the oak door to the forest.
+
+> map --generate
+Saved world.dot (use Graphviz to render)
+2. Entity Creation
+bash
+> create location "Dark Cave" --x 5 --y 12 --floor -1 --symbol 'C'
+Created location [Dark Cave]
+
+> create door tavern cave "Iron Gate" --locked --key 42
+Created locked door requiring key#42
+
+> create npc bartender "Old Greg" --location tavern --dialog "Aye, what'll it be?"
+Added NPC with 1 dialog branch
+3. Structure Validation
+bash
+> validate
+Checking world integrity...
+[✓] All locations reachable
+[!] Orphaned item: "Ruby Ring" in abandoned_house
+[!] Unused key: #42 in tavern
+4. Quick Visualization
+bash
+> show connections --from tavern
+Tavern connections:
+- East → Forest (Oak Door, locked)
+- Down → Cellar (Wooden Stairs)
+
+> show inventory --npc bartender
+Bartender carries:
+- Tankard (item#23)
+- Rag (item#45)
+Key Command Implementations
+1. Interactive Shell (quest_cli.c)
+c
+#include "quest_composite.h"
+#include "quest_loader.h"
+#include <stdio.h>
+#include <readline/readline.h>  // For line editing (optional)
+
+void start_cli(quest_component_t* world) {
+    char* input;
+    while ((input = readline("> ")) != NULL) {
+        if (strcmp(input, "exit") == 0) break;
+        
+        // Parse command
+        if (strncmp(input, "create ", 7) == 0) {
+            handle_create(world, input + 7);
+        } 
+        else if (strncmp(input, "go ", 3) == 0) {
+            handle_move(world, input + 3);
+        }
+        // ... other commands
+        
+        free(input);
+    }
+}
+2. Create Command Handler
+c
+void handle_create(quest_component_t* root, const char* args) {
+    char type[32];
+    sscanf(args, "%31s", type);
+    
+    if (strcmp(type, "location") == 0) {
+        char name[128], symbol;
+        int x, y, floor;
+        if (sscanf(args, "%*s \"%127[^\"]\" --x %d --y %d --floor %d --symbol '%c'", 
+                  name, &x, &y, &floor, &symbol) == 5) {
+            quest_location_t* loc = /*...create location...*/;
+            printf("Created %s at (%d,%d)\n", name, x, y);
+        }
+    }
+    // ... other entity types
+}
+3. Validation System
+c
+void validate_world(quest_component_t* root) {
+    // 1. Check unreachable locations
+    bfs_check_connectivity(root);
+    
+    // 2. Verify key-door relationships
+    check_key_usage(root);
+    
+    // 3. Validate NPC dialog references
+    check_dialog_integrity(root);
+}
+
+static void bfs_check_connectivity(quest_component_t* root) {
+    // Use BFS to flag locations with no paths to root
+    // ...
+}
+DOS-Friendly Features
+TUI Mode (For older systems):
+
+c
+void draw_tui(quest_location_t* current) {
+    printf("┌───────────────┐\n");
+    printf("│ %-13s │\n", current->base.base.info->brief);
+    printf("├──────┬────────┤\n");
+    // ... ASCII art exits/items
+}
+Scriptable Workflow:
+
+bash
+questtool --batch create_locations.txt > world.qdf
+Auto-Completion (If readline available):
+
+c
+// In CLI setup:
+rl_bind_key('\t', rl_complete);
+Suggested Commands
+Command	Example	Purpose
+teleport	teleport "Dark Cave"	Jump to location
+give	give player "Rusty Key"	Add item to inventory
+link	link tavern forest --bidirectional	Connect locations
+export	export --format qdf	Save world state
+history	history --undo 3	Rollback changes
+Error Handling
+bash
+> create door tavern unknown_room "Door" 
+[!] Error: Location 'unknown_room' not found
+[?] Create it now? (Y/n)
+This gives writers:
+
+Live feedback via command-line
+
+Validation to catch design issues
+
+Visualization integration
+
+DOS-compatible performance
