@@ -9,21 +9,8 @@ void quest_location_init(
     quest_info_t* info,
     char symbol
 ) {
-    assert(loc != NULL && "NULL location!");
-    assert(parent && "NULL parent!");
-    assert(info && "NULL string information!");
-
     quest_composite_init(&loc->base, parent, type, info);
-
-    loc->grid_x = 0;
-    loc->grid_y = 0;
-    loc->floor_number = 0;
     loc->symbol = symbol;
-    loc->connection_directions = 0;
-
-    for (int i = 0; i < 10; i++) {
-        loc->connections[i] = NULL;
-    }
 }
 
 quest_location_t* quest_location_create(
@@ -34,7 +21,7 @@ quest_location_t* quest_location_create(
     char symbol
 ) {
     assert(arena != NULL);
-    quest_location_t* loc = mem_arena_alloc(arena, sizeof(quest_location_t));
+    quest_location_t* loc = mem_arena_calloc(arena, sizeof(quest_location_t));
     assert(loc);
     quest_location_init(loc, parent, type, info, symbol);
     return loc;
