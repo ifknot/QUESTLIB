@@ -16,10 +16,11 @@
 #include "quest_errors.h"
 
 typedef enum {
-    DOOR_IS_OPEN     = 0x0001, // can go striaght through - eg an open arch 
-    DOOR_IS_LOCKABLE = 0x0002, // so can add lock(s) - or not eg open arch/window
-    DOOR_HAS_LOCK    = 0x0004, // has one or more locks 
-    DOOR_IS_RUSTY    = 0x0008  // has rusty hinges that might need some oil  
+    DOOR_IS_OPEN     = 0x0001,     // can go striaght through - eg an open arch 
+    DOOR_IS_LOCKABLE = 0x0002,     // so can add lock(s) - or not eg open arch/window
+    DOOR_HAS_LOCK    = 0x0004,     // has one or more locks 
+    DOOR_IS_RUSTY    = 0x0008,     // has rusty hinges that might need some oil  
+    DOOR_HAS_SPELL   = 0x0010      // has one or more spells on it
 } quest_door_features_t;
 
 typedef enum {
