@@ -11,7 +11,6 @@
 #ifndef QUEST_DOOR_H
 #define QUEST_DOOR_H
 
-#include <stdbool.h>
 #include "quest_connector.h"
 #include "quest_composite.h"
 #include "quest_errors.h"
