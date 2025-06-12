@@ -39,7 +39,7 @@ void quest_connector_join(
     quest_connector_t* connector,
     quest_location_t* loc1,
     quest_location_t* loc2,
-    quest_connection_bitmask_t direction
+    quest_bitmask_t direction
 ) {
     assert(connector && "NULL connector!");
     assert(loc1 && "NULL 1st location!");
