@@ -63,4 +63,6 @@ quest_error_t quest_door_lock(quest_door_t* door, quest_key_t* key);
 
 quest_error_t quest_door_unlock(quest_door_t* door, quest_key_t* key);
 
+void quest_door_dump(const quest_composite_t* comp, FILE* stream);
+
 #endif
