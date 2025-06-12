@@ -40,7 +40,7 @@ typedef struct quest_location_t {
     quest_size_t grid_x, grid_y;      ///< Grid coordinates
     quest_size_t floor_number;        ///< Z-level (0=ground)
     char symbol;                     ///< Display character
-    quest_connection_bitmask_t connection_directions; ///< Active connections
+    quest_bitmask_t active_directions; ///< Active connections
 } quest_location_t;
 
 /**
