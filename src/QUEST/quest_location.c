@@ -20,9 +20,8 @@ quest_location_t* quest_location_create(
     quest_info_t* info,
     char symbol
 ) {
-    assert(arena != NULL);
+    assert(arena && "NULL memory arena!");
     quest_location_t* loc = mem_arena_calloc(arena, sizeof(quest_location_t));
-    assert(loc);
     quest_location_init(loc, parent, type, info, symbol);
     return loc;
 }
