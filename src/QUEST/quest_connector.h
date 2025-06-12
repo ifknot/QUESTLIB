@@ -92,4 +92,6 @@ void quest_connector_join(
     quest_connection_bitmask_t direction
 );
 
+void quest_connector_dump(const quest_composite_t* comp, FILE* stream);
+
 #endif
