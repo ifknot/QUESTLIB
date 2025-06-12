@@ -12,7 +12,9 @@
 void quest_component_init(quest_component_t* comp, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
     assert(comp && "NULL component!");
     assert(info && "NULL string information!");
-
+#ifdef QUEST_DENY_NULL_PARENT
+    assert(parent && "NULL parent!");
+#endif
     comp->rtti = quest_rtti_create(type);
     comp->parent = parent;
     comp->info = info;
@@ -20,7 +22,9 @@ void quest_component_init(quest_component_t* comp, quest_component_t* parent, qu
 
 quest_component_t* quest_component_create(mem_arena_t* arena, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
     assert(arena && "NULL memory arena!");
-
+#ifdef QUEST_DENY_NULL_PARENT
+    assert(parent && "NULL parent!");
+#endif
     quest_component_t* comp = (quest_component_t*)mem_arena_calloc(arena, sizeof(quest_component_t));
     assert(comp && "NULL component - arena allocation failed!");
 
