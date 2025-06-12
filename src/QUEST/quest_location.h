@@ -94,4 +94,6 @@ quest_location_t* quest_location_create(
     char symbol
 );
 
+void quest_location_dump(const quest_composite_t* comp, FILE* stream);
+
 #endif
