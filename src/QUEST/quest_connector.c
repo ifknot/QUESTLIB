@@ -29,7 +29,10 @@ quest_connector_t* quest_connector_create(
     quest_type_t type,
     quest_info_t* info
 ) {
-    return quest_composite_create(arena, parent, type, info);
+    assert(arena != NULL);
+    quest_connector_t* conn = mem_arena_calloc(arena, sizeof(quest_arena_t));
+    quest_connector_init(conn, parent, type, info);
+    return conn;
 }
 
 void quest_connector_join(
