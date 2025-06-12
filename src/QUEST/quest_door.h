@@ -16,42 +16,35 @@
 #include "quest_composite.h"
 #include "quest_errors.h"
 
+typedef enum {
+    DOOR_IS_OPEN     = 0x0001, // can go striaght through - eg an open arch 
+    DOOR_IS_LOCKABLE = 0x0002, // so can add lock(s) - or not eg open arch/window
+    DOOR_HAS_LOCK    = 0x0004, // has one or more locks 
+    DOOR_IS_RUSTY    = 0x0008  // has rusty hinges that might need some oil  
+} quest_door_features_t;
+
+typedef enum {
+    DOOR_PAPER     = 0,    
+    DOOR_WOOD      = 10,
+    DOOR_IRON      = 20,
+    DOOR_BRONZE    = 30
+} quest_door_strengths_t;    // how easy it is to smash a door or safe to hide behind depending on NPC
+
 typedef struct quest_door_t {
     quest_connector_t base;    
-    
+    quest_bitmask_t active_features;
+    quest_size_t door_weight; // strength needed to move the door maybe level up to open
+    quest_size_t door_strength; // can you smash the door?
 } quest_door_t;
 
-/**
- * @brief Initializes a door
- * @param door Door to initialize
- * @param loc1 First connected location
- * @param loc2 Second connected location
- * @param type Door type
- * @param info Descriptive information
- * @param locked Initial lock state
- * @param key Required key RTTI
- */
-void quest_door_init(
+void quest_door_init(    // defaults to an open door with no lock
     quest_door_t* door,
-    quest_location_t* loc1,
-    quest_location_t* loc2,
-    quest_type_t type,
+     quest_type_t type,
     quest_info_t* info,
-    bool locked,
-    quest_rtti_t key
+    quest_location_t* loc1,
+    quest_location_t* loc2
 );
 
-/**
- * @brief Creates a new door
- * @param arena Memory arena for allocation
- * @param loc1 First connected location
- * @param loc2 Second connected location
- * @param type Door type
- * @param info Descriptive information
- * @param locked Initial lock state
- * @param key Required key RTTI
- * @return New door or NULL on failure
- */
 quest_door_t* quest_door_create(
     mem_arena_t* arena,
     quest_location_t* loc1,
@@ -62,47 +55,12 @@ quest_door_t* quest_door_create(
     quest_rtti_t key
 );
 
-/**
- * @brief Locks a door
- * @param door Door to lock
- * @return QUEST_SUCCESS if locked, QUEST_ALREADY_LOCKED if already locked
- */
-quest_error_t quest_door_lock(quest_door_t* door);
+quest_error_t quest_door_open(quest_door_t* door);
 
-/**
- * @brief Unlocks a door with a key
- * @param door Door to unlock
- * @param key Key being used
- * @return QUEST_SUCCESS if unlocked,
- *         QUEST_WRONG_KEY if key doesn't match,
- *         QUEST_ALREADY_UNLOCKED if door wasn't locked
- */
-quest_error_t quest_door_unlock(quest_door_t* door, const quest_rtti_t key);
+quest_error_t quest_door_close(quest_door_t* door);
+
+quest_error_t quest_door_lock(quest_door_t* door, quest_key_t* key);
+
+quest_error_t quest_door_unlock(quest_door_t* door, quest_key_t* key);
 
 #endif
-
-/*
-// Create adjacent locations
-quest_location_t* kitchen = quest_location_create(arena, NULL, QUEST_LOCATION, kitchen_info, 'K');
-quest_location_t* pantry = quest_location_create(arena, NULL, QUEST_LOCATION, pantry_info, 'P');
-
-// Create a locked door between them
-quest_door_t* door = quest_door_create(arena, kitchen, pantry, QUEST_DOOR_WOODEN,
-                                      door_info, true, key_rtti);
-
-// Connect east of kitchen to west of pantry
-quest_connector_join(kitchen, pantry, CONN_E, (quest_connector_t*)door);
-
-// Attempt to unlock with wrong key
-quest_rtti_t wrong_key = {...};
-if (quest_door_unlock(door, &wrong_key) == QUEST_WRONG_KEY) {
-    printf("The key doesn't fit!\n");
-}
-
-// Unlock with correct key
-quest_door_unlock(door, &correct_key);
-
-// Verify unlocked state
-assert(door->is_locked == false);
-
- */
