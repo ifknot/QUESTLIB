@@ -15,37 +15,21 @@ static const quest_connection_bitmask_t direction_to_flag[] = {
 };
 
 void quest_connector_init(
-    quest_connector_t* conn,
-    quest_location_t* loc1,
-    quest_location_t* loc2,
+    quest_composite_t* comp,
+    quest_component_t* parent,
     quest_type_t type,
     quest_info_t* info
-) {
-    assert(conn && "NULL connector!");
-    assert(loc1 && "NULL 1st location!");
-    assert(loc2 && "NULL 2nd location!");
-    assert(info && "NULL string information!");
-    assert(loc1 != loc2 && "SELF connection!");
-
-    conn->rtti = quest_rtti_create(type);
-    conn->locations[0] = loc1;
-    conn->locations[1] = loc2;
-    conn->info = info;
+)) {
+    quest_composite_init(&comp->base, parent, type, info);
 }
 
 quest_connector_t* quest_connector_create(
     mem_arena_t* arena,
-    quest_location_t* loc1,
-    quest_location_t* loc2,
+    quest_component_t* parent,
     quest_type_t type,
     quest_info_t* info
 ) {
-    assert(arena && "NULL arena");
-
-    quest_connector_t* conn = mem_arena_alloc(arena, sizeof(quest_connector_t));
-    assert(conn && "Null connection");
-
-    quest_connector_init(conn, loc1, loc2, type, info);
+    return quest_composite_create(arena, parent, type, info);
 }
 
 void quest_connector_join(
