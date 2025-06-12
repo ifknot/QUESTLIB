@@ -50,6 +50,6 @@ void quest_connector_join(
     loc1->connections[direction] = connector;
     loc2->connections[opposite_directions[direction]] = connector;
     // Set bit mask
-    loc1->connection_directions |= direction_to_flag[direction];
-    loc2->connection_directions |= direction_to_flag[opposite_directions[direction]];
+    loc1->active_directions |= direction_to_flag[direction];
+    loc2->active_directions |= direction_to_flag[opposite_directions[direction]];
 }
