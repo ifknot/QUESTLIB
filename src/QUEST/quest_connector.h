@@ -12,10 +12,7 @@
 #define QUEST_CONNECTOR_H
 
 #include "../MEM/mem_arena.h"
-#include "quest_errors.h"
-#include "quest_types.h"
-#include "quest_rtti.h"
-#include "quest_info.h"
+#include "quest_composite.h"
 
 typedef struct quest_location_t quest_location_t;
 
@@ -28,30 +25,24 @@ typedef struct quest_location_t quest_location_t;
  * - Descriptive text
  */
 typedef struct quest_connector_t {
-    quest_rtti_t rtti;            ///< Runtime type information
+    quest_composite_t base; 
     quest_location_t* locations[2]; ///< Connected locations [0]=origin, [1]=destination
-    quest_info_t* info;           ///< Connection description (ownership transferred)
 } quest_connector_t;
 
 /**
- * @brief Initializes a connector between two locations
- * @param conn Pre-allocated connector to initialize
- * @param loc1 First connected location (must not be NULL)
- * @param loc2 Second connected location (must not be NULL)
- * @param type Connector type from quest_types.h
- * @param info Descriptive information (ownership transferred)
+ * @brief Initializes a connector to be joined later
+ * @param comp Pointer to pre-allocated component structure
+ * @param parent Parent component or NULL for root objects
+ * @param type Component type from quest_object_types.h
+ * @param info Pre-allocated info structure (ownership transferred)
  *
  * @code
- * // Example: Manual initialization
- * quest_connector_t passage;
- * quest_info_t* info = quest_info_create(arena, "Stone Passage", "Carved from living rock");
- * quest_connector_init(&passage, dungeon, crypt, QUEST_CONNECTOR_PASSAGE, info);
+ *
  * @endcode
  */
 void quest_connector_init(
-    quest_connector_t* conn,
-    quest_location_t* loc1,
-    quest_location_t* loc2,
+    quest_composite_t* comp,
+    quest_component_t* parent,
     quest_type_t type,
     quest_info_t* info
 );
@@ -59,28 +50,18 @@ void quest_connector_init(
 /**
  * @brief Creates a new connector
  * @param arena Memory arena for allocation (must not be NULL)
- * @param loc1 First connected location (must not be NULL)
- * @param loc2 Second connected location (must not be NULL)
- * @param type Connector type from quest_types.h
- * @param info Descriptive information (ownership transferred)
+ * @param parent Parent component or NULL for root objects
+ * @param type Component type from quest_object_types.h
+ * @param info Pre-allocated info structure (ownership transferred)
  * @return New connector or NULL on allocation failure
  *
  * @code
- * // Example 1: Creating a basic passage
- * quest_connector_t* tunnel = quest_connector_create(arena, cave1, cave2,
- *     QUEST_CONNECTOR_PASSAGE,
- *     quest_info_create(arena, "Tunnel", "Damp and narrow"));
  *
- * // Example 2: Creating a stairwell
- * quest_connector_t* stairs = quest_connector_create(arena, foyer, balcony,
- *     QUEST_CONNECTOR_STAIRS,
- *     quest_info_create(arena, "Marble Stairs", "Worn smooth by centuries of use"));
  * @endcode
  */
 quest_connector_t* quest_connector_create(
     mem_arena_t* arena,
-    quest_location_t* loc1,
-    quest_location_t* loc2,
+    quest_component_t* parent,
     quest_type_t type,
     quest_info_t* info
 );
