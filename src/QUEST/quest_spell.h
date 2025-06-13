@@ -4,12 +4,25 @@
 #include "quest_composite.h"
 
 /**
- * @brief any component in a quest world can have spell placed upon it
+ * @brief Any component in a quest world can have spell placed upon it.
+ * @details There are 4 nybbles available in the quest_size_t to represent
+ * the quest world's 4 families of spells:
+ * earth, wind, water, fire
+ * 0 is no spell in this family 
+ * leaving 15 spells for each family a total of 60 in game spells for quest_spell_t  
+ * @note only 1 nybble can be used otherwise the spell is corrupted
+ * to undo the spell an undo spell can be applied where the codes must match or...
+ * be 0xF in the corrrect nybble for the spell family as the universal undo spell 
+ * 0x000F all fire undo 
+ * 0x00F0 all water undo 
+ * 0x0F00 all wind undo 
+ * 0xF000 all earth undo 
+ * 0xFFFF universal all spells undo 
  */
 typedef struct {
     quest_component_t base;    
-    quest_size_t spell_code; // 14 spells each 4 categories earth, water, fire, death 
-    quest_size_t spell_strength; 
+    quest_size_t spell_code;     // 14 spells each 4 categories earth, water, fire, death 
+    quest_size_t spell_strength; // is a function of the spell caster's magical power and character type 
 } quest_spell_t;
 
 typedef struct {
@@ -17,15 +30,41 @@ typedef struct {
     quest_size_t spell_code; // can be over-riding eg 00F0 for all water spells
 } quest_undo_spell_t;
 
-void  quest_spell_init();
+void  quest_spell_init(
+    quest_spell_t* spell,
+    quest_component_t* parent,
+    quest_type_t type,
+    quest_info_t* info,
+    quest_size_t code,
+    quest_size_t strength
+);
 
-quest_spell_t* quest_spell_create();
+quest_spell_t* quest_spell_create(
+    mem_arena_t* arena,
+    quest_component_t* parent,
+    quest_type_t type,
+    quest_info_t* info,
+    quest_size_t code,
+    quest_size_t strength 
+);
 
-void quest_undo_spell_init();
+void quest_undo_spell_init() {
+    quest_spell_t* spell,
+    quest_component_t* parent,
+    quest_type_t type,
+    quest_info_t* info,
+    quest_spell_t* source 
+}
 
-quest_undo_spell_t* quest_undo_spell_create( ... quest_spell_t source);
+quest_undo_spell_t* quest_undo_spell_create(
+    mem_arena_t* arena,
+    quest_component_t* parent,
+    quest_type_t type,
+    quest_info_t* info,
+    quest_spell_t* source 
+);
 
-bool quest_component_is_spellbound();
+bool quest_component_is_spellbound(quest_component_t* comp);
 
 /**
  * @brief any item in a quest world can have a spell cast upon it, unless:
