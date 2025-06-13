@@ -17,13 +17,15 @@
 #include "quest_constants.h"
 #include "quest_types.h"
 #include "quest_info.h"
+#include "quest_spell.h" 
 
 typedef struct quest_component_t quest_component_t;
 
 typedef struct quest_component_t {
-    quest_rtti_t rtti;      ///< Unique type+ID combination
-    quest_component_t* parent; ///< Parent container (NULL if root)
-    quest_info_t* info;     //< mutable string information
+    quest_rtti_t rtti;          ///< Unique type+ID combination
+    quest_component_t* parent;  ///< Parent container (NULL if root)
+    quest_info_t* info;         //< mutable string information
+    quest_spell* spell;         //< any item in a quest world can have spell plaed upon it (unless that spell is a no spell)   
 } quest_component_t;
 
 typedef struct {
