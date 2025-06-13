@@ -10,6 +10,8 @@
 #ifndef QUEST_COMPOSITE_H
 #define QUEST_COMPOSITE_H
 
+#include <stdbool.h>
+
 #include "../MEM/mem_arena.h"
 
 #include "quest_rtti.h"
@@ -29,7 +31,7 @@ typedef struct quest_component_t {
     quest_rtti_t rtti;          ///< Unique type+ID combination
     quest_component_t* parent;  ///< Parent container (NULL if root)
     quest_info_t* info;         //< mutable string information
-    quest_spell_t* spell;       //< any item in a quest world can have spell plaed upon it, unless, there is already spell attached
+    quest_spell_t* spell;       //< any item in a quest world can have spell plaed upon it
 } quest_component_t;
 
 typedef struct {
@@ -84,8 +86,11 @@ quest_component_t* quest_component_create(
     quest_info_t* info
 );
 
+bool quest_component_spellbound();
+
 /**
- * @brief any item in a quest world can have a spell cast upon it, unless, there is already spell attached
+ * @brief any item in a quest world can have a spell cast upon it, unless:
+ * 1. there is already spellbound 
  * 
  */
 quest_error_t* quest_component_cast_spell(quest_component_t* comp, quest_spell_t* spell);
