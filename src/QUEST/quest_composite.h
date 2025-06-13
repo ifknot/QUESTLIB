@@ -15,7 +15,6 @@
 #include "../MEM/mem_arena.h"
 
 #include "quest_rtti.h"
-#include "quest_errors.h"
 #include "quest_constants.h"
 #include "quest_types.h"
 #include "quest_info.h"
@@ -90,15 +89,16 @@ bool quest_component_is_spellbound();
 
 /**
  * @brief any item in a quest world can have a spell cast upon it, unless:
- * 1. there is already spellbound 
- * 
+ * 1. component already spellbound with a stronger spell
+ * 2. component has a no spell cast upon it
+ * If a stronger spell is cast it replaces the weaker spell which is returned
  */
-quest_error_t* quest_component_cast_spell(quest_component_t* comp, quest_spell_t* spell);
+quest_spell_t* quest_component_cast_spell(quest_component_t* comp, quest_spell_t* spell);
 
 /**
- * @brief in oder to undo (remove) a spell an undo spell must be cast, after which the item is open to having another spell cast upon it.
+ * @brief in order to undo (remove) a spell a *matching* undo spell must be cast, after which the item is open to having another spell cast upon it.
  */
-quest_error_t* quest_component_undo_spell(quest_component_t* comp, quest_undo_spell_t* undo_spell);
+quest_spell_t* quest_component_undo_spell(quest_component_t* comp, quest_undo_spell_t* undo_spell);
 
 /**
  * @brief Initializes a composite structure with provided values
