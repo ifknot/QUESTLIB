@@ -86,7 +86,7 @@ quest_component_t* quest_component_create(
     quest_info_t* info
 );
 
-bool quest_component_spellbound();
+bool quest_component_is_spellbound();
 
 /**
  * @brief any item in a quest world can have a spell cast upon it, unless:
