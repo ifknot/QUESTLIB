@@ -25,7 +25,7 @@ typedef struct quest_component_t {
     quest_rtti_t rtti;          ///< Unique type+ID combination
     quest_component_t* parent;  ///< Parent container (NULL if root)
     quest_info_t* info;         //< mutable string information
-    quest_spell* spell;         //< any item in a quest world can have spell plaed upon it (unless that spell is a no spell)   
+    quest_spell* spell;         //< any item in a quest world can have spell plaed upon it, unless, there is already spell attached
 } quest_component_t;
 
 typedef struct {
@@ -79,6 +79,17 @@ quest_component_t* quest_component_create(
     quest_type_t type,
     quest_info_t* info
 );
+
+/**
+ * @brief any item in a quest world can have a spell cast upon it, unless, there is already spell attached
+ * 
+ */
+quest_error_t* quest_component_cast_spell(quest_component_t* comp, quest_spell_t* spell);
+
+/**
+ * @brief in oder to undo (remove) a spell an undo spell must be cast, after which the item is open to having another spell cast upon it.
+ */
+quest_error_t* quest_component_undo_spell(quest_component_t* comp, quest_undo_spell_t* undo_spell);
 
 /**
  * @brief Initializes a composite structure with provided values
