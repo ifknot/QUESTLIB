@@ -4,11 +4,10 @@
 typedef enum {
     LOCK_IS_LOCKED   = 0x0001,    
     LOCK_IS_RUSTY    = 0x0002,
-    LOCK_HAS_SPELL   = 0x0004      // has one or more spells on it
 } quest_door_features_t;
 
 typedef struct quest_lock_t {
-    quest_composite_t base;    
+    quest_component_t base;          
     quest_bitmask_t active_features; // defaults to unlocked not rusty 
     quest_size_t combination;
 } quest_lock_t;
