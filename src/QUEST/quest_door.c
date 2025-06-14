@@ -1,6 +1,7 @@
 #include "quest_door.h"
 #include "quest_composite.h"
 #include "quest_connector.h"
+#include "quest_errors.h"
 //#include <assert.h>
 
 void quest_door_init(    // defaults to an *unjoined*, open door with no lock and no hinges e.g an archway
@@ -12,7 +13,8 @@ void quest_door_init(    // defaults to an *unjoined*, open door with no lock an
     quest_size_t strength
 ) {
     quest_connector_init(&door->base, parent, type, info);
-
+    door->weight = weight;
+    door->strength = strength;
 }
 
 quest_door_t* quest_door_create(
@@ -29,8 +31,18 @@ quest_door_t* quest_door_create(
     return door;
 }
 
+bool quest_door_is_open(quest_door_t* door) {
+    return door->features & DOOR_IS_OPEN;
+}
+
 quest_error_t quest_door_open(quest_door_t* door) {
-    return 0;
+    if(!quest_door_is_open(door)) {
+        door->features |= DOOR_IS_OPEN;
+        return QUEST_SUCCESS;
+    }
+    if(door->features & DOOR_HAS_LOCK) {
+        return
+    }
 }
 
 quest_error_t quest_door_close(quest_door_t* door) {
