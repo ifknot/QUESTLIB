@@ -10,16 +10,16 @@ static const quest_connection_direction_t opposite_directions[] = {
 };
 
 // Lookup table to convert direction enum -> bitflag
-static const quest_connection_bitmask_t direction_to_flag[] = {
+static const quest_bitmask_t direction_to_flag[] = {
     FLAG_N, FLAG_NE, FLAG_E, FLAG_SE, FLAG_S, FLAG_SW, FLAG_W, FLAG_NW, FLAG_UP, FLAG_DOWN, FLAG_STAIR
 };
 
 void quest_connector_init(
-    quest_composite_t* comp,
+    quest_connector_t* comp,
     quest_component_t* parent,
     quest_type_t type,
     quest_info_t* info
-)) {
+) {
     quest_composite_init(&comp->base, parent, type, info);
 }
 
@@ -30,7 +30,7 @@ quest_connector_t* quest_connector_create(
     quest_info_t* info
 ) {
     assert(arena && "NULL memory arena!");
-    quest_connector_t* conn = mem_arena_calloc(arena, sizeof(quest_arena_t));
+    quest_connector_t* conn = mem_arena_calloc(arena, sizeof(quest_connector_t));
     quest_connector_init(conn, parent, type, info);
     return conn;
 }

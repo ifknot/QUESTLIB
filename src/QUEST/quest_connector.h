@@ -25,7 +25,7 @@ typedef struct quest_location_t quest_location_t;
  * - Descriptive text
  */
 typedef struct quest_connector_t {
-    quest_composite_t base; 
+    quest_composite_t base;
     quest_location_t* locations[2]; ///< Connected locations [0]=origin, [1]=destination
 } quest_connector_t;
 
@@ -41,7 +41,7 @@ typedef struct quest_connector_t {
  * @endcode
  */
 void quest_connector_init(
-    quest_composite_t* comp,
+    quest_connector_t* comp,
     quest_component_t* parent,
     quest_type_t type,
     quest_info_t* info
@@ -89,9 +89,9 @@ void quest_connector_join(
     quest_connector_t* connector,
     quest_location_t* loc1,
     quest_location_t* loc2,
-    quest_connection_bitmask_t direction
+    quest_bitmask_t direction
 );
 
-void quest_connector_dump(const quest_composite_t* comp, FILE* stream);
+void quest_connector_dump(const quest_connector_t* comp, FILE* stream);
 
 #endif

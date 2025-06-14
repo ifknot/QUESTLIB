@@ -92,6 +92,6 @@ quest_info_t* quest_info_copy(
     const char* string_details
 );
 
-void quest_dump_dump(const quest_composite_t* comp, FILE* stream);
+void quest_info_dump(const quest_info_t* comp, FILE* stream);
 
 #endif

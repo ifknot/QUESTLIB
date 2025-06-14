@@ -2,7 +2,7 @@
  * @file quest_door.h
  * @brief Door connector between locations
  *
- * Specialized connector 
+ * Specialized connector
  *
  * @code
  *
@@ -14,24 +14,25 @@
 #include "quest_connector.h"
 #include "quest_composite.h"
 #include "quest_errors.h"
+#include "quest_key.h"
 
 typedef enum {
-    DOOR_IS_OPEN     = 0x0001,     // can go striaght through - eg an open arch 
+    DOOR_IS_OPEN     = 0x0001,     // can go striaght through - eg an open arch
     DOOR_IS_LOCKABLE = 0x0002,     // so can add lock(s) - or not eg open arch/window
-    DOOR_HAS_LOCK    = 0x0004,     // has one or more locks 
-    DOOR_IS_RUSTY    = 0x0008,     // has rusty hinges that might need some oil  
+    DOOR_HAS_LOCK    = 0x0004,     // has one or more locks
+    DOOR_IS_RUSTY    = 0x0008,     // has rusty hinges that might need some oil
     DOOR_HAS_SPELL   = 0x0010      // has one or more spells on it
 } quest_door_features_t;
 
 typedef enum {
-    DOOR_PAPER     = 0,    
+    DOOR_PAPER     = 0,
     DOOR_WOOD      = 10,
     DOOR_IRON      = 20,
     DOOR_BRONZE    = 30
 } quest_door_strengths_t;    // how easy it is to smash a door or safe to hide behind depending on NPC
 
 typedef struct quest_door_t {
-    quest_connector_t base;    
+    quest_connector_t base;
     quest_bitmask_t active_features;
     quest_size_t door_weight; // strength needed to move the door maybe level up to open
     quest_size_t door_strength; // can you smash the door?
@@ -58,10 +59,6 @@ quest_door_t* quest_door_create(
 quest_error_t quest_door_open(quest_door_t* door);
 
 quest_error_t quest_door_close(quest_door_t* door);
-
-quest_error_t quest_door_lock(quest_door_t* door, quest_key_t* key);
-
-quest_error_t quest_door_unlock(quest_door_t* door, quest_key_t* key);
 
 void quest_door_dump(const quest_composite_t* comp, FILE* stream);
 
