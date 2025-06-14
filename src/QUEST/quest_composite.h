@@ -19,8 +19,6 @@
 #include "quest_types.h"
 #include "quest_info.h"
 
-typedef struct quest_spell_t quest_spell_t;    // forward declaration
-
 typedef struct quest_component_t quest_component_t;
 
 /**
@@ -30,7 +28,6 @@ typedef struct quest_component_t {
     quest_rtti_t rtti;          ///< Unique type+ID combination
     quest_component_t* parent;  ///< Parent container (NULL if root)
     quest_info_t* info;         //< mutable string information
-    quest_spell_t* spell;       //< any item in a quest world can have spell plaed upon it
 } quest_component_t;
 
 typedef struct {
@@ -177,29 +174,47 @@ quest_component_t* quest_composite_remove(
 );
 
 /**
- * @brief Finds a child by fingerprint
+ * @brief Finds a specific child by its unique fingerprint
  * @param parent Container to search
  * @param fingerprint Unique identifier to find
  * @return Pointer to child component or NULL
  *
  * @code
- * // Example 1: Finding equipped armor
- * quest_component_t* helm = quest_composite_find(
- *     player->equipment,
- *     (quest_fingerprint_t){QUEST_ARMOR_HELMET, 1}
- * );
- * if (helm) apply_armor_bonus(helm);
  *
- * // Example 2: Finding by dynamic type
- * quest_component_t* first_gold = quest_composite_find(
- *     inventory,
- *     (quest_fingerprint_t){QUEST_ITEM_GOLD, 0} // ID 0 matches any gold
- * );
  * @endcode
  */
-quest_component_t* quest_composite_find(
+quest_component_t* quest_composite_find_fingerprint(
     quest_composite_t* parent,
     quest_fingerprint_t fingerprint
+);
+
+/**
+ *
+ */
+quest_size_t quest_composite_count_type(
+    quest_composite_t* parent,
+    quest_type_t target_type
+);
+
+/**
+ * @brief Finds the first child of a specific type
+ * @param parent Container to search
+ * @param type identifier to find
+ */
+quest_component_t* quest_composite_find_type(
+    quest_composite_t* parent,
+    quest_type_t target_type
+);
+
+/**
+ * @brief Find all the children of a target type and enumerate their pointers in an array
+ *
+ * @return count of target type enumerated
+ */
+quest_size_t quest_composite_enumerate_type(
+    quest_composite_t* parent,
+    quest_type_t target_type,
+    quest_component_t** enumeration
 );
 
 /**

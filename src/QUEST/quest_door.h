@@ -22,9 +22,6 @@
 typedef enum {
     DOOR_IS_OPEN     = 0x0001,     // can go striaght through - eg an open arch
     DOOR_IS_LOCKABLE = 0x0002,     // so can add lock(s) - or not eg open arch/window
-    DOOR_HAS_LOCK    = 0x0004,     // has one or more locks
-    DOOR_HAS_HINGES  = 0x0008,     // has hinges (that might need some oil)
-
 } quest_door_features_t;
 
 typedef enum {
@@ -38,7 +35,7 @@ typedef struct quest_door_t {
     quest_connector_t base;
     quest_size_t weight; // strength needed to move the door maybe level up to open
     quest_size_t strength; // can you smash the door?
-    quest_bitmask_t features;
+    quest_bitmask_t features; // upto 16 features
 } quest_door_t;
 
 void quest_door_init(    // defaults to an *unjoined*, open door with no lock and no hinges e.g an archway

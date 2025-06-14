@@ -1,17 +1,26 @@
 #ifndef QUEST_OBJECT_TYPES_H
 #define QUEST_OBJECT_TYPES_H
 
-typedef enum  {     // minimum set of quest game objects
+// RTTI code one to one realtionship for the quest objects as expressed as C structs in the quest folder
+typedef enum  {
     QUEST_NULL = 0,
-
-    QUEST_LOCATION = 10,
-    QUEST_LOCATION_END = QUEST_LOCATION + 1,
-
-    QUEST_LOCK = QUEST_LOCATION_END,
-    QUEST_LOCK_RUSTY = QUEST_LOCK + 1,
-    QUEST_LOCK_END = QUEST_LOCK_RUSTY +1,
-
-    QUEST_KEY = QUEST_LOCK_END + 1
+    QUEST_CONTAINER, // ie quest_composite
+    QUEST_LOCATION,
+    QUEST_DOOR,
+    QUEST_LOCK,
+    QUEST_KEY,
+    QUEST_SPELL,
+    // todo...
+    QUEST_SWORD,
+    QUEST_CHEST,
+    QUEST_GOLD,
+    QUEST_RING,
+    QUEST_SCROLL,
+    QUEST_POTION,
+    QUEST_INVENTORY,
+    QUEST_PLAYER,
+    QUEST_MERCHANT,
+    QUEST_DUNGEON
 
 } quest_object_t;
 

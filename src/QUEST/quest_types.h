@@ -60,4 +60,12 @@ typedef enum {
     FLAG_STAIR  = 0x0400
 } quest_connection_flags_t;
 
+// Sterngth of quest objects
+typedef enum {
+    STRENGTH_NONE   = 0,
+    STRENGTH_WEAK   = 8,
+    STRENGTH_NORMAL = 16,
+    STRENGTH_STRONG = 32
+} quest_strength_t;
+
 #endif

@@ -81,7 +81,7 @@ quest_component_t* quest_composite_remove(quest_composite_t* parent, quest_compo
     return NULL;
 }
 
-quest_component_t* quest_composite_find(quest_composite_t* parent, quest_fingerprint_t fingerprint) {
+quest_component_t* quest_composite_find_fingerprint(quest_composite_t* parent, quest_fingerprint_t fingerprint) {
     assert(parent && "NULL parent!");
     assert(parent->child_count > 0 && "EMPTY children array!");
 
@@ -91,6 +91,51 @@ quest_component_t* quest_composite_find(quest_composite_t* parent, quest_fingerp
         }
     }
     return NULL;
+}
+
+quest_size_t quest_composite_count_type(
+    quest_composite_t* parent,
+    quest_type_t target_type
+) {
+    assert(parent && "NULL parent!");
+    assert(parent->child_count > 0 && "EMPTY children array!");
+
+    quest_size_t count = 0;
+    for (quest_size_t i = 0; i < parent->child_count; ++i) {
+        if (parent->children[i]->rtti.parts.type == target_type) {
+            count++;
+        }
+    }
+    return count;
+}
+
+quest_component_t* quest_composite_find_type(
+    quest_composite_t* parent,
+    quest_type_t target_type
+) {
+    assert(parent && "NULL parent!");
+    assert(parent->child_count > 0 && "EMPTY children array!");
+
+    for (quest_size_t i = 0; i < parent->child_count; ++i) {
+        if (parent->children[i]->rtti.parts.type == target_type) {
+            return parent->children[i];
+        }
+    }
+    return NULL;
+}
+
+quest_size_t quest_composite_enumerate_type(
+    quest_composite_t* parent,
+    quest_type_t target_type,
+    quest_component_t** enumeration
+) {
+    quest_size_t count = 0;
+    for (quest_size_t i = 0; i < parent->child_count; ++i) {
+        if (parent->children[i]->rtti.parts.type == target_type) {
+            enumeration[count++] = parent->children[i];
+        }
+    }
+    return count;
 }
 
 quest_size_t quest_composite_transfer_all(quest_composite_t* dst, quest_composite_t* src) {

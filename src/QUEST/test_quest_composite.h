@@ -46,12 +46,12 @@ static quest_component_t* create_test_item(quest_type_t type, quest_size_t uid, 
 
 TEST(test_add_remove_single) {
     test_setup();
-    quest_component_t* sword = create_test_item(QUEST_ITEM_SWORD, 1, "Excalibur");
+    quest_component_t* sword = create_test_item(QUEST_SWORD, 1, "Excalibur");
     // Test create component
     EXPECT_STREQ(sword->info->brief, "Excalibur");
     EXPECT_STREQ(sword->info->details, "Test item");
     EXPECT_EQ(sword->parent, (quest_component_t*)0xBEEF);
-    EXPECT_EQ(sword->rtti.parts.type, QUEST_ITEM_SWORD);
+    EXPECT_EQ(sword->rtti.parts.type, QUEST_SWORD);
     EXPECT_EQ(sword->rtti.parts.uid, 1);
     V(quest_component_dump(sword, stdout););
     quest_composite_t* bag = create_test_composite(QUEST_CONTAINER, "Leather Bag");
@@ -63,8 +63,8 @@ TEST(test_add_remove_single) {
     EXPECT_EQ(bag->base.rtti.parts.uid, 2);
     V(quest_composite_dump(bag, stdout););
     // Test add
-    EXPECT(sword->parent == (quest_component_t*)0xF00D);
     quest_composite_add(bag, sword);
+    EXPECT_EQ(sword->parent, (quest_component_t*)bag);
     EXPECT(bag->child_count == 1);
     EXPECT(sword->parent == (quest_component_t*)bag);
     V(quest_composite_dump(bag, stdout););
@@ -86,13 +86,13 @@ TEST(test_add_capacity) {
     for (quest_size_t i = 0; i < QUEST_COMPOSITE_MAX_CHILDREN; i++) {
         char name[32];
         snprintf(name, sizeof(name), "Gold Coin %zu", i);
-        quest_component_t* gold = create_test_item(QUEST_ITEM_GOLD, i, name);
+        quest_component_t* gold = create_test_item(QUEST_GOLD, i, name);
         quest_composite_add(chest, gold);
         EXPECT(chest->child_count == i + 1);
     }
 
     // Test overflow
-    quest_component_t* overflow = create_test_item(QUEST_ITEM_RING, 99, "Overflow Ring");
+    quest_component_t* overflow = create_test_item(QUEST_RING, 99, "Overflow Ring");
     EXPECT(chest->child_count == QUEST_COMPOSITE_MAX_CHILDREN);
     //quest_composite_add(chest, overflow); // Should silently fail (EXPECT in debug)
     EXPECT(chest->child_count == QUEST_COMPOSITE_MAX_CHILDREN);
@@ -107,9 +107,9 @@ TEST(test_transfer_all) {
     quest_composite_t* inv = create_test_composite(QUEST_INVENTORY, "Player Inventory");
 
     // Populate chest with mixed items
-    quest_composite_add(chest, create_test_item(QUEST_ITEM_GOLD, 1, "Gold Coin"));
-    quest_composite_add(chest, create_test_item(QUEST_ITEM_SCROLL, 1, "Scroll of Fire"));
-    quest_composite_add(chest, create_test_item(QUEST_ITEM_POTION, 1, "Health Potion"));
+    quest_composite_add(chest, create_test_item(QUEST_GOLD, 1, "Gold Coin"));
+    quest_composite_add(chest, create_test_item(QUEST_SCROLL, 1, "Scroll of Fire"));
+    quest_composite_add(chest, create_test_item(QUEST_POTION, 1, "Health Potion"));
 
     EXPECT(chest->child_count == 3);
     EXPECT(inv->child_count == 0);
@@ -135,24 +135,24 @@ TEST(test_transfer_type) {
     quest_composite_t* player = create_test_composite(QUEST_PLAYER, "Hero");
 
     // Create mixed inventory (3 gold, 2 potions)
-    quest_composite_add(merchant, create_test_item(QUEST_ITEM_GOLD, 1, "Gold Nugget"));
-    quest_composite_add(merchant, create_test_item(QUEST_ITEM_POTION, 1, "Health Potion"));
-    quest_composite_add(merchant, create_test_item(QUEST_ITEM_GOLD, 2, "Gold Bar"));
-    quest_composite_add(merchant, create_test_item(QUEST_ITEM_POTION, 2, "Mana Potion"));
-    quest_composite_add(merchant, create_test_item(QUEST_ITEM_GOLD, 3, "Gold Coin"));
+    quest_composite_add(merchant, create_test_item(QUEST_GOLD, 1, "Gold Nugget"));
+    quest_composite_add(merchant, create_test_item(QUEST_POTION, 1, "Health Potion"));
+    quest_composite_add(merchant, create_test_item(QUEST_GOLD, 2, "Gold Bar"));
+    quest_composite_add(merchant, create_test_item(QUEST_POTION, 2, "Mana Potion"));
+    quest_composite_add(merchant, create_test_item(QUEST_GOLD, 3, "Gold Coin"));
 
     EXPECT(merchant->child_count == 5);
     EXPECT(player->child_count == 0);
 
     // Test gold transfer
-    size_t gold_transferred = quest_composite_transfer_type(player, merchant, QUEST_ITEM_GOLD);
+    size_t gold_transferred = quest_composite_transfer_type(player, merchant, QUEST_GOLD);
     EXPECT(gold_transferred == 3);
     EXPECT(merchant->child_count == 2); // Potions remain
     EXPECT(player->child_count == 3);   // All gold transferred
 
     // Verify no gold left in merchant
     for (quest_size_t i = 0; i < merchant->child_count; i++) {
-        EXPECT(merchant->children[i]->rtti.parts.type != QUEST_ITEM_GOLD);
+        EXPECT(merchant->children[i]->rtti.parts.type != QUEST_GOLD);
     }
 
     test_teardown();
@@ -162,19 +162,19 @@ TEST(test_find_component) {
     test_setup();
 
     quest_composite_t* dungeon = create_test_composite(QUEST_DUNGEON, "Dark Crypt");
-    quest_component_t* key = create_test_item(QUEST_ITEM_KEY, 42, "Rusty Key");
-    quest_component_t* fake_key = create_test_item(QUEST_ITEM_KEY, 99, "Fake Key");
+    quest_component_t* key = create_test_item(QUEST_KEY, 42, "Rusty Key");
+    quest_component_t* fake_key = create_test_item(QUEST_KEY, 99, "Fake Key");
 
     quest_composite_add(dungeon, key);
 
     // Test successful find
     quest_fingerprint_t target = key->rtti.fingerprint;
-    quest_component_t* found = quest_composite_find(dungeon, target);
+    quest_component_t* found = quest_composite_find_fingerprint(dungeon, target);
     EXPECT(found == key);
 
     // Test not found
     quest_fingerprint_t fake_target = fake_key->rtti.fingerprint;
-    EXPECT(quest_composite_find(dungeon, fake_target) == NULL);
+    EXPECT(quest_composite_find_fingerprint(dungeon, fake_target) == NULL);
 
     test_teardown();
 }

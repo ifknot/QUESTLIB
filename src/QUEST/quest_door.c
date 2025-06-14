@@ -26,6 +26,7 @@ quest_door_t* quest_door_create(
     quest_size_t strength
 ) {
     assert(arena && "NULL memory arena!");
+
     quest_door_t* door = mem_arena_calloc(arena, sizeof(quest_door_t));
     quest_door_init(door, parent, type, info, weight, strength);
     return door;
@@ -36,13 +37,7 @@ bool quest_door_is_open(quest_door_t* door) {
 }
 
 quest_error_t quest_door_open(quest_door_t* door) {
-    if(!quest_door_is_open(door)) {
-        door->features |= DOOR_IS_OPEN;
-        return QUEST_SUCCESS;
-    }
-    if(door->features & DOOR_HAS_LOCK) {
-        return
-    }
+    return QUEST_SUCCESS;
 }
 
 quest_error_t quest_door_close(quest_door_t* door) {
