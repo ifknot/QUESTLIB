@@ -104,6 +104,52 @@ mem_size_t private_mem_arena_dos_delete(mem_arena_t* arena) {
     free(arena);
     return freed;
 }
+
+/* ----------------- C99-Specific Implementation ----------------- */
+
+/**
+ * @brief Creates a C memory arena via malloc
+ * @param byte_count Requested size in bytes
+ * @return Initialized arena or NULL on failure
+ */
+mem_arena_t* private_mem_arena_c_new(mem_size_t byte_count) {
+    assert(byte_count > 0);
+    if (!byte_count) {
+        return NULL;
+    }
+
+    mem_arena_t* arena = (mem_arena_t*)malloc(sizeof(mem_arena_t));
+    if (!arena) {
+        return NULL;
+    }
+
+    arena->policy = MEM_ARENA_POLICY_C;
+    arena->start.ptr = malloc(byte_count);
+    if (!arena->start.ptr) {
+        free(arena);
+        return NULL;
+    }
+
+    arena->free = arena->start.ptr;
+    arena->end = arena->start.ptr + byte_count;
+
+    return arena;
+}
+
+/**
+ * @brief Releases C memory arena
+ * @param arena Valid C arena
+ * @return Bytes freed
+ */
+mem_size_t private_mem_arena_c_delete(mem_arena_t* arena) {
+    assert(arena && arena->policy == MEM_ARENA_POLICY_C);
+    mem_size_t freed = mem_arena_capacity(arena);
+    free(arena->start.ptr);
+    free(arena);
+    return freed;
+}
+
+
 /* ----------------- Public Interface ----------------- */
 
 mem_arena_t* mem_arena_create(mem_arena_policy_t policy, mem_size_t byte_request) {
@@ -112,6 +158,7 @@ mem_arena_t* mem_arena_create(mem_arena_policy_t policy, mem_size_t byte_request
         case MEM_ARENA_POLICY_DOS:
             return private_mem_arena_dos_new(byte_request);
         case MEM_ARENA_POLICY_C:
+            return private_mem_arena_c_new(byte_request);
         default:
             fprintf(stderr, "Unimplemented policy: %d\n", policy);
             return NULL;
@@ -126,7 +173,8 @@ mem_size_t mem_arena_delete(mem_arena_t* arena) {
     switch(arena->policy) {
         case MEM_ARENA_POLICY_DOS:
             return private_mem_arena_dos_delete(arena);
-        case MEM_ARENA_POLICY_C:	// TODO
+        case MEM_ARENA_POLICY_C:
+            return private_mem_arena_c_delete(arena);
         default:
             fprintf(stderr, "Unimplemented policy: %d\n", arena->policy);
             return 0;
