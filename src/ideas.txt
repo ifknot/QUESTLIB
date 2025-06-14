@@ -1,5 +1,7 @@
 Text Adventure
 
+A forest with glowing unicorn that always stays ahead of the player and if followed will lead player around endlessly
+
 /*
 typedef struct quest_item_s quest_item_t;
 

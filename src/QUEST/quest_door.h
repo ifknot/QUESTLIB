@@ -11,50 +11,56 @@
 #ifndef QUEST_DOOR_H
 #define QUEST_DOOR_H
 
+#include <stdbool.h>
+
 #include "quest_connector.h"
 #include "quest_composite.h"
 #include "quest_errors.h"
 #include "quest_key.h"
+#include "quest_types.h"
 
 typedef enum {
     DOOR_IS_OPEN     = 0x0001,     // can go striaght through - eg an open arch
     DOOR_IS_LOCKABLE = 0x0002,     // so can add lock(s) - or not eg open arch/window
     DOOR_HAS_LOCK    = 0x0004,     // has one or more locks
-    DOOR_IS_RUSTY    = 0x0008,     // has rusty hinges that might need some oil
-    DOOR_HAS_SPELL   = 0x0010      // has one or more spells on it
+    DOOR_HAS_HINGES  = 0x0008,     // has hinges (that might need some oil)
+
 } quest_door_features_t;
 
 typedef enum {
-    DOOR_PAPER     = 0,
-    DOOR_WOOD      = 10,
-    DOOR_IRON      = 20,
-    DOOR_BRONZE    = 30
+    DOOR_PAPER     = 16,
+    DOOR_WOOD      = 32,
+    DOOR_IRON      = 64,
+    DOOR_BRONZE    = 128
 } quest_door_strengths_t;    // how easy it is to smash a door or safe to hide behind depending on NPC
 
 typedef struct quest_door_t {
     quest_connector_t base;
-    quest_bitmask_t active_features;
-    quest_size_t door_weight; // strength needed to move the door maybe level up to open
-    quest_size_t door_strength; // can you smash the door?
+    quest_size_t weight; // strength needed to move the door maybe level up to open
+    quest_size_t strength; // can you smash the door?
+    quest_bitmask_t features;
 } quest_door_t;
 
-void quest_door_init(    // defaults to an open door with no lock
+void quest_door_init(    // defaults to an *unjoined*, open door with no lock and no hinges e.g an archway
     quest_door_t* door,
-     quest_type_t type,
-    quest_info_t* info,
-    quest_location_t* loc1,
-    quest_location_t* loc2
-);
-
-quest_door_t* quest_door_create(
-    mem_arena_t* arena,
-    quest_location_t* loc1,
-    quest_location_t* loc2,
+    quest_component_t* parent,
     quest_type_t type,
     quest_info_t* info,
-    bool locked,
-    quest_rtti_t key
+    quest_size_t weight,
+    quest_size_t strength
 );
+
+// note doors are *not* joined to their locations when created
+quest_door_t* quest_door_create(
+    mem_arena_t* arena,
+    quest_component_t* parent,
+    quest_type_t type,
+    quest_info_t* info,
+    quest_size_t weight,
+    quest_size_t strength
+);
+
+bool quest_door_is_open(quest_door_t* door);
 
 quest_error_t quest_door_open(quest_door_t* door);
 
