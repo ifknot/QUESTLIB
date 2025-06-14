@@ -2,10 +2,14 @@
  * @file quest_composite.h
  * @brief Composite pattern implementation for game object hierarchies
  *
- * Provides parent-child relationship management for game entities using:
- * - Fixed-size arrays for memory safety
- * - RTTI fingerprints for identification
- * - Error-checked operations
+ * @details Provides a parent-child relationship management system for game entities with:
+ * - Memory safety through arena allocation
+ * - Runtime type identification (RTTI)
+ * - Fixed maximum children count for predictable behavior
+ * - Type-safe operations with compile-time checks
+ *
+ * The composite pattern allows treating individual objects and compositions uniformly.
+ * All game objects inherit from quest_component_t, while containers use quest_composite_t.
  */
 #ifndef QUEST_COMPOSITE_H
 #define QUEST_COMPOSITE_H
@@ -189,7 +193,19 @@ quest_component_t* quest_composite_find_fingerprint(
 );
 
 /**
+ * @brief Counts children of a specific type in a composite
+ * @param parent Container to search (must not be NULL)
+ * @param target_type Type identifier to count
+ * @return Number of children matching the target type
  *
+ * @note This is an O(n) operation that scans all children.
+ *       For frequent type counting, consider maintaining separate counters.
+ *
+ * @code
+ * // Example: Counting treasure in a room
+ * quest_size_t treasure_count = quest_composite_count_type(room, QUEST_TREASURE);
+ * printf("Room contains %zu treasure items\n", treasure_count);
+ * @endcode
  */
 quest_size_t quest_composite_count_type(
     quest_composite_t* parent,
@@ -197,9 +213,21 @@ quest_size_t quest_composite_count_type(
 );
 
 /**
- * @brief Finds the first child of a specific type
- * @param parent Container to search
- * @param type identifier to find
+ * @brief Finds a child component by its unique fingerprint identifier
+ * @param parent Composite container to search (must not be NULL)
+ * @param fingerprint Unique identifier to locate (see quest_rtti.h)
+ * @return Pointer to found child component, or NULL if not found
+ *
+ * @details Fingerprints provide O(1) comparison but require O(n) search time.
+ *          For better performance with frequent lookups, consider maintaining
+ *          a separate hash table or dictionary structure.
+ *
+ * @note Fingerprints are guaranteed unique across all game objects and remain
+ *       constant for an object's lifetime. They combine:
+ *       - Type information
+ *       - Unique serial number
+ *       - Creation timestamp
+ *
  */
 quest_component_t* quest_composite_find_type(
     quest_composite_t* parent,
@@ -207,9 +235,78 @@ quest_component_t* quest_composite_find_type(
 );
 
 /**
- * @brief Find all the children of a target type and enumerate their pointers in an array
+ * @brief Collects all children of a specific type into an array
+ * @param parent Composite container to search (must not be NULL)
+ * @param target_type Component type to enumerate (from quest_types.h)
+ * @param enumeration [out] Pre-allocated array to store results (must have capacity for all matching children)
+ * @return Number of matching components found and stored in enumeration array
  *
- * @return count of target type enumerated
+ * @details This function provides efficient bulk processing of components by:
+ * - Performing a single O(n) scan of children
+ * - Filtering by type in the same pass
+ * - Storing results in caller-provided memory
+ *
+ * @note For empty composites or no matches, returns 0 and leaves enumeration unchanged
+ *
+ * @warning Caller must ensure enumeration array has sufficient capacity (can check via quest_composite_count_type first)
+ *
+ * @code
+ * // --- EXAMPLE 1: Basic Type Enumeration ---
+ * quest_composite_t* dungeon_room = ;
+ * quest_component_t* weapons[10]; // Enough for max expected
+ *
+ * quest_size_t weapon_count = quest_composite_enumerate_type(
+ *     dungeon_room,
+ *     QUEST_WEAPON,
+ *     weapons
+ * );
+ *
+ * for (quest_size_t i = 0; i < weapon_count; i++) {
+ *     printf("Weapon %zu: %s\n", i+1, weapons[i]->info->name);
+ * }
+ *
+ * // --- EXAMPLE 2: Safe Enumeration with Capacity Checking ---
+ * #define MAX_TREASURE 20
+ * quest_composite_t* dragon_hoard = ;
+ * quest_component_t* treasure[MAX_TREASURE];
+ *
+ * // Check capacity first
+ * quest_size_t treasure_types = quest_composite_count_type(dragon_hoard, QUEST_TREASURE);
+ * if (treasure_types > MAX_TREASURE) {
+ *     printf("Warning: Too much treasure (%zu), only taking %d\n",
+ *            treasure_types, MAX_TREASURE);
+ * }
+ *
+ * // Safe enumeration with array bounds
+ * quest_size_t collected = quest_composite_enumerate_type(
+ *     dragon_hoard,
+ *     QUEST_TREASURE,
+ *     treasure
+ * );
+ *
+ * // --- EXAMPLE 3: Processing Specific Entity Types ---
+ * // Define important NPC types
+ * const quest_type_t NPC_TYPES[] = {
+ *     QUEST_MERCHANT,
+ *     QUEST_GUARD,
+ *     QUEST_QUESTGIVER
+ * };
+ *
+ * quest_composite_t* town = ;
+ * quest_component_t* npcs[50];
+ * quest_size_t total_npcs = 0;
+ *
+ * // Collect all types of NPCs
+ * for (int i = 0; i < sizeof(NPC_TYPES)/sizeof(NPC_TYPES[0]); i++) {
+ *     total_npcs += quest_composite_enumerate_type(
+ *         town,
+ *         NPC_TYPES[i],
+ *         npcs + total_npcs // Append to array
+ *     );
+ * }
+ *
+ * printf("Town contains %zu NPCs\n", total_npcs);
+ * @endcode
  */
 quest_size_t quest_composite_enumerate_type(
     quest_composite_t* parent,

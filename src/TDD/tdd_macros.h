@@ -1,9 +1,8 @@
 /**
  * @file tdd_macros.h
  * @brief Minimalist Test-Driven Development (TDD) framework
- * @author (modified version of) Axel Lindeberg aka u/SuperSmurfen
+ * @details Inspired by Axel Lindeberg aka u/SuperSmurfen but significantly extending
  * @see Original implementation: https://github.com/AxlLind/libwebb/blob/main/tests/libtest.h
- * @see Example usage: https://github.com/AxlLind/libwebb/blob/main/tests/test_http.c
  *
  * @defgroup tdd_framework Test Framework
  * @{
@@ -17,6 +16,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 
 #include "tdd_progress.h"
 
@@ -59,6 +59,31 @@
                    "  Expected: \"%s\"\n"                               \
                    "  strcmp() = %d\n",                                \
                    _FILENAME, __LINE__, #a, #op, #b, (a), (b), cmp);    \
+            *pass = false;                                              \
+        }                                                               \
+    } while (0)
+
+#define _EXPECT_NULLCHECK(ptr, should_be_null)                         \
+    do {                                                                \
+        bool is_null = (ptr == NULL);                                   \
+        if (is_null != should_be_null) {                                \
+            printf("\n%s:%d - FAILED: %s %s NULL\n"                     \
+                   "  Pointer: %p\n",                                   \
+                   _FILENAME, __LINE__, #ptr,                           \
+                   should_be_null ? "should be" : "should not be",      \
+                   (void*)(ptr));                                       \
+            *pass = false;                                              \
+        }                                                               \
+    } while (0)
+
+#define _EXPECT_STRCONTAINS(haystack, needle)                          \
+    do {                                                                \
+        const char* _hs = (haystack);                                   \
+        const char* _nd = (needle);                                     \
+        if (_hs == NULL || _nd == NULL || strstr(_hs, _nd) == NULL) {  \
+            printf("\n%s:%d - FAILED: \"%s\" should contain \"%s\"\n"   \
+                   "  Full string: \"%s\"\n",                           \
+                   _FILENAME, __LINE__, #haystack, #needle, _hs);       \
             *pass = false;                                              \
         }                                                               \
     } while (0)
@@ -141,7 +166,28 @@
  */
 #define EXPECT_STRNEQ(a, b) _EXPECT_STRCOMPARE(a, b, !=, "STRNEQ")
 
+/**
+ * @brief Expects a string to contain a substring (non-fatal)
+ * @param haystack String to search in
+ * @param needle Substring to find
+ */
+#define EXPECT_STR_CONTAINS(haystack, needle) _EXPECT_STRCONTAINS(haystack, needle)
 
+// =============================================
+// Pointer Comparisons
+// =============================================
+
+/**
+ * @brief Expects pointer to be NULL (non-fatal)
+ * @param ptr Pointer to check
+ */
+#define EXPECT_NULL(ptr) _EXPECT_NULLCHECK(ptr, true)
+
+/**
+ * @brief Expects pointer to not be NULL (non-fatal)
+ * @param ptr Pointer to check
+ */
+#define EXPECT_NOT_NULL(ptr) _EXPECT_NULLCHECK(ptr, false)
 
 /**
  * @brief Test case structure
@@ -176,38 +222,26 @@ typedef struct {
  *          - Failure counting
  *          - Verbosity control
  */
-#ifndef NDEBUG
-#define RUN_TESTS(...)                                                          \
-    int run_tests(void) {                                                       \
-        const test_t* tests[] = {__VA_ARGS__};                                  \
-        int failures = 0;                                                       \
-        for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {         \
-            bool passed = true;                                                 \
-            tests[i]->fn(&passed);                                              \
-            printf("\n%s: %s\n", passed ? "PASS" : "FAIL", tests[i]->name); \
-            if (!passed)                                                        \
-                failures++;                                                     \
-        }                                                                       \
-        V(printf("Failures = %i", failures););                                  \
-        return failures;                                                        \
-    }
-#else
-#define RUN_TESTS(...)                                                          \
-    int run_tests(void) {                                                       \
-        const test_t* tests[] = {__VA_ARGS__};                                  \
-        int iterations = sizeof(tests) / sizeof(tests[0]);                      \
-        int failures = 0;                                                       \
-        for (size_t i = 0; i < iterations; i++) {                               \
-            bool passed = true;                                                 \
-            tests[i]->fn(&passed);                                              \
-            printf("%c",'.');                                                   \
-            fflush(stdout);                                                     \
-            if (!passed)                                                        \
-                failures++;                                                     \
-        }                                                                       \
-        return failures;                                                        \
-    }
-#endif
+ #define RUN_TESTS(...)                                                  \
+     int run_tests(void) {                                               \
+         const test_t* tests[] = {__VA_ARGS__};                          \
+         test_summary_t summary = {0};                                   \
+         summary.suite_name = _FILENAME;                                 \
+         clock_t start = clock();                                        \
+                                                                         \
+         for (size_t i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {   \
+             bool passed = true;                                         \
+             tests[i]->fn(&passed);                                      \
+             summary.total++;                                            \
+             passed ? summary.passed++ : summary.failed++;               \
+         }                                                               \
+                                                                         \
+         summary.time_elapsed = (double)(clock() - start) / CLOCKS_PER_SEC; \
+         tdd_generate_report(summary, stdout);                           \
+         tdd_save_history(summary);                                      \
+         return summary.failed;                                          \
+     }
+
 #endif
 
 /** @} */ // end of tdd_framework group

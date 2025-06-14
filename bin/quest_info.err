@@ -1,3 +1,0 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_info.c(11): Warning! W303: Parameter 'size_deatils' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/../MEM/mem_types.h(48): Warning! W202: Symbol 'default_mem_segoff_t' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/../MEM/mem_arena.h(33): Warning! W202: Symbol 'mem_policy_info' has been defined, but not referenced

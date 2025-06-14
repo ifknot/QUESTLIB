@@ -2,7 +2,7 @@
 #define TEST_MAIN_H
 
 
-//#include "TDD/test_tdd.h"
+#include "TDD/test_tdd_framework.h"
 //#include "DOS/test_dos_services.h"
 //#include "STR/test_str.h"
 //#include "FILE/test_file.h"
@@ -10,18 +10,18 @@
 //#include "MEM/test_mem_arena.h"
 //#include "PARSE/test_parse_dictionary.h"
 //#include "QUEST/test_quest_rtti_uid.h"
-#include "QUEST/test_quest_composite.h"
+//#include "QUEST/test_quest_composite.h"
 //#include "QUEST/test_quest_location.h"
 
-RUN_TESTS( /*TDD_TESTS,
-    DOS_SERVICES_TESTS,
-    FILE_TESTS,
-    STR_TESTS,
-    TOOLS_TESTS,
-    ARENA_TESTS*/
+RUN_TESTS( TDD_FRAMEWORK_TESTS,
+    //DOS_SERVICES_TESTS,
+    //FILE_TESTS,
+    //STR_TESTS,
+    //TOOLS_TESTS,
+    //ARENA_TESTS*
     //DICTIONARY_TESTS
     //QUEST_RTTI_TESTS,
-    QUEST_COMPOSITE_TESTS
+    //QUEST_COMPOSITE_TESTS
     //QUEST_LOCATION_TESTS
     // DOOR
     // CONNECTOR

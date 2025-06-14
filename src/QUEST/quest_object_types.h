@@ -20,7 +20,17 @@ typedef enum  {
     QUEST_INVENTORY,
     QUEST_PLAYER,
     QUEST_MERCHANT,
-    QUEST_DUNGEON
+    QUEST_DUNGEON,
+    QUEST_ARMOR,
+    QUEST_ROOM,
+    QUEST_BOOK,
+    QUEST_SHIELD,
+    QUEST_TAVERN,
+    QUEST_NPC,
+    QUEST_CHAIR,
+    QUEST_TABLE,
+    QUEST_LIBRARY,
+    QUEST_GEM
 
 } quest_object_t;
 
