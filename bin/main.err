@@ -1,8 +1,11 @@
-/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_composite.h(340): Warning! W106: Parameter 2: Constant out of range - truncated
-/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_composite.h(340): Note! I2003: source conversion type is 'unsigned long'
-/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_composite.h(340): Note! I2004: target conversion type is 'unsigned short'
-/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_composite.h(340): Note! I2002: 'quest_component_set_features' defined in: /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.h(323)
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(60): Warning! W106: Constant out of range - truncated
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(60): Note! I2003: source conversion type is 'long'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(60): Note! I2004: target conversion type is 'int'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(56): Warning! W303: Parameter 'pass' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(88): Warning! W201: Unreachable code
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(96): Warning! W106: Constant out of range - truncated
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(96): Note! I2003: source conversion type is 'long'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(96): Note! I2004: target conversion type is 'int'
 /Users/jeremythornton/dosbox/QUESTLIB/src/main.c(5): Warning! W303: Parameter 'argv' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/main.c(5): Warning! W303: Parameter 'argc' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/../MEM/mem_types.h(48): Warning! W202: Symbol 'default_mem_segoff_t' has been defined, but not referenced
-/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/../MEM/mem_arena.h(33): Warning! W202: Symbol 'mem_policy_info' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(74): Warning! W202: Symbol 'test_ascii_noise' has been defined, but not referenced

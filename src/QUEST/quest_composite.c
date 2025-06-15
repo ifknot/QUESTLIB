@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "quest_info.h"
 #include "quest_rtti.h"
@@ -207,33 +208,119 @@ quest_size_t quest_composite_transfer_type(quest_composite_t* dst, quest_composi
     return transfer_count;
 }
 
+const char* quest_info_brief(quest_component_t* comp) {
+    assert(comp && "NULL component!");
+    return comp->info->brief;
+}
+
+const char* quest_info_details(quest_component_t* comp) {
+    assert(comp && "NULL component!");
+    return comp->info->details;
+}
+
+const char* quest_type_to_string(quest_component_t* comp) {
+    assert(comp && "NULL component!");
+    quest_type_t type = comp->rtti.parts.type;
+    if (type >= 0 && type < sizeof(QUEST_OBJECT_NAMES)/sizeof(QUEST_OBJECT_NAMES[0])) {
+        return QUEST_OBJECT_NAMES[type];
+    }
+    return "UNKNOWN";
+}
+
 void quest_component_dump(const quest_component_t* comp, FILE* stream) {
     assert(comp && "NULL component!");
     assert(stream && "NULL file stream!");
 
-    quest_rtti_dump(comp->rtti, stream);
-    if (comp->parent) {
-        fprintf(stream, "|parent:%p", comp->parent);
-        quest_rtti_dump(comp->parent->rtti, stream);
-    } else {
-        fprintf(stream, "|parent:NULL");
+    // Header line with type, brief and binary feature representation
+    fprintf(stream, "[%s] \"%s\" |",
+            quest_type_to_string(comp),
+            quest_info_brief(comp));
+
+    // Print feature bits (lower byte)
+    for (int i = 7; i >= 0; i--) {
+        fprintf(stream, "%d", (comp->features >> i) & 1);
     }
+    fprintf(stream, ":");
+    // Print feature bits (upper byte)
+    for (int i = 15; i >= 8; i--) {
+        fprintf(stream, "%d", (comp->features >> i) & 1);
+    }
+    fprintf(stream, "|\n");
+
+    // Trimmed details (40 chars max)
+    const char* details = quest_info_details(comp);
+    size_t len = strlen(details);
+    fprintf(stream, "  %.*s%s\n",
+            (int)(len > 40 ? 40 : len),
+            details,
+            len > 40 ? "..." : "");
+
+    // RTTI information
+    fprintf(stream, "  RTTI: ");
+    quest_rtti_dump(comp->rtti, stream);
+    fprintf(stream, "\n");
+
+    // Parent information
+    fprintf(stream, "  Parent: ");
+    if (comp->parent) {
+        fprintf(stream, "[%s] \"%s\" @%p",
+                quest_type_to_string(comp->parent),
+                quest_info_brief(comp->parent),
+                (void*)comp->parent);
+    } else {
+        fprintf(stream, "NULL");
+    }
+    fprintf(stream, "\n");
 }
 
 void quest_composite_dump(const quest_composite_t* comp, FILE* stream) {
     assert(comp && "NULL component!");
     assert(stream && "NULL file stream!");
 
-    fprintf(stream, "COMPOSITE[children=%zu]:", comp->child_count); // Dump header
+    // Composite header with binary features
+    fprintf(stream, "\nCOMPOSITE [%s] \"%s\" (%zu children) |",
+            quest_type_to_string(&comp->base),
+            quest_info_brief(&comp->base),
+            comp->child_count);
+
+    // Print feature bits
+    for (int i = 7; i >= 0; i--) {
+        fprintf(stream, "%d", (comp->base.features >> i) & 1);
+    }
+    fprintf(stream, ":");
+    for (int i = 15; i >= 8; i--) {
+        fprintf(stream, "%d", (comp->base.features >> i) & 1);
+    }
+    fprintf(stream, "|\n");
+
+    fprintf(stream, "==================================\n");
+
+    // Base component info
     quest_component_dump(&comp->base, stream);
-    fprintf(stream, "\n  CHILDREN:\n"); // Dump children
+    fprintf(stream, "----------------------------------\n");
+
+    // Children listing with binary features
+    fprintf(stream, "CHILDREN:\n");
     for (quest_size_t i = 0; i < comp->child_count; i++) {
-        fprintf(stream, "    [%02zu] ", i);
+        fprintf(stream, "[%02zu] ", i);
         if (comp->children[i]) {
-            quest_component_dump(comp->children[i], stream);
+            fprintf(stream, "[%s] \"%s\" |",
+                    quest_type_to_string(comp->children[i]),
+                    quest_info_brief(comp->children[i]));
+
+            // Child feature bits
+            for (int j = 7; j >= 0; j--) {
+                fprintf(stream, "%d", (comp->children[i]->features >> j) & 1);
+            }
+            fprintf(stream, ":");
+            for (int j = 15; j >= 8; j--) {
+                fprintf(stream, "%d", (comp->children[i]->features >> j) & 1);
+            }
+            fprintf(stream, "| @%p", (void*)comp->children[i]);
         } else {
             fprintf(stream, "NULL_SLOT");
         }
         fprintf(stream, "\n");
     }
+    fprintf(stream, "\n");
 }

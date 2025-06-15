@@ -27,7 +27,7 @@
 #include "quest_connector.h"
 #include "quest_location.h"
 #include "quest_door.h"
-#include "quest_object_types.h"
+#include "quest_objects.h"
 
 #define QUEST_CONNECTOR_TESTS \
     &test_circular_building,      \

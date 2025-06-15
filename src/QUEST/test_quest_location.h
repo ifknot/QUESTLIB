@@ -8,7 +8,7 @@
 #include "quest_location.h"
 #include "quest_connector.h"
 #include "quest_door.h"
-#include "quest_object_types.h"
+#include "quest_objects.h"
 #include "quest_types.h"
 
 #define QUEST_LOCATION_TESTS &test_location_creation,  \

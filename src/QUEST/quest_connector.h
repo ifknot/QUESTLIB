@@ -127,4 +127,19 @@ void quest_connector_join(
  */
 const char* quest_direction_to_string(quest_bitmask_t dir);
 
+/**
+ * @brief Dumps connector information to a stream
+ * @param conn Connector to dump (must not be NULL)
+ * @param stream Output stream (must not be NULL)
+ *
+ * @output_format
+ * [CONNECTOR_TYPE] "Name" |LLLLLLLL:HHHHHHHH|
+ *   Details...
+ *   RTTI: [type:NAME serial:0xFFFF time:0xFFFF]
+ *   Parent: [TYPE] "Parent Name" or NULL
+ *   Connections: [0xADDR1] "Location1" <-> [0xADDR2] "Location2"
+ *   Directions: [N/NE/E/etc.]
+ */
+void quest_connector_dump(const quest_connector_t* conn, FILE* stream);
+
 #endif

@@ -1,12 +1,14 @@
 /**
  * @file quest_composite.h
- * @brief Composite pattern implementation (v2.1)
+ * @brief Composite pattern implementation (v2.2)
  *
- * @version 2.1
+ * @version 2.2
  * @changelog
+ * - v2.2: Enhanced dump functions with
  * - v2.1: Added feature bitmask to quest_component_t
  * - v2.0: Refactored to 16-bit features (lower=common, upper=type-specific)
  * - v1.4: Initial stable release
+ *
  *
  * @details Provides a parent-child relationship management system for game entities with:
  *
@@ -125,6 +127,7 @@
 #include "quest_constants.h"
 #include "quest_types.h"
 #include "quest_info.h"
+#include "quest_objects.h"
 
 /**
  * @brief Maximum number of child components any composite can contain
@@ -674,26 +677,75 @@ quest_size_t quest_composite_transfer_type(
 );
 
 /**
- * @brief Dump human readable a component to a stream
- * @param comp Component to dump
- * @param stream Output stream
+ * @brief Gets the human-readable type name of a component
+ * @param comp Component to examine (may be NULL)
+ * @return String name of the component's type, or "NULL" if invalid
+ *
+ * @note Safely handles NULL components and invalid type values
+ * @see quest_objects.h for the complete type list
  *
  * @code
- * // Example: Debugging a component
- * quest_component_dump(my_item, stdout);
+ * // Cleaner usage without digging through rtti:
+ * printf("Type: %s\n", quest_type_to_string((quest_component_t*)my_component));
  * @endcode
+ */
+const char* quest_type_to_string(quest_component_t* comp);
+
+/**
+ * @brief Safely retrieves the brief description of a component
+ * @param comp Component to query (may be NULL)
+ * @return The brief description string, or "(no brief)" if invalid
+ *
+ * @note This is a null-safe wrapper around comp->info->brief
+ * @warning Returns a default string if either comp or comp->info is NULL
+ *
+ * @code
+ * // Example usage:
+ * printf("Item: %s\n", quest_info_brief((quest_component_t*)item));
+ * @endcode
+ */
+const char* quest_info_brief(quest_component_t* comp);
+
+/**
+ * @brief Safely retrieves the detailed description of a component
+ * @param comp Component to query (may be NULL)
+ * @return The detailed description string, or "(no details)" if invalid
+ *
+ * @note This is a null-safe wrapper around comp->info->details
+ * @warning Returns a default string if either comp or comp->info is NULL
+ *
+ * @code
+ * // Example usage:
+ * printf("Description: %s\n", quest_info_details((quest_component_t*)item));
+ * @endcode
+ */
+const char* quest_info_details(quest_component_t* comp);
+
+/**
+ * @brief Dumps detailed component information to a stream
+ * @param comp Component to dump (must not be NULL)
+ * @param stream Output stream (must not be NULL)
+ *
+ * @output_format
+ * [TYPE] "Brief Description" |LLLLLLLL:HHHHHHHH|
+ *   Details... (trimmed to 40 chars)
+ *   RTTI: [type:NAME serial:0xFFFF time:0xFFFF]
+ *   Parent: [TYPE] "Parent Name" or NULL
  */
 void quest_component_dump(const quest_component_t* comp, FILE* stream);
 
 /**
- * @brief Serializes composite with all children
- * @param comp Composite to dump
- * @param stream Output stream
+ * @brief Dumps composite structure with children hierarchy
+ * @param comp Composite to dump (must not be NULL)
+ * @param stream Output stream (must not be NULL)
  *
- * @code
- * // Example: Debugging a composite structure
- * quest_composite_dump(tavern, stdout);
- * @endcode
+ * @output_format
+ * COMPOSITE [TYPE] "Name" (X children) |LLLLLLLL:HHHHHHHH|
+ * ==================================
+ * [Component dump of base]
+ * ----------------------------------
+ * CHILDREN:
+ * [00] [TYPE] "Name" |LLLLLLLL:HHHHHHHH| @addr
  */
 void quest_composite_dump(const quest_composite_t* comp, FILE* stream);
 

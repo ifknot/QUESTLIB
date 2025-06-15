@@ -1,2 +1,23 @@
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(224): Warning! W124: Comparison result always 1
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(236): Warning! E1179: Parameter 1, type qualifier mismatch
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(236): Note! I2003: source conversion type is 'struct quest_component_t const *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(236): Note! I2004: target conversion type is 'struct quest_component_t *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(236): Note! I2002: 'quest_type_to_string' defined in: /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(221)
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(237): Warning! E1179: Parameter 1, type qualifier mismatch
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(237): Note! I2003: source conversion type is 'struct quest_component_t const *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(237): Note! I2004: target conversion type is 'struct quest_component_t *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(237): Note! I2002: 'quest_info_brief' defined in: /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(211)
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(251): Warning! E1179: Parameter 1, type qualifier mismatch
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(251): Note! I2003: source conversion type is 'struct quest_component_t const *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(251): Note! I2004: target conversion type is 'struct quest_component_t *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(251): Note! I2002: 'quest_info_details' defined in: /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(216)
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(282): Warning! E1179: Parameter 1, type qualifier mismatch
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(282): Note! I2003: source conversion type is 'struct quest_component_t const *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(282): Note! I2004: target conversion type is 'struct quest_component_t *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(282): Note! I2002: 'quest_type_to_string' defined in: /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(221)
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(283): Warning! E1179: Parameter 1, type qualifier mismatch
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(283): Note! I2003: source conversion type is 'struct quest_component_t const *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(283): Note! I2004: target conversion type is 'struct quest_component_t *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(283): Note! I2002: 'quest_info_brief' defined in: /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_composite.c(211)
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/../MEM/mem_types.h(48): Warning! W202: Symbol 'default_mem_segoff_t' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/../MEM/mem_arena.h(33): Warning! W202: Symbol 'mem_policy_info' has been defined, but not referenced

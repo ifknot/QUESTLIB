@@ -5,7 +5,7 @@
 #include "quest_errors.h"
 #include "quest_composite.h"
 #include "quest_info.h"
-#include "quest_object_types.h"
+#include "quest_objects.h"
 #include "quest_features.h"
 
 #define QUEST_COMPOSITE_TESTS \
@@ -22,7 +22,8 @@
     &test_feature_set_clear_single, \
     &test_feature_bulk_operations, \
     &test_feature_queries,      \
-    &test_feature_edge_cases
+    &test_feature_edge_cases,   \
+    &test_dump_functions
 
 // =============================================
 // Test Utilities (Arena-based)
@@ -348,5 +349,66 @@ TEST(test_feature_edge_cases) {
     */
 }
 
+TEST(test_dump_functions) {
+    test_setup();
+
+    printf("\n=== TESTING DUMP FUNCTIONS ===\n\n");
+
+    // Create a test composite (tavern)
+    quest_composite_t* tavern = create_test_composite(QUEST_TAVERN, "Dragon's Inn");
+    tavern->base.features = COMP_FEATURE_VISIBLE | COMP_FEATURE_INTERACTABLE;
+
+    // Add some children with different features
+    quest_component_t* barkeep = create_test_item(QUEST_NPC, 1, "Old Barkeep");
+    barkeep->features = COMP_FEATURE_VISIBLE | COMP_FEATURE_INTERACTABLE | 0x8000; // NPC-specific flag
+    quest_composite_add(tavern, barkeep);
+
+    quest_component_t* chair = create_test_item(QUEST_CHAIR, 1, "Sturdy Chair");
+    chair->features = COMP_FEATURE_VISIBLE;
+    quest_composite_add(tavern, chair);
+
+    quest_component_t* table = create_test_item(QUEST_TABLE, 1, "Round Table");
+    table->features = COMP_FEATURE_INTERACTABLE | 0x4000; // Furniture-specific flag
+    quest_composite_add(tavern, table);
+
+    // Create a nested composite (chest in the tavern)
+    quest_composite_t* chest = create_test_composite(QUEST_CHEST, "Treasure Chest");
+    chest->base.features = COMP_FEATURE_VISIBLE | 0x2000; // Container-specific flag
+    quest_composite_add(chest, create_test_item(QUEST_GOLD, 1, "Gold Coin"));
+    quest_composite_add(chest, create_test_item(QUEST_RING, 1, "Ruby Ring"));
+    quest_composite_add(tavern, (quest_component_t*)chest);
+
+    // Dump the tavern hierarchy
+    printf("=== COMPOSITE DUMP ===\n");
+    quest_composite_dump(tavern, stdout);
+
+    // Dump individual components
+    printf("\n=== COMPONENT DUMPS ===\n");
+    printf("Barkeep:\n");
+    quest_component_dump(barkeep, stdout);
+
+    printf("\nChair:\n");
+    quest_component_dump(chair, stdout);
+
+    printf("\nTable:\n");
+    quest_component_dump(table, stdout);
+
+    printf("\nChest:\n");
+    quest_component_dump((quest_component_t*)chest, stdout);
+
+    // Edge case testing
+    printf("\n=== EDGE CASES ===\n");
+    printf("NULL component dump (should assert):\n");
+    #ifndef NDEBUG
+    //EXPECT_ASSERT(quest_component_dump(NULL, stdout));
+    #endif
+
+    printf("Component with NULL info:\n");
+    quest_component_t null_info_comp = {0};
+    null_info_comp.rtti.parts.type = QUEST_POTION;
+    quest_component_dump(&null_info_comp, stdout);
+
+    test_teardown();
+}
 
 #endif

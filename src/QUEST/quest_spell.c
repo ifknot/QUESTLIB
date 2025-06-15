@@ -1,6 +1,6 @@
 #include "quest_spell.h"
 
-#include "quest_object_types.h"
+#include "quest_objects.h"
 
 void  quest_spell_init(
     quest_spell_t* spell,

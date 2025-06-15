@@ -1,3 +1,4 @@
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_connector.c(37): Warning! W124: Comparison result always 1
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/../MEM/mem_types.h(48): Warning! W202: Symbol 'default_mem_segoff_t' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/../MEM/mem_arena.h(33): Warning! W202: Symbol 'mem_policy_info' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_objects.h(39): Warning! W202: Symbol 'QUEST_OBJECT_NAMES' has been defined, but not referenced

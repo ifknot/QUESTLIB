@@ -34,7 +34,7 @@
 #include "quest_connector.h"
 #include "quest_composite.h"
 #include "quest_errors.h"
-#include "quest_key.h"
+#include "quest_key_lock.h"
 #include "quest_types.h"
 
 /**
@@ -129,10 +129,22 @@ quest_error_t quest_door_open(quest_door_t* door);
 quest_error_t quest_door_close(quest_door_t* door);
 
 /**
- * @brief Dumps door state to output stream
- * @param comp Door component (must be quest_door_t*)
- * @param stream Output destination
+ * @brief Dumps door information to a stream
+ * @param door Door to dump (must not be NULL)
+ * @param stream Output stream (must not be NULL)
+ *
+ * @output_format
+ * [DOOR] "Name" |LLLLLLLL:HHHHHHHH|
+ *   State: OPEN/CLOSED
+ *   Weight: ### kg
+ *   Material: MATERIAL
+ *   Lockable: Yes/No
+ *   Key: [KEY_TYPE] "Key Name" or NULL
+ *   Details...
+ *   RTTI: [type:NAME serial:0xFFFF time:0xFFFF]
+ *   Parent: [TYPE] "Parent Name" or NULL
+ *   Children: (if any)
  */
-void quest_door_dump(const quest_composite_t* comp, FILE* stream);
+void quest_door_dump(const quest_door_t* door, FILE* stream);
 
 #endif

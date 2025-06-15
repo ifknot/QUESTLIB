@@ -1,6 +1,11 @@
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_door.c(39): Warning! W303: Parameter 'door' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_door.c(43): Warning! W303: Parameter 'door' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_door.c(66): Warning! E1179: Parameter 1, type qualifier mismatch
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_door.c(66): Note! I2003: source conversion type is 'struct quest_door_t const *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_door.c(66): Note! I2004: target conversion type is 'struct quest_door_t *'
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_door.c(66): Note! I2002: 'quest_door_is_open' defined in: /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_door.c(35)
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/../MEM/mem_types.h(48): Warning! W202: Symbol 'default_mem_segoff_t' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/../MEM/mem_arena.h(33): Warning! W202: Symbol 'mem_policy_info' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_objects.h(39): Warning! W202: Symbol 'QUEST_OBJECT_NAMES' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_connector.h(41): Warning! W202: Symbol 'direction_to_flag' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/quest_connector.h(36): Warning! W202: Symbol 'opposite_directions' has been defined, but not referenced

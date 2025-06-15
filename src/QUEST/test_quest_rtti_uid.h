@@ -7,32 +7,14 @@
 #include "quest_errors.h"
 #include "quest_uid.h"
 #include "quest_rtti.h"
+#include "quest_objects.h"
 
 #define QUEST_RTTI_TESTS &test_uid,                 \
                     &test_rtti_creation,            \
                     &test_type_checks,              \
                     &test_uid_uniqueness,           \
                     &test_fingerprint_components,   \
-                    &test_null_type_handling,
-
-typedef enum  {     // minimum set of quest game objects
-    QUEST_NULL = 0,
-    QUEST_LOCATION,
-    QUEST_CHARACTER,
-    QUEST_PLAYER,
-    QUEST_OBJECT,
-    QUEST_CONTAINER,
-    QUEST_ITEM_SWORD,
-    QUEST_CHEST,
-    QUEST_ITEM_GOLD,
-    QUEST_ITEM_RING,
-    QUEST_INVENTORY,
-    QUEST_MERCHANT,
-    QUEST_ITEM_SCROLL,
-    QUEST_ITEM_POTION,
-    QUEST_DUNGEON,
-    QUEST_ITEM_KEY
-} quest_object_t;
+                    &test_null_type_handling
 
 // =============================================
 // UID and RTTI
@@ -56,16 +38,16 @@ TEST(test_rtti_creation) {
 
 TEST(test_type_checks) {
     quest_rtti_t loc = quest_rtti_create(QUEST_LOCATION);
-    quest_rtti_t obj = quest_rtti_create(QUEST_OBJECT);
+    quest_rtti_t obj = quest_rtti_create(QUEST_PLAYER);
 
     EXPECT_EQ(quest_is_typeof(loc, QUEST_LOCATION), true);
-    EXPECT_EQ(quest_is_typeof(obj, QUEST_OBJECT), true);
-    EXPECT_EQ(quest_is_typeof(loc, QUEST_OBJECT), false);
+    EXPECT_EQ(quest_is_typeof(obj, QUEST_PLAYER), true);
+    EXPECT_EQ(quest_is_typeof(loc, QUEST_PLAYER), false);
 }
 
 TEST(test_uid_uniqueness) {
-    quest_rtti_t rtti1 = quest_rtti_create(QUEST_CHARACTER);
-    quest_rtti_t rtti2 = quest_rtti_create(QUEST_CHARACTER);
+    quest_rtti_t rtti1 = quest_rtti_create(QUEST_NPC);
+    quest_rtti_t rtti2 = quest_rtti_create(QUEST_NPC);
 
     EXPECT_EQ(quest_rtti_type(rtti1), quest_rtti_type(rtti2));
     EXPECT_NEQ(quest_rtti_uid(rtti1), quest_rtti_uid(rtti2));
@@ -73,7 +55,7 @@ TEST(test_uid_uniqueness) {
 }
 
 TEST(test_fingerprint_components) {
-    quest_rtti_t rtti = quest_rtti_create(QUEST_OBJECT);
+    quest_rtti_t rtti = quest_rtti_create(QUEST_PLAYER);
     quest_fingerprint_t fp = quest_rtti_fingerprint(rtti);
 
     // Verify bit layout matches documentation

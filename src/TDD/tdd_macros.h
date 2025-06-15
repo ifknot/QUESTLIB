@@ -191,6 +191,26 @@
 #define EXPECT_NOT_NULL(ptr) _EXPECT_NULLCHECK(ptr, false)
 
 /**
+ * @brief Watcom-compatible range check with custom error messages
+ * @param value Numeric value to test (converted to double)
+ * @param min Minimum bound (inclusive, converted to double)
+ * @param max Maximum bound (inclusive, converted to double)
+ * @param ... Optional printf-style error message
+ */
+#define EXPECT_IN_RANGE(value, min, max, ...) do { \
+    const double _val = (double)(value); \
+    const double _min = (double)(min); \
+    const double _max = (double)(max); \
+    if (_val < _min || _val > _max) { \
+        fprintf(stderr, "[FAIL] %s:%d: %g not in [%g,%g]", \
+                __FILE__, __LINE__, _val, _min, _max); \
+        if (0 __VA_ARGS__ + 0) fprintf(stderr, ": " __VA_ARGS__); \
+        fprintf(stderr, "\n"); \
+        return; \
+    } \
+} while (0)
+
+/**
  * @brief Test case structure
  */
 typedef struct {
