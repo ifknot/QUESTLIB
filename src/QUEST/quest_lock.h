@@ -1,14 +1,16 @@
 #ifndef QUEST_LOCK_H
 #define QUEST_LOCK_H
 
+#include "quest_composite.h"
+
 typedef enum {
-    LOCK_IS_LOCKED   = 0x0001,    
+    LOCK_IS_LOCKED   = 0x0001,
     LOCK_IS_RUSTY    = 0x0002,
-} quest_door_features_t;
+} quest_lock_features_t;
 
 typedef struct quest_lock_t {
-    quest_component_t base;          
-    quest_bitmask_t active_features; // defaults to unlocked not rusty 
+    quest_component_t base;
+    quest_bitmask_t active_features; // defaults to unlocked not rusty
     quest_size_t combination;
 } quest_lock_t;
 
@@ -18,11 +20,11 @@ void quest_lock_init(    // defaults to an open lock
     quest_info_t* info
 );
 
-quest_door_t* quest_lock_create(
+quest_lock_t* quest_lock_create(
     mem_arena_t* arena,
     quest_lock_t* lock,
     quest_type_t type,
-    quest_info_t* info,
+    quest_info_t* info
 );
 
 #endif

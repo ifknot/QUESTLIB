@@ -13,7 +13,7 @@
 
 #define QUEST_LOCATION_TESTS &test_location_creation,  \
                             &test_location_connections, \
-                            //&test_invalid_connection,   \
+                            &test_invalid_connection,   \
                             &test_multi_floor_connections
 
 // =============================================
@@ -47,12 +47,12 @@ static quest_info_t* create_test_info(const char* brief) {
 TEST(test_location_creation) {
     setup();
     quest_info_t* info = create_test_info("Ruined Temple");
-    quest_location_t* loc = quest_location_create(test_arena, root, QUEST_LOCATION, info, 'R');
+    quest_location_t* loc = quest_location_create(test_arena, NULL, QUEST_LOCATION, info, 'R');
 
     EXPECT(loc != NULL);
     EXPECT_EQ(loc->symbol, 'R');
     EXPECT_EQ(loc->floor_number, 0);
-    EXPECT_EQ(loc->connection_directions, 0);
+    EXPECT_EQ(loc->active_directions, 0);
 
     // Verify composite base
     EXPECT_EQ(loc->base.base.rtti.parts.type, QUEST_LOCATION);
@@ -67,14 +67,14 @@ TEST(test_location_connections) {
 
     quest_location_t* loc1 = quest_location_create(test_arena, NULL, QUEST_LOCATION, create_test_info("Hall"), 'A');
     quest_location_t* loc2 = quest_location_create(test_arena, NULL, QUEST_LOCATION, create_test_info("Chamber"), 'B');
-    quest_connector_t* conn = quest_connector_create(test_arena, loc1, loc2, QUEST_CONNECTOR_PASSAGE, NULL);
+    quest_connector_t* conn = quest_connector_create(test_arena, NULL, QUEST_CONNECTOR_PASSAGE, NULL);
 
     // Test east-west connection
     quest_connector_join(conn, loc1, loc2, CONN_E);
     EXPECT_EQ(loc1->connections[CONN_E], conn);
     EXPECT_EQ(loc2->connections[CONN_W], conn);
-    EXPECT(loc1->connection_directions & FLAG_E);
-    EXPECT(loc2->connection_directions & FLAG_W);
+    EXPECT(loc1->active_directions & FLAG_E);
+    EXPECT(loc2->active_directions & FLAG_W);
 
     V(printf("Created passage between Hall (E) and Chamber (W)\n"););
 
@@ -85,7 +85,7 @@ TEST(test_invalid_connection) {
     setup();
 
     quest_location_t* valid_loc = quest_location_create(test_arena, NULL, QUEST_LOCATION, create_test_info("Valid"), 'V');
-    quest_connector_t* conn = quest_connector_create(test_arena, valid_loc, valid_loc, QUEST_CONNECTOR_PASSAGE, NULL);
+    quest_connector_t* conn = quest_connector_create(test_arena, NULL, QUEST_CONNECTOR_PASSAGE, NULL);
     // Should trigger assertions in debug mode
     #ifndef NDEBUG
     printf("Expecting assertion failures for invalid connections:\n");
@@ -107,7 +107,7 @@ TEST(test_multi_floor_connections) {
     ground->floor_number = 0;
     upper->floor_number = 1;
 
-    quest_connector_t* stairs = quest_connector_create(test_arena, ground, upper,
+    quest_connector_t* stairs = quest_connector_create(test_arena, NULL,
                                                      QUEST_CONNECTOR_STAIRS,
                                                      create_test_info("Wooden Stairs"));
 
@@ -115,8 +115,8 @@ TEST(test_multi_floor_connections) {
     quest_connector_join(stairs, ground, upper, CONN_UP);
     EXPECT_EQ(ground->connections[CONN_UP], stairs);
     EXPECT_EQ(upper->connections[CONN_DOWN], stairs);
-    EXPECT(ground->connection_directions & FLAG_UP);
-    EXPECT(upper->connection_directions & FLAG_DOWN);
+    EXPECT(ground->active_directions & FLAG_UP);
+    EXPECT(upper->active_directions & FLAG_DOWN);
 
     V(printf("Connected Cellar (Up) to Attic (Down)\n"););
 

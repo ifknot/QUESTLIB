@@ -1,8 +1,15 @@
 /**
  * @file quest_composite.h
- * @brief Composite pattern implementation for game object hierarchies
+ * @brief Composite pattern implementation (v2.1)
+ *
+ * @version 2.1
+ * @changelog
+ * - v2.1: Added feature bitmask to quest_component_t
+ * - v2.0: Refactored to 16-bit features (lower=common, upper=type-specific)
+ * - v1.4: Initial stable release
  *
  * @details Provides a parent-child relationship management system for game entities with:
+ *
  * - Memory safety through arena allocation
  * - Runtime type identification (RTTI)
  * - Fixed maximum children count for predictable behavior
@@ -10,6 +17,102 @@
  *
  * The composite pattern allows treating individual objects and compositions uniformly.
  * All game objects inherit from quest_component_t, while containers use quest_composite_t.
+ *
+ * Key Relationships Diagram
+ * @dot
+ * digraph quest_composite_v2 {
+ *     graph [
+ *         label=<<B>Quest Composite Object Model v2.1</B><BR/><FONT POINT-SIZE="10">features: uint16_t</FONT>>,
+ *         labelloc="t",
+ *         tooltip="Updated for feature bitmask",
+ *         fontname="Courier New"
+ *     ];
+ *
+ *     // Nodes with feature field
+ *     Component [label=<
+ *         <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+ *         <TR><TD COLSPAN="2" BGCOLOR="#2b2b2b"><FONT COLOR="#ffffff">quest_component_t</FONT></TD></TR>
+ *         <TR><TD ALIGN="LEFT">+ rtti</TD><TD ALIGN="LEFT">quest_rtti_t</TD></TR>
+ *         <TR><TD ALIGN="LEFT">+ parent</TD><TD ALIGN="LEFT">quest_component_t*</TD></TR>
+ *         <TR><TD ALIGN="LEFT">+ info</TD><TD ALIGN="LEFT">quest_info_t*</TD></TR>
+ *         <TR><TD ALIGN="LEFT">+ features</TD><TD ALIGN="LEFT">uint16_t</TD></TR>
+ *         </TABLE>
+ *     >];
+ *
+ *     Composite [label=<
+ *         <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+ *         <TR><TD COLSPAN="2" BGCOLOR="#2b5b84"><FONT COLOR="#ffffff">quest_composite_t</FONT></TD></TR>
+ *         <TR><TD ALIGN="LEFT">+ base</TD><TD ALIGN="LEFT">quest_component_t</TD></TR>
+ *         <TR><TD ALIGN="LEFT">+ children[16]</TD><TD ALIGN="LEFT">quest_component_t*</TD></TR>
+ *         <TR><TD ALIGN="LEFT">+ child_count</TD><TD ALIGN="LEFT">quest_size_t</TD></TR>
+ *         </TABLE>
+ *     >, fillcolor="#e6f3ff"];
+ *
+ *     Info [label=<
+ *         <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+ *         <TR><TD COLSPAN="2" BGCOLOR="#7a3b00"><FONT COLOR="#ffffff">quest_info_t</FONT></TD></TR>
+ *         <TR><TD ALIGN="LEFT">+ brief</TD><TD ALIGN="LEFT">char*</TD></TR>
+ *         <TR><TD ALIGN="LEFT">+ details</TD><TD ALIGN="LEFT">char*</TD></TR>
+ *         </TABLE>
+ *     >, fillcolor="#ffeee6"];
+ *
+ *     // ==============================================
+ *     // Relationships (No C-style comments)
+ *     // ==============================================
+ *     // Inheritance
+ *     Composite -> Component [label=<<I>inherits</I>>, arrowhead=empty];
+ *
+ *     // Composition
+ *     Composite -> Component [
+ *         label=<<B>contains 0..16</B>>,
+ *         fontcolor="#0066cc",
+ *         color="#0066cc"
+ *     ];
+ *
+ *     // Ownership
+ *     Component -> Info [
+ *         label=<<B>owns</B>>,
+ *         fontcolor="#cc3300",
+ *         color="#cc3300"
+ *     ];
+ *
+ *     // Reference
+ *     Component -> Composite [
+ *         label=<<I>optional parent</I>>,
+ *         dir=back,
+ *         fontcolor="#009933",
+ *         color="#009933"
+ *     ];
+ *
+ *     // ==============================================
+ *     // Legend (Using HTML-like labels)
+ *     // ==============================================
+ *     subgraph cluster_legend {
+ *         label=<<B>Legend</B>>;
+ *         fontsize=10;
+ *         color=none;
+ *
+ *         {
+ *             node [shape=plaintext];
+ *
+ *             l1 [label=<<FONT COLOR="#000000">■</FONT> Inheritance>];
+ *             l2 [label=<<FONT COLOR="#0066cc">■</FONT> Composition>];
+ *             l3 [label=<<FONT COLOR="#cc3300">■</FONT> Ownership>];
+ *             l4 [label=<<FONT COLOR="#009933">■</FONT> Reference>];
+ *         }
+ *     }
+ *     // Add feature legend
+ *     subgraph cluster_features {
+ *         label=<<B>Feature Bits</B>>;
+ *         fontsize=10;
+ *
+ *         f1 [label=<<TABLE BORDER="0" CELLBORDER="1">
+ *             <TR><TD>0-7</TD><TD>Common</TD></TR>
+ *             <TR><TD>8-15</TD><TD>Type-Specific</TD></TR>
+ *         </TABLE>>, shape=none];
+ *     }
+ * }
+ * @enddot
  */
 #ifndef QUEST_COMPOSITE_H
 #define QUEST_COMPOSITE_H
@@ -23,21 +126,142 @@
 #include "quest_types.h"
 #include "quest_info.h"
 
+/**
+ * @brief Maximum number of child components any composite can contain
+ *
+ * @note This fixed-size design ensures:
+ * - Memory safety (no dynamic allocation per composite)
+ * - Predictable memory overhead (sizeof(quest_composite_t) = base + 16 pointers)
+ * - Cache-friendly iteration (contiguous child array)
+ *
+ * @tradeoff Choosing this value:
+ * - Too low: Limits complex object hierarchies
+ * - Too high: Wastes memory for simple objects
+ *
+ * @default 16 is optimal for:
+ * - RPG inventories (slots + equipped items)
+ * - Room contents (NPCs + items + features)
+ * - Nested containers (chests within chests)
+ */
+#define QUEST_COMPOSITE_MAX_CHILDREN    16
+
 typedef struct quest_component_t quest_component_t;
 
 /**
- * @brief everything in a quest world is-a component
+ * @brief Fundamental building block of all game entities
+ *
+ * @inheritance Every game object inherits from this base type through either:
+ * - Direct composition (e.g., quest_item_t has a quest_component_t as first member)
+ * - Containment (quest_composite_t's base field)
+ *
+ * @memory_layout
+ * +-----------------------+
+ * | rtti (16+ bits)       |
+ * +-----------------------+
+ * | parent* (machine word)|
+ * +-----------------------+
+ * | info* (ptr to strings)|
+ * +-----------------------+
  */
 typedef struct quest_component_t {
-    quest_rtti_t rtti;          ///< Unique type+ID combination
-    quest_component_t* parent;  ///< Parent container (NULL if root)
-    quest_info_t* info;         //< mutable string information
+    /**
+     * @brief Runtime Type Information (RTTI)
+     * @see quest_rtti.h for bitfield layout
+     * @invariant Must be first member to enable:
+     * - Type-safe casting via (quest_type_t)component->rtti.parts.type
+     * - Memory alignment guarantees
+     */
+    quest_rtti_t rtti;
+
+    /**
+     * @brief Hierarchical parent pointer
+     * @behavior
+     * - NULL for root-level objects (world, player)
+     * - Automatically updated by quest_composite_add/remove
+     * @warning Never modify directly - use composite API
+     */
+    quest_component_t* parent;
+
+    /**
+     * @brief Human-readable metadata
+     * @owned_by This component (freed when component is destroyed)
+     * @content Typical uses:
+     * - brief: Short name ("Sword of Truth")
+     * - details: Long description ("An ancient blade...")
+     * @see quest_info.h for string management
+     */
+    quest_info_t* info;
+
+    /**
+    * @brief Bitmask of component capabilities/states
+    * @usage
+    * - Bits 0-7: Common features (shared across all components)
+    * - Bits 8-15: Type-specific features
+    * @see quest_features.h for standard feature definitions
+    */
+    quest_bitmask_t features;
 } quest_component_t;
 
+/**
+ * @brief Container type that can parent other components
+ *
+ * @extends quest_component_t (inherits base fields)
+ * @composition_pattern Composite nodes vs. Leaf nodes:
+ * - Leaf:   Component without children (e.g., items)
+ * - Composite: Has children (e.g., inventories, rooms)
+ *
+ * Memory Layout:
+ * +------------------------+
+ * | quest_composite_t      |
+ * +------------------------+
+ * | base (quest_component_t|
+ * +------------------------+
+ * | children[0]            | -> child_1
+ * | ...                    |
+ * | children[15]           | -> NULL
+ * +------------------------+
+ * | child_count            |
+ * +------------------------+
+ *
+ * @performance Characteristics:
+ * - O(1) add/remove via swap-with-last
+ * - O(n) searches (linear scan)
+ * - 64 bytes child pointers (on 32-bit arch)
+ */
 typedef struct {
-    quest_component_t base;       ///< Base component properties
-    quest_component_t* children[QUEST_COMPOSITE_MAX_CHILDREN]; ///< Child array
-    quest_size_t child_count;     ///< Current number of children
+    /**
+     * @brief Inherited component properties
+     * @note Must be first member to enable:
+     * - Type casting: (quest_component_t*)composite
+     * - Memory alignment with base type
+     */
+    quest_component_t base;
+
+    /**
+     * @brief Fixed-capacity child array
+     * @layout
+     * [0] -> child_1
+     * ...
+     * [child_count-1] -> last_child
+     * [child_count] -> NULL (unused slot)
+     * ...
+     * [QUEST_COMPOSITE_MAX_CHILDREN-1] -> NULL
+     * @invariant Maintained by API:
+     * - All used slots are contiguous from [0]
+     * - All unused slots are NULL
+     */
+    quest_component_t* children[QUEST_COMPOSITE_MAX_CHILDREN];
+
+    /**
+     * @brief Active children counter
+     * @rules
+     * - Always <= QUEST_COMPOSITE_MAX_CHILDREN
+     * - On add: Incremented if successful
+     * - On remove: Decremented
+     * @optimization Used instead of NULL checks for faster iteration
+     */
+    quest_size_t child_count;
+
 } quest_composite_t;
 
 /**
@@ -85,6 +309,94 @@ quest_component_t* quest_component_create(
     quest_type_t type,
     quest_info_t* info
 );
+
+/**
+ * @brief Sets multiple feature flags at once
+ * @param comp Target component (must not be NULL)
+ * @param features Bitmask of features to enable (multiple bits allowed)
+ * @return New feature bitmask
+ *
+ * @code
+ * // Make object visible and interactable in one call
+ * quest_component_set_features(sword, COMP_FEATURE_VISIBLE | COMP_FEATURE_INTERACTABLE);
+ * @endcode
+ */
+quest_bitmask_t quest_component_set_features(quest_component_t* comp, quest_bitmask_t features);
+
+/**
+ * @brief Clears multiple feature flags at once
+ * @param comp Target component (must not be NULL)
+ * @param features Bitmask of features to disable (multiple bits allowed)
+ * @return New feature bitmask
+ *
+ * @code
+ * // Make door non-interactable and invisible
+ * quest_component_clear_features(door,
+ *     COMP_FEATURE_VISIBLE | COMP_FEATURE_INTERACTABLE);
+ * @endcode
+ */
+quest_bitmask_t quest_component_clear_features(quest_component_t* comp, quest_bitmask_t features);
+
+/**
+ * @brief Checks if a component has specific feature flag(s) enabled
+ * @param comp Component to check (must not be NULL)
+ * @param feature Bitmask of features to check (can be single or combined flags)
+ * @return true if ANY of the specified features are set, false otherwise
+ *
+ * @usage
+ * // Check single feature
+ * if (quest_component_has_feature(door, COMP_FEATURE_VISIBLE)) {
+ *     render(door);
+ * }
+ *
+ * // Check multiple features (OR condition)
+ * if (quest_component_has_feature(chest,
+ *     COMP_FEATURE_INTERACTABLE | COMP_FEATURE_VISIBLE)) {
+ *     make_clickable(chest);
+ * }
+ *
+ * @note
+ * - For ALL features check, compare with full mask:
+ *   (comp->features & mask) == mask
+ * - Feature bits are organized as:
+ *   - Bits 0-7: Common features (shared across all components)
+ *   - Bits 8-15: Type-specific features
+ *
+ * @examples
+ * // Door-specific check
+ * bool is_locked = quest_component_has_feature(door, DOOR_FEATURE_LOCKED);
+ *
+ * // Common feature check
+ * bool is_visible = quest_component_has_feature(any_obj, COMP_FEATURE_VISIBLE);
+ *
+ * @warning
+ * - Does not validate feature type vs component type
+ * - For type-safe checking see quest_component_has_type_feature()
+ */
+bool quest_component_has_feature(const quest_component_t* comp, quest_feature_t feature);
+
+/**
+ * @brief Checks if ALL specified features are enabled
+ * @param comp Target component
+ * @param features Bitmask of features to check (multiple bits allowed)
+ * @return true if all specified features are active
+ *
+ * @code
+ * if (quest_component_has_all_features(door,
+ *     COMP_FEATURE_VISIBLE | COMP_FEATURE_INTERACTABLE)) {
+ *     printf("Door is visible and interactable\n");
+ * }
+ * @endcode
+ */
+bool quest_component_has_all_features(const quest_component_t* comp, quest_bitmask_t features);
+
+/**
+ * @brief Checks if ANY specified features are enabled
+ * @param comp Target component
+ * @param features Bitmask of features to check (multiple bits allowed)
+ * @return true if at least one specified feature is active
+ */
+bool quest_component_has_any_features(const quest_component_t* comp, quest_bitmask_t features);
 
 /**
  * @brief Initializes a composite structure with provided values

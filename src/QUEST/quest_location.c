@@ -10,6 +10,7 @@ void quest_location_init(
     char symbol
 ) {
     quest_composite_init(&loc->base, parent, type, info);
+    assert(symbol >= 32 && symbol <= 126 && "Invalid ASCII symbol"); // Printable chars only
     loc->symbol = symbol;
 }
 

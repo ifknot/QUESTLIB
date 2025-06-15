@@ -6,6 +6,7 @@
 #include "quest_composite.h"
 #include "quest_info.h"
 #include "quest_object_types.h"
+#include "quest_features.h"
 
 #define QUEST_COMPOSITE_TESTS \
     &test_component_creation,    \
@@ -18,8 +19,10 @@
     &test_count_type,            \
     &test_find_type,             \
     &test_enumerate_type,        \
-    &test_component_dump,        \
-    &test_composite_dump
+    &test_feature_set_clear_single, \
+    &test_feature_bulk_operations, \
+    &test_feature_queries,      \
+    &test_feature_edge_cases
 
 // =============================================
 // Test Utilities (Arena-based)
@@ -277,55 +280,73 @@ TEST(test_enumerate_type) {
     test_teardown();
 }
 
-TEST(test_component_dump) {
-    test_setup();
-    quest_component_t* ring = create_test_item(QUEST_RING, 1, "Ring of Power");
+TEST(test_feature_set_clear_single) {
+    quest_component_t comp = {0};
 
-    // Redirect stdout for testing
-    FILE* test_output = tmpfile();
-    EXPECT_NOT_NULL(test_output);
+    // Set single feature
+    quest_component_set_features(&comp, COMP_FEATURE_VISIBLE);
+    EXPECT(quest_component_has_all_features(&comp, COMP_FEATURE_VISIBLE));
+    EXPECT_EQ(comp.features, COMP_FEATURE_VISIBLE);
 
-    quest_component_dump(ring, test_output);
-
-    // Verify output contains expected information
-    rewind(test_output);
-    char buffer[256];
-    fgets(buffer, sizeof(buffer), test_output);
-    EXPECT_STR_CONTAINS(buffer, "Ring of Power");
-    EXPECT_STR_CONTAINS(buffer, "QUEST_RING");
-
-    fclose(test_output);
-    test_teardown();
+    // Clear single feature
+    quest_component_clear_features(&comp, COMP_FEATURE_VISIBLE);
+    EXPECT(!quest_component_has_any_features(&comp, COMP_FEATURE_VISIBLE));
+    EXPECT_EQ(comp.features, 0);
 }
 
-TEST(test_composite_dump) {
-    test_setup();
-    quest_composite_t* chest = create_test_composite(QUEST_CHEST, "Oak Chest");
-    quest_composite_add(chest, create_test_item(QUEST_GOLD, 1, "Gold Coin"));
-    quest_composite_add(chest, create_test_item(QUEST_GEM, 1, "Ruby"));
+TEST(test_feature_bulk_operations) {
+    quest_component_t comp = {0};
+    const quest_bitmask_t mask = COMP_FEATURE_VISIBLE | COMP_FEATURE_INTERACTABLE;
 
-    // Redirect stdout for testing
-    FILE* test_output = tmpfile();
-    EXPECT_NOT_NULL(test_output);
+    // Set multiple
+    quest_component_set_features(&comp, mask);
+    EXPECT(quest_component_has_all_features(&comp, mask));
+    EXPECT_EQ(comp.features, mask);
 
-    quest_composite_dump(chest, test_output);
-
-    // Verify output contains expected information
-    rewind(test_output);
-    char buffer[512];
-    while (fgets(buffer, sizeof(buffer), test_output)) {
-        if (strstr(buffer, "CHILDREN:")) {
-            // Verify child entries
-            fgets(buffer, sizeof(buffer), test_output); // First child
-            EXPECT_STR_CONTAINS(buffer, "Gold Coin");
-            fgets(buffer, sizeof(buffer), test_output); // Second child
-            EXPECT_STR_CONTAINS(buffer, "Ruby");
-            break;
-        }
-    }
-
-    fclose(test_output);
-    test_teardown();
+    // Clear one
+    quest_component_clear_features(&comp, COMP_FEATURE_VISIBLE);
+    EXPECT(quest_component_has_all_features(&comp, COMP_FEATURE_INTERACTABLE));
+    EXPECT(!quest_component_has_any_features(&comp, COMP_FEATURE_VISIBLE));
 }
+
+TEST(test_feature_queries) {
+    quest_component_t comp = {0};
+    comp.features = COMP_FEATURE_VISIBLE | COMP_FEATURE_INTERACTABLE;
+
+    // has_all (AND)
+    EXPECT(quest_component_has_all_features(&comp,
+        COMP_FEATURE_VISIBLE | COMP_FEATURE_INTERACTABLE));
+    EXPECT(!quest_component_has_all_features(&comp,
+        COMP_FEATURE_VISIBLE | COMP_FEATURE_PERSISTENT));
+
+    // has_any (OR)
+    EXPECT(quest_component_has_any_features(&comp,
+        COMP_FEATURE_VISIBLE | COMP_FEATURE_PERSISTENT));
+    EXPECT(!quest_component_has_any_features(&comp,
+        COMP_FEATURE_PERSISTENT));
+}
+
+TEST(test_feature_edge_cases) {
+    quest_component_t comp = {0};
+
+    // Zero input (should be no-op)
+    quest_component_set_features(&comp, 0);
+    EXPECT_EQ(comp.features, 0);
+
+    quest_component_clear_features(&comp, 0);
+    EXPECT_EQ(comp.features, 0);
+
+    // Invalid bits (should ignore)
+    quest_component_set_features(&comp, 0x80000000);
+    EXPECT_EQ(comp.features, 0);
+    /*
+    #ifndef NDEBUG
+    printf("Expect assertion failures:\n");
+    EXPECT_ASSERT(quest_component_set_features(NULL, COMP_FEATURE_VISIBLE));
+    EXPECT_ASSERT(quest_component_has_all_features(NULL, COMP_FEATURE_VISIBLE));
+    #endif
+    */
+}
+
 
 #endif

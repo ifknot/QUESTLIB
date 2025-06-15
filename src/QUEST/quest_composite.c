@@ -33,6 +33,33 @@ quest_component_t* quest_component_create(mem_arena_t* arena, quest_component_t*
     return comp;
 }
 
+quest_bitmask_t quest_component_set_features(quest_component_t* comp, quest_bitmask_t features) {
+    assert(comp && "NULL component");
+    comp->features |= features;
+    return comp->features;
+}
+
+quest_bitmask_t quest_component_clear_features(quest_component_t* comp, quest_bitmask_t features) {
+    assert(comp && "NULL component");
+    comp->features &= ~features;
+    return comp->features;
+}
+
+bool quest_component_has_feature(const quest_component_t* comp, quest_feature_t feature) {
+    assert(comp && "NULL component");
+    return (comp->features & feature);
+}
+
+bool quest_component_has_all_features(const quest_component_t* comp, quest_bitmask_t features) {
+    assert(comp && "NULL component");
+    return (comp->features & features) == features;
+}
+
+bool quest_component_has_any_features(const quest_component_t* comp, quest_bitmask_t features) {
+    assert(comp && "NULL component");
+    return (comp->features & features) != 0;
+}
+
 void quest_composite_init(quest_composite_t* comp, quest_component_t* parent, quest_type_t type, quest_info_t* info) {
     assert(comp && "NULL composite!");
     assert(info && "NULL string information!");

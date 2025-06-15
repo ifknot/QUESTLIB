@@ -10,7 +10,16 @@
  * - Directional connections (8 compass + up/down)
  * - Symbol-based map rendering
  * - Parent-child hierarchy for contained objects
- */
+ *
+  * @dot
+* digraph location {
+*   node [shape=record];
+*   Location [label="quest_location_t|{<base>quest_composite_t|symbol|connections[12]}"];
+*   Composite [label="quest_composite_t|{<base>quest_component_t|children[...]}"];
+*   Location:base -> Composite [arrowhead=empty];
+* }
+* @enddot
+*/
 #ifndef QUEST_LOCATION_H
 #define QUEST_LOCATION_H
 
@@ -36,7 +45,7 @@ typedef struct quest_location_t quest_location_t;
  */
 typedef struct quest_location_t {
     quest_composite_t base;           ///< Base composite properties
-    quest_connector_t* connections[10]; ///< Connections array (8 dirs + up/down)
+    quest_connector_t* connections[MAX_FLOORS]; ///< Connections array (8 dirs + up/down)
     quest_size_t grid_x, grid_y;      ///< Grid coordinates
     quest_size_t floor_number;        ///< Z-level (0=ground)
     char symbol;                     ///< Display character
@@ -93,7 +102,5 @@ quest_location_t* quest_location_create(
     quest_info_t* info,
     char symbol
 );
-
-void quest_location_dump(const quest_composite_t* comp, FILE* stream);
 
 #endif

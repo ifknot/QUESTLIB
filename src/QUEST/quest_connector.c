@@ -4,16 +4,6 @@
 
 #include "quest_location.h"
 
-// Lookup table for opposite directions (using quest_connection_direction_t)
-static const quest_connection_direction_t opposite_directions[] = {
-    CONN_S, CONN_SW, CONN_W, CONN_NW, CONN_N, CONN_NE, CONN_E, CONN_SE, CONN_DOWN, CONN_UP, CONN_STAIR
-};
-
-// Lookup table to convert direction enum -> bitflag
-static const quest_bitmask_t direction_to_flag[] = {
-    FLAG_N, FLAG_NE, FLAG_E, FLAG_SE, FLAG_S, FLAG_SW, FLAG_W, FLAG_NW, FLAG_UP, FLAG_DOWN, FLAG_STAIR
-};
-
 void quest_connector_init(
     quest_connector_t* comp,
     quest_component_t* parent,
@@ -44,12 +34,32 @@ void quest_connector_join(
     assert(connector && "NULL connector!");
     assert(loc1 && "NULL 1st location!");
     assert(loc2 && "NULL 2nd location!");
-    assert(direction && "INVALIDdirection (0)!");
-    assert((direction & (direction - 1)) == 0 && "MULTIPLE direction flags set!");
+    assert(direction >= CONN_N && direction <= CONN_STAIR && "Invalid direction enum");
     // Set up bidirectional connection
     loc1->connections[direction] = connector;
     loc2->connections[opposite_directions[direction]] = connector;
     // Set bit mask
     loc1->active_directions |= direction_to_flag[direction];
     loc2->active_directions |= direction_to_flag[opposite_directions[direction]];
+}
+
+const char* quest_direction_to_string(quest_bitmask_t dir) {
+    static const char* names[] = {
+        "N", "NE", "E", "SE", "S", "SW", "W", "NW",
+        "UP", "DOWN", "/" // Up/Down/Stairs
+    };
+
+    for (int i = 0; i < sizeof(direction_to_flag)/sizeof(direction_to_flag[0]); i++) {
+        if (dir == direction_to_flag[i]) {
+            return names[i];
+        }
+    }
+    return "?";
+}
+
+void quest_connector_dump(const quest_connector_t* conn, FILE* stream) {
+    assert(conn && "NULL connector");
+    assert(stream && "NULL stream");
+
+
 }

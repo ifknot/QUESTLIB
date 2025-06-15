@@ -18,6 +18,7 @@
 #include <stdbool.h>
 #include <time.h>
 
+#include "tdd_report.h"
 #include "tdd_progress.h"
 
 /**

@@ -14,6 +14,34 @@
 #include "../MEM/mem_arena.h"
 #include "quest_composite.h"
 
+typedef enum { CONN_N = 0, CONN_NE, CONN_E, CONN_SE, CONN_S, CONN_SW, CONN_W, CONN_NW, CONN_UP, CONN_DOWN, CONN_STAIR
+} quest_connection_direction_t;
+
+// Connection direction bitflags
+typedef enum {
+    FLAG_N      = 0x0001,
+    FLAG_NE     = 0x0002,
+    FLAG_E      = 0x0004,
+    FLAG_SE     = 0x0008,
+    FLAG_S      = 0x0010,
+    FLAG_SW     = 0x0020,
+    FLAG_W      = 0x0040,
+    FLAG_NW     = 0x0080,
+    FLAG_UP     = 0x0100,
+    FLAG_DOWN   = 0x0200,
+    FLAG_STAIR  = 0x0400
+} quest_connection_flags_t;
+
+// Lookup table for opposite directions (using quest_connection_direction_t)
+static const quest_connection_direction_t opposite_directions[] = {
+    CONN_S, CONN_SW, CONN_W, CONN_NW, CONN_N, CONN_NE, CONN_E, CONN_SE, CONN_DOWN, CONN_UP, CONN_STAIR
+};
+
+// Lookup table to convert direction enum -> bitflag
+static const quest_bitmask_t direction_to_flag[] = {
+    FLAG_N, FLAG_NE, FLAG_E, FLAG_SE, FLAG_S, FLAG_SW, FLAG_W, FLAG_NW, FLAG_UP, FLAG_DOWN, FLAG_STAIR
+};
+
 typedef struct quest_location_t quest_location_t;
 
 /**
@@ -92,6 +120,11 @@ void quest_connector_join(
     quest_bitmask_t direction
 );
 
-void quest_connector_dump(const quest_connector_t* comp, FILE* stream);
+/**
+ * @brief Converts direction bitmask to human-readable string
+ * @param dir Direction bitflag (single flag!)
+ * @return Static string representation
+ */
+const char* quest_direction_to_string(quest_bitmask_t dir);
 
 #endif

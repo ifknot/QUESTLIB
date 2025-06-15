@@ -30,7 +30,10 @@ typedef enum  {
     QUEST_CHAIR,
     QUEST_TABLE,
     QUEST_LIBRARY,
-    QUEST_GEM
+    QUEST_GEM,
+
+    QUEST_CONNECTOR_PASSAGE,
+    QUEST_CONNECTOR_STAIRS
 
 } quest_object_t;
 
