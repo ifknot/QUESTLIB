@@ -9,16 +9,18 @@
 #include "quest_types.h"
 
 #define QUEST_LOCK_KEY_MAX    4    // option of multiple keys for richer game play (same code) and even option copy keys
+#define QUEST_KEY_WEAR_FACTOR 5    // repeatedly trying a key in a lock will erode its durability - eg found a fragile key only can try once!
 
 typedef struct quest_key_t {
     quest_component_t base;
     quest_combination_t key_code;
-    quest_size_t durability;
+    quest_size_t durability;        
 } quest_key_t;
 
 typedef struct quest_lock_t {
     quest_component_t base;
     quest_key_t* valid_keys[QUEST_LOCK_KEY_MAX];
+    quest_size_t valid_keys_count;
     quest_combination_t lock_code;
 } quest_lock_t;
 
