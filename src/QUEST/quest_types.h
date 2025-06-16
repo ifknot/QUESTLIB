@@ -33,6 +33,8 @@ typedef uint16_t quest_bitmask_t;
 
 typedef quest_bitmask_t quest_feature_t;
 
+typedef uint32_t quest_combination_t;
+
 // Sterngth of quest objects
 typedef enum {
     STRENGTH_NONE   = 0,
