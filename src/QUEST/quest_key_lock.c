@@ -1,90 +1,87 @@
 #include "quest_key_lock.h"
 
-#include <string.h>
-
-#include "quest_prng.h"
-
-quest_prng_ctx_t quest_global_ctx;
-
-// ==================
-// Key Implementation
-// ==================
-
 void quest_key_init(
-    quest_key_t* key,
-    quest_type_t type,
+    quest_key_t* key, 
+    quest_component_t* parent,
+    quest_type_t type, 
     quest_info_t* info,
-    uint32_t code,
-    uint8_t durability
+    quest_combination_t key_code,
+    quest_size_t durability
 ) {
-    quest_component_init(&key->base, NULL, type, info);
-    key->key_code = (code == 0) ? quest_prng_generate(&quest_global_ctx) : code;
-    key->durability = (durability > 100) ? 100 : durability;
+    assert(key_code && "ZERO key_code!");
+        
+    quest_component_init(&key->base, parent, type, info);
+    key->key_code = key_code; 
+    key->durability = (durability > 100) ? 100 : durability;    // capped at 100%
     key->owner = NULL;
 }
 
 quest_key_t* quest_key_create(
     mem_arena_t* arena,
+    quest_component_t* parent,
     quest_type_t type,
-    quest_info_t* info, uint32_t code,
-    uint8_t durability
+    quest_info_t* info, 
+    quest_combination_t key_code,
+    quest_size_t durability
 ) {
+    assert(arena && "NULL memory arena!");
+    
     quest_key_t* key = mem_arena_calloc(arena, sizeof(quest_key_t));
-    quest_key_init(key, type, info, code, durability);
+    quest_key_init(key, type, info, key_code, durability);
     return key;
 }
 
-// ==================
-// Lock Implementation
-// ==================
-
 void quest_lock_init(
-    quest_lock_t* lock,
-    quest_type_t type,
+    quest_lock_t* lock, 
+    quest_component_t* parent,
+    quest_type_t type, 
     quest_info_t* info,
-    uint8_t difficulty
+    quest_combination_t lock_code
 ) {
-    quest_component_init(&lock->base, NULL, type, info);
-    lock->pick_difficulty = (difficulty > 100) ? 100 : difficulty;
-    lock->combination = 0;
-    lock->pick_resistance = 100;
-    memset(lock->valid_keys, 0, sizeof(lock->valid_keys));
+    assert(lock_code && "ZERO key_code!");
+    
+    quest_component_init(&lock->base, parent, type, info);
+    lock->clock_code = lock_code;
 }
 
 quest_lock_t* quest_lock_create(
-    mem_arena_t* arena,
+    mem_arena_t* arena, 
     quest_type_t type,
-    quest_info_t* info,
-    uint8_t difficulty
+    quest_info_t* info, 
+    quest_combination_t lock_code
 ) {
+    assert(arena && "NULL memory arena!");
+    
     quest_lock_t* lock = mem_arena_calloc(arena, sizeof(quest_lock_t));
-    quest_lock_init(lock, type, info, difficulty);
+    quest_lock_init(lock, parent, type, info,lock_code);
     return lock;
 }
-
-// ==================
-// Key-Lock Interactions
-// ==================
 
 bool quest_key_lock_register(
     quest_lock_t* lock,
     quest_key_t* key
 ) {
-    for (int i = 0; i < 4; i++) {
-        if (!lock->valid_keys[i]) {
-            lock->valid_keys[i] = key;
-            return true;
-        }
-    }
-    return false;
+    assert(lock && "NULL lock!");
+    assert(key && "NULL key!");
+
+    if(lock->lock_code != key->key_code || lock->valid_keys_count == QUEST_LOCK_KEY_MAX) {
+        return false;
+    )
+    lock->valid_keys[valid_keys_count++] = key;
+    return true;
 }
 
 bool quest_key_lock_try_open(
     quest_key_t* key,
     quest_lock_t* lock
 ) {
-    if (key->durability == 0) return false;
-
+    if (!key->durability) {
+        return false;
+    }
+    for(int i = 0; i < valid_keys_count; ++i) {
+        
+    }
+    
     for (int i = 0; i < 4; i++) {
         if (lock->valid_keys[i] &&
             lock->valid_keys[i]->key_code == key->key_code) {
