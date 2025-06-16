@@ -191,22 +191,28 @@
 #define EXPECT_NOT_NULL(ptr) _EXPECT_NULLCHECK(ptr, false)
 
 /**
- * @brief Watcom-compatible range check with custom error messages
- * @param value Numeric value to test (converted to double)
- * @param min Minimum bound (inclusive, converted to double)
- * @param max Maximum bound (inclusive, converted to double)
- * @param ... Optional printf-style error message
+ * @brief Expects a value to be within [min,max] range (inclusive)
+ * @param value The value to test
+ * @param min Minimum allowed value
+ * @param max Maximum allowed value
+ * @param ... Optional failure message
+ *
+ * @code
+ * EXPECT_IN_RANGE(temperature, 20.0, 25.0);
+ * EXPECT_IN_RANGE(score, 0, 100, "Score out of bounds");
+ * @endcode
  */
 #define EXPECT_IN_RANGE(value, min, max, ...) do { \
     const double _val = (double)(value); \
     const double _min = (double)(min); \
     const double _max = (double)(max); \
-    if (_val < _min || _val > _max) { \
-        fprintf(stderr, "[FAIL] %s:%d: %g not in [%g,%g]", \
-                __FILE__, __LINE__, _val, _min, _max); \
-        if (0 __VA_ARGS__ + 0) fprintf(stderr, ": " __VA_ARGS__); \
-        fprintf(stderr, "\n"); \
-        return; \
+    if (!(_val >= _min && _val <= _max)) { \
+        printf("\n%s:%d - FAILED: %s not in [%s,%s]\n" \
+               "  Actual:   %g\n" \
+               "  Expected: [%g,%g]\n", \
+               _FILENAME, __LINE__, #value, #min, #max, _val, _min, _max); \
+        if (strlen("" #__VA_ARGS__) > 0) printf("  Message:  " __VA_ARGS__ "\n"); \
+        *pass = false; \
     } \
 } while (0)
 
