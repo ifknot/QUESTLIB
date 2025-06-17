@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-tdd_progress_t tdd_progress_make(uint32_t total, uint32_t current, uint32_t step, uint32_t width) {
+tdd_progress_t tdd_progress_make(tdd_size_t total, tdd_size_t current, tdd_size_t step, tdd_size_t width) {
     tdd_progress_t progress;
     progress.total = total;
     progress.current = current;
@@ -18,11 +18,11 @@ void tdd_progress_bar(tdd_progress_t* progress) {
         return;    // current mod step != 0
     }
     printf("\r[");
-    int limit = (progress->current * progress->width) / progress->total;
-    for (int i = 0; i < progress->width; i++) {
+    tdd_size_t limit = (progress->current * progress->width) / progress->total;
+    for (tdd_size_t i = 0; i < progress->width; i++) {
         putchar(i < limit ? '=' : ' ');
     }
-    printf("] %3i%%", (int)((progress->current * 100) / progress->total));
+    printf("] %3lu%%", (tdd_size_t)((progress->current * 100) / progress->total));
     fflush(stdout);
 }
 
@@ -31,6 +31,6 @@ void tdd_progress_percent(tdd_progress_t* progress) {
     if((progress->current++) % progress->step > 0 && progress->current < progress->total) {
         return;    // current mod step != 0
     }
-    printf("\r %3i%%", (int)((progress->current * 100) / progress->total));
+    printf("\r %3lu%%", (tdd_size_t)((progress->current * 100) / progress->total));
     fflush(stdout);
 }

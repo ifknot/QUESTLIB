@@ -9,14 +9,18 @@
 
 #include <stdint.h>
 
+#include "tdd_on_escape.h"
+
+typedef uint32_t tdd_size_t;
+
 typedef struct {
-    uint32_t total;
-    uint32_t current;
-    uint32_t width;       // bar width - 0 if not a width widget
-    uint32_t step;        // step size for percent or rotation - if 0 step is calculated
+    tdd_size_t total;
+    tdd_size_t current;
+    tdd_size_t width;       // bar width - 0 if not a width widget
+    tdd_size_t step;        // step size for percent or rotation - if 0 step is calculated
 } tdd_progress_t;
 
-tdd_progress_t tdd_progress_make(uint32_t total, uint32_t current, uint32_t step, uint32_t width);
+tdd_progress_t tdd_progress_make(tdd_size_t total, tdd_size_t current, tdd_size_t step, tdd_size_t width);
 
 void tdd_progress_bar(tdd_progress_t* p);
 

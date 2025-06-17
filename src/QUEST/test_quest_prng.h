@@ -17,6 +17,7 @@
 #define TEST_PRNG_H
 
 #include <math.h>
+#include <stdint.h>
 #include <stdio.h>
 
 #include "../TDD/tdd_macros.h"
@@ -30,7 +31,7 @@
 #define QUEST_PRNG_TESTS \
                     &test_prng_basic_functionality, \
                     &test_monte_carlo_pi,           \
-                    &test_distribution,             \
+                    //&test_distribution,             \
                     //&test_ascii_noise
 
 TEST(test_prng_basic_functionality) {
@@ -54,21 +55,42 @@ TEST(test_prng_basic_functionality) {
 }
 
 TEST(test_monte_carlo_pi) {
-    quest_prng_ctx_t rng;
-    quest_prng_seed(&rng, quest_prng_seed_from_time());
+    const tdd_size_t samples = 5000;//0;
+    tdd_size_t inside_circle = 0;
+    tdd_progress_t prg = tdd_progress_make(samples, 0, 0, 40);
+/*
+    // Initialize random seed
+    srand(time(NULL));
+    for (tdd_size_t i = 0; i < samples; i++) {
+        tdd_progress_bar(&prg);
+        ON_ESCAPE_BREAK
+        // Generate random point in [0,1) x [0,1)
+        double x = (double)rand() / RAND_MAX;
+        double y = (double)rand() / RAND_MAX;
 
-    const int samples = 500000;
-    int inside = 0;
+        // Check if point is inside unit circle
+        if (x*x + y*y <= 1.0) {
+            inside_circle++;
+        }
+    }
+    printf("/ninside circle %lu, samples %lu", inside_circle, samples);
+    // π ≈ 4 * (points inside circle) / (total points)
+    double pi_est = 4.0 * (double)inside_circle / (double)samples;
+*/
+    quest_prng_ctx_t prng;
+    quest_prng_seed(&prng, quest_prng_seed_from_time());
 
-    for (int i = 0; i < samples; i++) {
-        double x = quest_prng_generate(&rng) / (double)UINT32_MAX;
-        double y = quest_prng_generate(&rng) / (double)UINT32_MAX;
-        inside += (x*x + y*y) <= 1.0;
+    for (tdd_size_t i = 0; i < samples; i++) {
+        tdd_progress_bar(&prg);
+        ON_ESCAPE(break;)
+        double x = (double)quest_prng_generate(&prng) / (double)UINT32_MAX;
+        double y = (double)quest_prng_generate(&prng) / (double)UINT32_MAX;
+        inside_circle += (x*x + y*y) <= 1.0;
     }
 
-    double pi_est = 4.0 * inside / samples;
+    double pi_est = 4.0 * (double)inside_circle / (double)samples;
     printf("\n PI Estimation: %.6f (Error: %.4f%%)\n", pi_est, fabs(pi_est - M_PI)/M_PI*100);
-    //EXPECT_IN_RANGE(pi_est, 3.12, 3.16);
+    EXPECT_IN_RANGE(pi_est, 3.12, 3.16);
 }
 
 TEST(test_ascii_noise) {

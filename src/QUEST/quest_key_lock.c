@@ -1,12 +1,14 @@
 #include "quest_key_lock.h"
 
+#include "quest_prng.h"
+
 void quest_key_init(
-    quest_key_t* key, 
+    quest_key_t* key,
     quest_component_t* parent,
-    quest_type_t type, 
+    quest_type_t type,
     quest_info_t* info,
     quest_size_t durability
-) {      
+) {
     quest_component_init(&key->base, parent, type, info);
     key->durability = (durability > 100) ? 100 : durability;    // capped at 100%
 }
@@ -15,38 +17,39 @@ quest_key_t* quest_key_create(
     mem_arena_t* arena,
     quest_component_t* parent,
     quest_type_t type,
-    quest_info_t* info, 
+    quest_info_t* info,
     quest_size_t durability
 ) {
     assert(arena && "NULL memory arena!");
-    
+
     quest_key_t* key = mem_arena_calloc(arena, sizeof(quest_key_t));
-    quest_key_init(key, type, info, durability);
+    quest_key_init(key, parent, type, info, durability);
     return key;
 }
 
 void quest_lock_init(
-    quest_lock_t* lock, 
+    quest_lock_t* lock,
     quest_component_t* parent,
-    quest_type_t type, 
+    quest_type_t type,
     quest_info_t* info,
     quest_size_t key_max
-) {    
+) {
     assert(key_max && "LOCK with no possible key!");
-    
+
     quest_component_init(&lock->base, parent, type, info);
-    lock->code = quest_prng_generate(quest_global_ctx);
+    lock->code = quest_prng_generate(&quest_global_ctx);
     lock->key_max = key_max;
 }
 
 quest_lock_t* quest_lock_create(
-    mem_arena_t* arena, 
+    mem_arena_t* arena,
+    quest_component_t* parent,
     quest_type_t type,
     quest_info_t* info,
     quest_size_t key_max
 ) {
     assert(arena && "NULL memory arena!");
-    
+
     quest_lock_t* lock = mem_arena_calloc(arena, sizeof(quest_lock_t));
     quest_lock_init(lock, parent, type, info, key_max);
     return lock;
@@ -59,9 +62,9 @@ bool quest_key_lock_imprint(
     assert(lock && "NULL lock!");
     assert(key && "NULL key!");
 
-    if(key->key_code != 0 || lock->key_count == lock->key_max) {
-        return false;            
-    } 
+    if(key->code != 0 || lock->key_count == lock->key_max) {
+        return false;
+    }
     key->code = lock->code;
     lock->key_count++;
     return true;

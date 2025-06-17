@@ -2,6 +2,8 @@
 
 #include "test_main.h"
 
+quest_prng_ctx_t quest_global_ctx;
+
 int main(int argc, char** argv) {
 
     return (run_tests()) ? EXIT_FAILURE : EXIT_SUCCESS;
