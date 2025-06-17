@@ -21,6 +21,7 @@
 #include <stdio.h>
 
 #include "../TDD/tdd_macros.h"
+#include "../STAT/stat_ascii_graphs.h"
 
 #include "quest_prng.h"
 
@@ -124,12 +125,7 @@ TEST(test_distribution) {
         tdd_progress_bar(&prg);
         ON_ESCAPE(break;)
     }
-
-    printf("\nDistribution:\n");
-    for (tdd_size_t i = 0; i < NBUCKETS; i++) {
-        printf("%lu: %lu %s\n", i, buckets[i], buckets[i] > i/25 ? "" : "X");
-        EXPECT_GT(buckets[i], 0);
-    }
+    stat_histogram(buckets, NBUCKETS, 50); // 50 = max bar width
     PRESS_ENTER
 }
 

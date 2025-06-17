@@ -7,11 +7,8 @@
 #ifndef TDD_PROGRESS_H
 #define TDD_PROGRESS_H
 
-#include <stdint.h>
-
+#include "tdd_types.h"
 #include "tdd_on_escape.h"
-
-typedef uint32_t tdd_size_t;
 
 typedef struct {
     tdd_size_t total;
