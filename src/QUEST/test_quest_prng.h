@@ -31,7 +31,7 @@
 #define QUEST_PRNG_TESTS \
                     &test_prng_basic_functionality, \
                     &test_monte_carlo_pi,           \
-                    //&test_distribution,             \
+                    &test_distribution,             \
                     //&test_ascii_noise
 
 TEST(test_prng_basic_functionality) {
@@ -55,7 +55,7 @@ TEST(test_prng_basic_functionality) {
 }
 
 TEST(test_monte_carlo_pi) {
-    const tdd_size_t samples = 5000;//0;
+    const tdd_size_t samples = 10000;//0;
     tdd_size_t inside_circle = 0;
     tdd_progress_t prg = tdd_progress_make(samples, 0, 0, 40);
 /*
@@ -77,15 +77,15 @@ TEST(test_monte_carlo_pi) {
     // π ≈ 4 * (points inside circle) / (total points)
     double pi_est = 4.0 * (double)inside_circle / (double)samples;
 */
-    quest_prng_ctx_t prng;
-    quest_prng_seed(&prng, quest_prng_seed_from_time());
+    quest_prng_ctx_t rng;
+    quest_prng_seed(&rng, quest_prng_seed_from_time());
 
     for (tdd_size_t i = 0; i < samples; i++) {
+        double x = (double)quest_prng_generate(&rng) / (double)UINT32_MAX;
+        double y = (double)quest_prng_generate(&rng) / (double)UINT32_MAX;
+        inside_circle += (x*x + y*y) <= 1.0;
         tdd_progress_bar(&prg);
         ON_ESCAPE(break;)
-        double x = (double)quest_prng_generate(&prng) / (double)UINT32_MAX;
-        double y = (double)quest_prng_generate(&prng) / (double)UINT32_MAX;
-        inside_circle += (x*x + y*y) <= 1.0;
     }
 
     double pi_est = 4.0 * (double)inside_circle / (double)samples;
@@ -94,15 +94,14 @@ TEST(test_monte_carlo_pi) {
 }
 
 TEST(test_ascii_noise) {
-    quest_prng_ctx_t rng;
-    quest_prng_seed(&rng, 0xCAFEBABE);
+    quest_prng_seed(&quest_global_ctx, 0xCAFEBABE);
 
     printf("\nASCII Noise:\n");
     const char* shades = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
 
     for (int y = 0; y < 20; y++) {
         for (int x = 0; x < 50; x++) {
-            char c = shades[quest_prng_range(&rng, 0, strlen(shades)-1)];
+            char c = shades[quest_prng_range(&quest_global_ctx, 0, strlen(shades)-1)];
             putchar(c);
         }
         putchar('\n');
@@ -111,22 +110,27 @@ TEST(test_ascii_noise) {
 }
 
 TEST(test_distribution) {
+    #define NBUCKETS 20
     quest_prng_ctx_t rng;
     quest_prng_seed(&rng, time(NULL));
 
-    int buckets[20] = {0};
-    const int samples = 100000;
+    tdd_size_t buckets[NBUCKETS] = {0};
+    const tdd_size_t samples = 10000;//0;
+    tdd_progress_t prg = tdd_progress_make(samples, 0, 0, 40);
+    tdd_size_t i;
 
-    for (int i = 0; i < samples; i++) {
+    for (i = 0; i < samples; i++) {
         buckets[quest_prng_generate(&rng) % 20]++;
+        tdd_progress_bar(&prg);
+        ON_ESCAPE(break;)
     }
 
     printf("\nDistribution:\n");
-    for (int i = 0; i < 2; i++) {
-        printf("%2d: %5d %s\n", i, buckets[i],
-               buckets[i] > samples/25 ? ":)" : ":(");
+    for (tdd_size_t i = 0; i < NBUCKETS; i++) {
+        printf("%lu: %lu %s\n", i, buckets[i], buckets[i] > i/25 ? "" : "X");
         EXPECT_GT(buckets[i], 0);
     }
+    PRESS_ENTER
 }
 
 #endif
