@@ -14,11 +14,13 @@ project(
 add_compile_options(
     -za99               # undocumented switch enable partial C99 compatibility
     -ml                 # memory model options - large model
+    -k"stack=0x10000"
     #-dNDEBUG
 )
 
 file(GLOB SOURCES
     *.c
+    STAT/*c
     DOS/*.c
     FILE/*.c
     MEM/*.c

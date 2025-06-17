@@ -2,7 +2,7 @@
 //#include <limits.h>
 #include <errno.h>
 
-bool stat_safe_div_int32(int32_t numerator, int32_t denominator, int32_t* result) {
+bool stat_safe_div_i32(int32_t numerator, int32_t denominator, int32_t* result) {
     if (denominator == 0 ||
         (numerator == INT32_MIN && denominator == -1)) {
         errno = ERANGE;

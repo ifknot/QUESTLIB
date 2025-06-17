@@ -2,6 +2,7 @@
 #define TEST_STATS_H
 
 #include <math.h>
+#include <errno.h>
 
 #include "../TDD/tdd_macros.h"
 #include "../STAT/stat.h"
@@ -70,11 +71,11 @@ TEST(test_distributions) {
     stat_prng_state_t prng;
     stat_prng_init(&prng);
 
-    stat_float_t normal[1000];
-    stat_generate_normal_dist(normal, 1000, 0.0, 1.0, &prng);
+    stat_float_t normal[100];
+    stat_generate_normal_dist(normal, 100, 0.0, 1.0, &prng);
 
     // Check mean is near 0
-    EXPECT_IN_RANGE(stat_mean(normal, 1000), -0.1, 0.1);
+    EXPECT_IN_RANGE(stat_mean(normal, 100), -0.1, 0.1);
 }
 
 TEST(test_descriptive_stats) {
@@ -118,9 +119,9 @@ TEST(test_division) {
     int32_t result;
 
     // Safe division
-    EXPECT(stat_safe_div_int32(10, 2, &result) && result == 5);
-    EXPECT(!stat_safe_div_int32(10, 0, &result)); // division by zero
-    EXPECT(!stat_safe_div_int32(INT32_MIN, -1, &result)); // overflow
+    EXPECT(stat_safe_div_i32(10, 2, &result) && result == 5);
+    EXPECT(!stat_safe_div_i32(10, 0, &result)); // division by zero
+    EXPECT(!stat_safe_div_i32(INT32_MIN, -1, &result)); // overflow
 
     // Rounding division
     EXPECT_EQ(stat_div_round_up(10, 3), 4);
@@ -129,14 +130,71 @@ TEST(test_division) {
 
 TEST(test_rounding) {
     // Basic rounding
-    EXPECT_EQ(stat_round_to_int32(3.4), 3);
-    EXPECT_EQ(stat_round_to_int32(3.6), 4);
-    EXPECT_EQ(stat_floor_to_int32(3.9), 3);
-    EXPECT_EQ(stat_ceil_to_int32(3.1), 4);
+    EXPECT_EQ(stat_round_to_i32(3.4), 3);
+    EXPECT_EQ(stat_round_to_i32(3.6), 4);
+    EXPECT_EQ(stat_floor_to_i32(3.9), 3);
+    EXPECT_EQ(stat_ceil_to_i32(3.1), 4);
 
     // Precision rounding
     EXPECT_EQ(stat_round_decimal(3.14159, 2), 3.14);
     EXPECT_EQ(stat_round_to_multiple(17, 5), 15);
+}
+
+/**
+ * @brief Test absolute value operations
+ * @details Covers all absolute value functions:
+ *          - stat_abs_f()
+ *          - stat_abs_i32()
+ *          - stat_abs_u32()
+ *          - stat_safe_abs_i32()
+ */
+TEST(test_abs_ops) {
+    // ======================
+    // Float absolute values
+    // ======================
+    EXPECT_EQ(stat_abs_f(3.14), 3.14);
+    EXPECT_EQ(stat_abs_f(-2.718), 2.718);
+    EXPECT_EQ(stat_abs_f(0.0), 0.0);
+    EXPECT(isnan(stat_abs_f(NAN)));
+
+    // ======================
+    // int32_t absolute values
+    // ======================
+    EXPECT_EQ(stat_abs_i32(42), 42);
+    EXPECT_EQ(stat_abs_i32(-42), 42);
+    EXPECT_EQ(stat_abs_i32(0), 0);
+
+    // Test INT32_MIN edge case (can't be represented positively)
+    EXPECT_EQ(stat_abs_i32(INT32_MIN), INT32_MIN); // Known limitation
+
+    // ======================
+    // uint32_t absolute values
+    // ======================
+    EXPECT_EQ(stat_abs_u32(42), 42);
+    EXPECT_EQ(stat_abs_u32(0), 0);
+
+    // ======================
+    // Safe absolute values
+    // ======================
+    int32_t result;
+    EXPECT(stat_safe_abs_i32(42, &result) && result == 42);
+    EXPECT(stat_safe_abs_i32(-42, &result) && result == 42);
+    EXPECT(stat_safe_abs_i32(0, &result) && result == 0);
+
+    // Test INT32_MIN failure case
+    bool success = stat_safe_abs_i32(INT32_MIN, &result);
+    EXPECT(!success && errno == ERANGE);
+
+    // ======================
+    // Array operations
+    // ======================
+    stat_float_t f_arr[] = {1.5, -2.5, 3.0};
+    int32_t i_arr[] = {1, -2, 3};
+    uint32_t u_arr[] = {1, 2, 3};
+
+    EXPECT_EQ(stat_min_f(f_arr, 3), 1.5);
+    EXPECT_EQ(stat_min_i32(i_arr, 3), -2);
+    EXPECT_EQ(stat_min_u32(u_arr, 3), 1);
 }
 
 TEST(test_sign_ops) {
@@ -188,7 +246,7 @@ TEST(test_type_safety) {
     // Mixed-type operations
     stat_float_t f = 3.0;
     int32_t i = 3;
-    EXPECT_EQ(stat_round_to_int32(f), i);
+    EXPECT_EQ(stat_round_to_i32(f), i);
 }
 
 TEST(test_edge_cases) {

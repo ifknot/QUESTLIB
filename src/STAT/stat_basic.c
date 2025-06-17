@@ -2,7 +2,7 @@
 #include <math.h>
 //#include <limits.h>
 
-stat_float_t stat_min_float(stat_float_t* data, stat_size_t size) {
+stat_float_t stat_min_f(stat_float_t* data, stat_size_t size) {
     if (size == 0) return NAN;
 
     stat_float_t min = data[0];
@@ -12,7 +12,7 @@ stat_float_t stat_min_float(stat_float_t* data, stat_size_t size) {
     return min;
 }
 
-int32_t stat_min_int32(int32_t* data, stat_size_t size) {
+int32_t stat_min_i32(int32_t* data, stat_size_t size) {
     if (size == 0) return INT32_MAX;
 
     int32_t min = data[0];
@@ -22,7 +22,7 @@ int32_t stat_min_int32(int32_t* data, stat_size_t size) {
     return min;
 }
 
-stat_float_t stat_max_float(stat_float_t* data, stat_size_t size) {
+stat_float_t stat_max_f(stat_float_t* data, stat_size_t size) {
     if (size == 0) return NAN;
 
     stat_float_t max = data[0];
@@ -32,7 +32,7 @@ stat_float_t stat_max_float(stat_float_t* data, stat_size_t size) {
     return max;
 }
 
-int32_t stat_max_int32(int32_t* data, stat_size_t size) {
+int32_t stat_max_i32(int32_t* data, stat_size_t size) {
     if (size == 0) return INT32_MIN;
 
     int32_t max = data[0];
@@ -42,14 +42,14 @@ int32_t stat_max_int32(int32_t* data, stat_size_t size) {
     return max;
 }
 
-stat_float_t stat_range_float(stat_float_t* data, stat_size_t size) {
+stat_float_t stat_range_f(stat_float_t* data, stat_size_t size) {
     if (size == 0) return NAN;
-    return stat_max_float(data, size) - stat_min_float(data, size);
+    return stat_max_f(data, size) - stat_min_f(data, size);
 }
 
-int32_t stat_range_int32(int32_t* data, stat_size_t size) {
+int32_t stat_range_i32(int32_t* data, stat_size_t size) {
     if (size == 0) return 0;
-    return stat_max_int32(data, size) - stat_min_int32(data, size);
+    return stat_max_i32(data, size) - stat_min_i32(data, size);
 }
 
 // uint32_t implementations

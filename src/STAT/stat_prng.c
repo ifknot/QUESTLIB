@@ -9,11 +9,16 @@ void stat_prng_init(stat_prng_state_t* state) {
 }
 
 void stat_prng_init_time(stat_prng_state_t* state) {
-    struct timespec ts;
-    clock_gettime(CLOCK_REALTIME, &ts);
-    uint64_t seed = ((uint64_t)ts.tv_sec << 32) | ts.tv_nsec;
-    state->x = seed ? seed : STAT_MARSAGLIA_SEED;
-    for (int i = 0; i < 10; i++) stat_prng_next(state); // Warm-up
+    uint64_t seed = (uint64_t)time(NULL);
+    // Mix in additional entropy sources when possible
+    //seed ^= (uint64_t)__rdtsc();  // Use CPU timestamp counter if available
+    //seed ^= (uint64_t)clock();    // Fallback to process clock
+    //state->x = seed ? seed : STAT_MARSAGLIA_SEED;
+
+    // Warm-up the generator
+    for (int i = 0; i < 10; i++) {
+        stat_prng_next(state);
+    }
 }
 
 stat_float_t stat_prng_next(stat_prng_state_t* state) {

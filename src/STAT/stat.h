@@ -9,6 +9,7 @@
 #ifndef STAT_H
 #define STAT_H
 
+#include "stat_constants.h"
 #include "stat_types.h"       ///< Core type definitions and structures
 #include "stat_abs.h"         ///< Absolute value functions: stat_abs_float(), stat_abs_int32(), stat_safe_abs_int32()
 #include "stat_basic.h"       ///< Basic statistics: stat_min(), stat_max(), stat_range()

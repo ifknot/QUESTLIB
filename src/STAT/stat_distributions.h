@@ -1,6 +1,7 @@
 #ifndef STAT_DISTRIBUTIONS_H
 #define STAT_DISTRIBUTIONS_H
 
+#include "stat_constants.h"
 #include "stat_types.h"
 #include "stat_prng.h"  // Now depends on PRNG module
 
