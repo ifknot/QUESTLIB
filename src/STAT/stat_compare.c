@@ -8,8 +8,7 @@ int stat_compare_floats(stat_float_t a, stat_float_t b, stat_float_t epsilon) {
     return (a < b) ? -1 : 1;
 }
 
-bool stat_almost_equal(stat_float_t a, stat_float_t b,
-                      stat_float_t rel_epsilon, stat_float_t abs_epsilon) {
+bool stat_almost_equal(stat_float_t a, stat_float_t b, stat_float_t rel_epsilon, stat_float_t abs_epsilon) {
     if (a == b) return true;
     stat_float_t diff = fabs(a - b);
     if (diff <= abs_epsilon) return true;

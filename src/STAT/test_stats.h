@@ -6,6 +6,8 @@
 
 #include "../TDD/tdd_macros.h"
 #include "../STAT/stat.h"
+#include "stat_compare.h"
+#include "stat_types.h"
 
 #define STATS_TEST_SUITE &test_basic_stats,          \
                         &test_central_tendency,      \
@@ -49,7 +51,19 @@ TEST(test_dispersion) {
     stat_float_t data[] = {1, 2, 3, 4, 5};
     EXPECT_EQ(stat_variance(data, 5), 2.5);
     EXPECT_EQ(stat_std_dev(data, 5), sqrt(2.5));
-    EXPECT_EQ(stat_mad(data, 5), 1.2);
+    EXPECT_EQ(stat_mad(data, 5), 1.0); // NB *median* absolute deviations
+    // Single element
+    stat_float_t single[] = {42};
+    EXPECT_EQ(stat_mad(single, 1), 0.0);
+    // Even-sized array
+    stat_float_t even[] = {1, 2, 3, 4};
+    EXPECT_EQ(stat_mad(even, 4), 1.0);  // Deviations: {1, 0, 0, 1}
+    // All identical values
+    stat_float_t identical[] = {5, 5, 5};
+    EXPECT_EQ(stat_mad(identical, 3), 0.0);
+    //floats
+    stat_float_t frac[] =  {1.1, 2.2, 3.3, 4.02, 5.1};
+    EXPECT_EQ(stat_compare_floats(stat_mad(frac, 5), 1.1, STAT_SAFE_EPSILON), 0);
 }
 
 TEST(test_percentiles) {
@@ -192,7 +206,7 @@ TEST(test_abs_ops) {
     int32_t i_arr[] = {1, -2, 3};
     uint32_t u_arr[] = {1, 2, 3};
 
-    EXPECT_EQ(stat_min_f(f_arr, 3), 1.5);
+    EXPECT_EQ(stat_min_f(f_arr, 3), -2.5);
     EXPECT_EQ(stat_min_i32(i_arr, 3), -2);
     EXPECT_EQ(stat_min_u32(u_arr, 3), 1);
 }
