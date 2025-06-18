@@ -3,7 +3,7 @@
 
 
 //#include "TDD/test_tdd_framework.h"
-#include "STAT/test_stats.h"
+//#include "STAT/test_stats.h"
 //#include "DOS/test_dos_services.h"
 //#include "STR/test_str.h"
 //#include "FILE/test_file.h"
@@ -14,11 +14,11 @@
 //#include "QUEST/test_quest_composite.h"
 //#include "QUEST/test_quest_connector.h"
 //#include "QUEST/test_quest_location.h"
-//#include "QUEST/test_quest_prng.h"
+#include "QUEST/test_quest_prng.h"
 
 RUN_TESTS(
     //TDD_FRAMEWORK_TESTS,
-    STATS_TEST_SUITE
+    //STATS_TEST_SUITE
     //DOS_SERVICES_TESTS,
     //FILE_TESTS,
     //STR_TESTS,
@@ -29,7 +29,7 @@ RUN_TESTS(
     //QUEST_COMPOSITE_TESTS
     //QUEST_CONNECTOR_TESTS
     //QUEST_LOCATION_TESTS
-    //QUEST_PRNG_TESTS
+    QUEST_PRNG_TESTS
 )
 
 #endif

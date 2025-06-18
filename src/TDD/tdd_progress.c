@@ -20,7 +20,7 @@ void tdd_progress_bar(tdd_progress_t* progress) {
     printf("\r[");
     tdd_size_t limit = (progress->current * progress->width) / progress->total;
     for (tdd_size_t i = 0; i < progress->width; i++) {
-        putchar(i < limit ? '=' : ' ');
+        putchar(i < limit ? 0xB0 : ' ');
     }
     printf("] %3lu%%", (tdd_size_t)((progress->current * 100) / progress->total));
     fflush(stdout);

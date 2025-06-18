@@ -21,7 +21,7 @@
 #include <stdio.h>
 
 #include "../TDD/tdd_macros.h"
-#include "../STAT/stat_ascii_graphs.h"
+#include "../TDD/tdd_graphs.h"
 
 #include "quest_prng.h"
 
@@ -86,7 +86,7 @@ TEST(test_monte_carlo_pi) {
         double y = (double)quest_prng_generate(&rng) / (double)UINT32_MAX;
         inside_circle += (x*x + y*y) <= 1.0;
         tdd_progress_bar(&prg);
-        ON_ESCAPE(break;)
+        ON_ESCAPE(break;);
     }
 
     double pi_est = 4.0 * (double)inside_circle / (double)samples;
@@ -123,10 +123,10 @@ TEST(test_distribution) {
     for (i = 0; i < samples; i++) {
         buckets[quest_prng_generate(&rng) % 20]++;
         tdd_progress_bar(&prg);
-        ON_ESCAPE(break;)
+        ON_ESCAPE(break;);
     }
-    stat_histogram(buckets, NBUCKETS, 50); // 50 = max bar width
-    PRESS_ENTER
+    tdd_histogram(buckets, NBUCKETS, 50); // 50 = max bar width
+    PRESS_ENTER;
 }
 
 #endif

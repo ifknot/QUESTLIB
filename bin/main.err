@@ -1,2 +1,5 @@
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(110): Warning! W201: Unreachable code
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(113): Warning! W303: Parameter 'pass' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/main.c(9): Warning! W303: Parameter 'argv' has been defined, but not referenced
 /Users/jeremythornton/dosbox/QUESTLIB/src/main.c(9): Warning! W303: Parameter 'argc' has been defined, but not referenced
+/Users/jeremythornton/dosbox/QUESTLIB/src/QUEST/test_quest_prng.h(97): Warning! W202: Symbol 'test_ascii_noise' has been defined, but not referenced
