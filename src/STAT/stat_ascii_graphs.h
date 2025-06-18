@@ -28,7 +28,7 @@ void stat_histogram(const stat_size_t* values, stat_size_t count, stat_size_t ma
         }
 
         // Show exact value at end
-        printf(" (%u)", values[i]);
+        printf(" (%u)", values[i]); // TODO make this optional
 
         putchar('\n');
     }
