@@ -102,9 +102,7 @@ static inline int quest_prng_roll(quest_prng_ctx_t* ctx, int percentage) {
  * // Random enemy count between 3-5:
  * uint32_t enemies = quest_prng_range(&quest_global_ctx, 3, 5);
  */
-static inline uint32_t quest_prng_range(quest_prng_ctx_t* ctx,
-                                      uint32_t min,
-                                      uint32_t max) {
+static inline uint32_t quest_prng_range(quest_prng_ctx_t* ctx, uint32_t min, uint32_t max) {
     return min + (quest_prng_generate(ctx) % (max - min + 1));
 }
 
