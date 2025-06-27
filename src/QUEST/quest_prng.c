@@ -1,8 +1,10 @@
 #include "quest_prng.h"
 
+#include <assert.h>
+
 void quest_prng_seed(quest_prng_ctx_t* ctx, uint32_t seed) {
-    *ctx = seed ? seed : 0xBAD5EED;
-    if (*ctx == 0) *ctx = 1; // XORSHIFT32 must not be zero
+   assert(ctx && "NULL context!");
+   *ctx = seed ? seed : 0xBAD5EED;
 }
 
 uint32_t quest_prng_generate(quest_prng_ctx_t* ctx) {
